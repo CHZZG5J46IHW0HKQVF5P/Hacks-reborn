@@ -12,7 +12,7 @@ private:
 	bool noFriendDamage;
 	void onDrawGUI() override;
 	void onDrawSettings() override;
-	bool onPackerOutcoming(stRakNetHookParams* params, const crTickLocalPlayerInfo& info) override;
+	bool onPacketOutcoming(stRakNetHookParams* params, const crTickLocalPlayerInfo& info) override;
 	bool onRPCIncoming(stRakNetHookParams* params, const crTickLocalPlayerInfo& info) override;
 	void save(Json::Value&) override;
 	void read(Json::Value&) override;

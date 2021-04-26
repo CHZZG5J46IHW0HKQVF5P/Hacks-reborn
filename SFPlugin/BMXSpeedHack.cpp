@@ -28,10 +28,9 @@ void BMXspeedhack::everyTickAction(const crTickLocalPlayerInfo& info)
 {
 	if (!info.isDriver || info.vehType != Vehicles::eVehicleType::CBMX)
 		return;
-
 	static uint8 BMXState = 1;
 	static DWORD dwBMXTime = 0;
-	if (GetTickCount() > dwBMXTime)
+	if (dwBMXTime < GetTickCount())
 	{
 		if (BMXState == 1)
 		{

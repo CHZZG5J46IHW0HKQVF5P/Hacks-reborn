@@ -5,14 +5,23 @@ Fix::Fix(const char* name)
 {
 	isEnable = true;
 }
+
+bool Fix::onRPCOutcoming(stRakNetHookParams* params, const crTickLocalPlayerInfo& info)
+{
+	switch (params->packetId)
+	{
+	case 106:
+		return false; /*UpdateVehicleDamageStatus*/
+	}
+	return true;
+}
+
 bool Fix::onRPCIncoming(stRakNetHookParams* params, const crTickLocalPlayerInfo& info)
 {
 	switch (params->packetId)
 	{
 	case 35: /*SetPlayerDrunkLevel*/
 		return false;
-	case 106:
-		return false; /*UpdateVehicleDamageStatus*/
 	case 44 /*CREATEOBJECT*/:
 	{
 		UINT16 wObjectID;

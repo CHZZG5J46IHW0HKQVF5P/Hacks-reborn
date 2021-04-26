@@ -370,7 +370,7 @@ bool OneLineHacks::onRPCIncoming(stRakNetHookParams *params, const crTickLocalPl
 		return false;
 	return true;
 }
-bool OneLineHacks::onPackerOutcoming(stRakNetHookParams *param, const crTickLocalPlayerInfo& info)
+bool OneLineHacks::onPacketOutcoming(stRakNetHookParams *param, const crTickLocalPlayerInfo& info)
 {
 
 	if ((bNoFall || bSurfOnVehicles || hacksSettings::bFakeAfk) && (param->packetId == ID_PLAYER_SYNC))

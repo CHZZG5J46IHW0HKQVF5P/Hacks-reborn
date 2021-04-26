@@ -8,11 +8,17 @@
 #include <future>
 #include <fstream>
 
-
+enum class Priority
+{
+	HIGH,
+	MIDDLE,
+	LOW,
+	DEFAULT
+};
 class HackManager
 {
 private:
-	std::deque<IHack*> hacks;
+	std::deque<std::pair<Priority, IHack*>> hacks;
 public:
 	void destroy();
 	void drawHacks(const crTickLocalPlayerInfo& info);

@@ -1,5 +1,5 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(373,5): warning MSB8004: каталог Output заканчивается не косой чертой.  Этот экземпляр сборки добавит косую черту, поскольку она необходима для правильного определения каталога Output.
-  Fix.cpp
+  AltClicker.cpp
 C:\SampSnipps.h(319): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\string.h(129): note:  см. объявление "strcpy"
 C:\Lippets\FIles\SingleFile\Computer.h(52): warning C4244: return: преобразование "double" в "FLOAT", возможна потеря данных
@@ -47,4 +47,4 @@ c:\users\mishu\vsc\hacksreborn\sfplugin\include\json\reader.h(235): warning C499
   c:\users\mishu\vsc\hacksreborn\sfplugin\include\json\reader.h(40): note:  см. объявление "Json::Reader::Location"
 c:\users\mishu\vsc\hacksreborn\sfplugin\include\json\reader.h(236): warning C4996: 'Json::Reader::Location': Use CharReader and CharReaderBuilder instead.
   c:\users\mishu\vsc\hacksreborn\sfplugin\include\json\reader.h(40): note:  см. объявление "Json::Reader::Location"
-  SFPlugin.vcxproj -> C:\Users\mishu\VSC\Hacksreborn\SFPlugin\..\..\..\..\..\GTA 140K BY DAPO SHOW\SAMPFUNCS\HacksReborn.sf
+LINK : fatal error LNK1104: не удается открыть файл "..\..\..\..\..\GTA 140K BY DAPO SHOW\SAMPFUNCS\HacksReborn.sf"

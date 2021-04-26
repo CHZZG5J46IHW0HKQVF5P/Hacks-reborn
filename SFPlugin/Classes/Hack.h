@@ -12,6 +12,7 @@ extern SAMPFUNCS *SF;
 #define iScrResX *(int*)0xC9C040
 #define iScrResY *(int*)0xC9C044
 #define cm(x) SF->getSAMP()->getChat()->AddChatMessage(-1,(x));
+#define cm_ SF->getSAMP()->getChat()->AddChatMessage
 #define MYID SF->getSAMP()->getPlayers()->sLocalPlayerID
 #pragma warning( disable : 4996 )
 
@@ -46,6 +47,7 @@ inline void notify(const std::string& text, bool e)
 	Stuff::AddMessageJumpQ(text + std::string(e ? " ~g~On" : " ~r~Off"));
 }
 
+
 class IHack
 {
 public:
@@ -58,7 +60,7 @@ public:
 	virtual bool onRPCIncoming(stRakNetHookParams*, const crTickLocalPlayerInfo&) { return true; };
 	virtual bool onRPCOutcoming(stRakNetHookParams*, const crTickLocalPlayerInfo&) { return true; };
 	virtual bool onPacketIncoming(stRakNetHookParams*, const crTickLocalPlayerInfo&) { return true; };
-	virtual bool onPackerOutcoming(stRakNetHookParams*, const crTickLocalPlayerInfo&) { return true; };
+	virtual bool onPacketOutcoming(stRakNetHookParams*, const crTickLocalPlayerInfo&) { return true; };
 	virtual void onWndProc(WPARAM, UINT, const crTickLocalPlayerInfo&) {};
 	virtual void everyTickAction(const crTickLocalPlayerInfo&) {};
 	virtual void onDrawGUI() {};

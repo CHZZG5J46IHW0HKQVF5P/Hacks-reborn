@@ -24,6 +24,12 @@ ChatBubble::ChatBubble(UINT16 PlayerID,
 	strcpy_s(this->message, message);
 }
 
+void WallHack::release()
+{
+	SF->getSAMP()->getInfo()->pSettings->byteNoNametagsBehindWalls = 1;
+	SF->getSAMP()->getInfo()->pSettings->fNameTagsDistance = fOrigDrawDistance;
+}
+
 void WallHack::init()
 {
 	this->isEnable = true;

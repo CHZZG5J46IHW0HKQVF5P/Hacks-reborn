@@ -91,6 +91,7 @@
   <ItemGroup>
     <ClCompile Include="1lineHacks.cpp" />
     <ClCompile Include="AirBrake.cpp" />
+    <ClCompile Include="AltClicker.cpp" />
     <ClCompile Include="AutoShot.cpp" />
     <ClCompile Include="BMXSpeedHack.cpp" />
     <ClCompile Include="CMFont.cpp" />
@@ -107,12 +108,14 @@
     <ClCompile Include="json\jsoncpp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MegaBMXJump.cpp" />
+    <ClCompile Include="OneBulletKill.cpp" />
     <ClCompile Include="PlayersList.cpp" />
     <ClCompile Include="SpeedControl.cpp" />
     <ClCompile Include="TurboControl.cpp" />
     <ClCompile Include="WallHack_NewNameTags.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AltClicker.h" />
     <ClInclude Include="Classes\CMFont.h" />
     <ClInclude Include="Classes\Hack.h" />
     <ClInclude Include="Classes\Hacks\1lineHacks.h" />
@@ -278,6 +281,7 @@
     <ClInclude Include="game_api\sdk\WString.hpp" />
     <ClInclude Include="HacksManager.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="OneBulletKill.h" />
     <ClInclude Include="PlayersList.h" />
     <ClInclude Include="SFAPI\SAMPFUNCS_API.h" />
     <ClInclude Include="SFAPI\SFCLEO.h" />

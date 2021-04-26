@@ -544,6 +544,12 @@
     <ClInclude Include="PlayersList.h">
       <Filter>Classes\Hacks</Filter>
     </ClInclude>
+    <ClInclude Include="OneBulletKill.h">
+      <Filter>Classes\Hacks</Filter>
+    </ClInclude>
+    <ClInclude Include="AltClicker.h">
+      <Filter>Classes\Hacks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -608,6 +614,12 @@
       <Filter>Classes\Hacks</Filter>
     </ClCompile>
     <ClCompile Include="PlayersList.cpp">
+      <Filter>Classes\Hacks</Filter>
+    </ClCompile>
+    <ClCompile Include="OneBulletKill.cpp">
+      <Filter>Classes\Hacks</Filter>
+    </ClCompile>
+    <ClCompile Include="AltClicker.cpp">
       <Filter>Classes\Hacks</Filter>
     </ClCompile>
   </ItemGroup>

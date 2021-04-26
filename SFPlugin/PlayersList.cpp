@@ -109,7 +109,7 @@ void PlayersList::onDrawSettings()
 	}
 }
 
-bool PlayersList::onPackerOutcoming(stRakNetHookParams* params, const crTickLocalPlayerInfo& info)
+bool PlayersList::onPacketOutcoming(stRakNetHookParams* params, const crTickLocalPlayerInfo& info)
 {
 	if (!noFriendDamage || params->packetId != ID_BULLET_SYNC)
 		return true;

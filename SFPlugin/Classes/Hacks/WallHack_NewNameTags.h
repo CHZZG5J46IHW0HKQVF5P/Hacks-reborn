@@ -43,6 +43,7 @@ private:
 	float fYChatBubleOffset = 0.f;
 	float fNameTagYOffset = 0.0;
 	//
+	void release() override;
 	void init() override;
 	void save(Json::Value &data) override;
 	void read(Json::Value &data) override;

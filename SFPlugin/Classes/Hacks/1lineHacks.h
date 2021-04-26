@@ -42,7 +42,7 @@ private:
 
 	bool onRPCIncoming(stRakNetHookParams *param, const crTickLocalPlayerInfo& info) override;
 
-	bool onPackerOutcoming(stRakNetHookParams *param, const crTickLocalPlayerInfo& info) override;
+	bool onPacketOutcoming(stRakNetHookParams *param, const crTickLocalPlayerInfo& info) override;
 
 	void save(Json::Value& data) override;
 
