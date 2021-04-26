@@ -1,57 +1,10 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(373,5): warning MSB8004: каталог Output заканчивается не косой чертой.  Этот экземпляр сборки добавит косую черту, поскольку она необходима для правильного определения каталога Output.
-  imgui.cpp
-  imgui_demo.cpp
-  imgui_draw.cpp
-  imgui_impl_dx9.cpp
-  imgui_impl_win32.cpp
-  imgui_widgets.cpp
-  jsoncpp.cpp
-c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1513): warning C4996: 'Json::Reader::Char': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1512): note:  см. объявление "Json::Reader::Char"
-c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1652): warning C4996: 'Json::Reader::Location': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1513): note:  см. объявление "Json::Reader::Location"
-c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1653): warning C4996: 'Json::Reader::Location': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1513): note:  см. объявление "Json::Reader::Location"
-c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1660): warning C4996: 'Json::Reader::Location': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1513): note:  см. объявление "Json::Reader::Location"
-c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1667): warning C4996: 'Json::Reader::Char': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1512): note:  см. объявление "Json::Reader::Char"
-c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1682): warning C4996: 'Json::Reader::Location': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1513): note:  см. объявление "Json::Reader::Location"
-c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1684): warning C4996: 'Json::Reader::Location': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1513): note:  см. объявление "Json::Reader::Location"
-c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1685): warning C4996: 'Json::Reader::Location': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1513): note:  см. объявление "Json::Reader::Location"
-c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1686): warning C4996: 'Json::Reader::Location': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1513): note:  см. объявление "Json::Reader::Location"
-c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1692): warning C4996: 'Json::Reader::Char': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1512): note:  см. объявление "Json::Reader::Char"
-c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1693): warning C4996: 'Json::Reader::Location': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1513): note:  см. объявление "Json::Reader::Location"
-c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1695): warning C4996: 'Json::Reader::Location': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1513): note:  см. объявление "Json::Reader::Location"
-c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1696): warning C4996: 'Json::Reader::Location': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1513): note:  см. объявление "Json::Reader::Location"
-c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1699): warning C4996: 'Json::Reader::Location': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1513): note:  см. объявление "Json::Reader::Location"
-c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1700): warning C4996: 'Json::Reader::Location': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1513): note:  см. объявление "Json::Reader::Location"
-c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1703): warning C4996: 'Json::Reader::Nodes': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1702): note:  см. объявление "Json::Reader::Nodes"
-c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1704): warning C4996: 'Json::Reader::Errors': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1663): note:  см. объявление "Json::Reader::Errors"
-c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1706): warning C4996: 'Json::Reader::Location': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1513): note:  см. объявление "Json::Reader::Location"
-c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1707): warning C4996: 'Json::Reader::Location': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1513): note:  см. объявление "Json::Reader::Location"
-c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1708): warning C4996: 'Json::Reader::Location': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1513): note:  см. объявление "Json::Reader::Location"
-c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1709): warning C4996: 'Json::Reader::Location': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\json\json/json.h(1513): note:  см. объявление "Json::Reader::Location"
-  main.cpp
+  Fix.cpp
 C:\SampSnipps.h(319): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\string.h(129): note:  см. объявление "strcpy"
 C:\Lippets\FIles\SingleFile\Computer.h(52): warning C4244: return: преобразование "double" в "FLOAT", возможна потеря данных
+C:\Lippets\FIles\SingleFile\ImGuiSnippets.h(31): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\string.h(129): note:  см. объявление "strcpy"
 c:\users\mishu\vsc\hacksreborn\sfplugin\include\json\reader.h(40): warning C4996: 'Json::Reader::Char': Use CharReader and CharReaderBuilder instead.
   c:\users\mishu\vsc\hacksreborn\sfplugin\include\json\reader.h(39): note:  см. объявление "Json::Reader::Char"
 c:\users\mishu\vsc\hacksreborn\sfplugin\include\json\reader.h(179): warning C4996: 'Json::Reader::Location': Use CharReader and CharReaderBuilder instead.
@@ -94,38 +47,4 @@ c:\users\mishu\vsc\hacksreborn\sfplugin\include\json\reader.h(235): warning C499
   c:\users\mishu\vsc\hacksreborn\sfplugin\include\json\reader.h(40): note:  см. объявление "Json::Reader::Location"
 c:\users\mishu\vsc\hacksreborn\sfplugin\include\json\reader.h(236): warning C4996: 'Json::Reader::Location': Use CharReader and CharReaderBuilder instead.
   c:\users\mishu\vsc\hacksreborn\sfplugin\include\json\reader.h(40): note:  см. объявление "Json::Reader::Location"
-c:\users\mishu\vsc\hacksreborn\sfplugin\CMFont.h(44): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\string.h(129): note:  см. объявление "strcpy"
-C:\Lippets\FIles\SingleFile\ImGuiSnippets.h(31): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\string.h(129): note:  см. объявление "strcpy"
-c:\users\mishu\vsc\hacksreborn\sfplugin\WallHack_NewNameTags.h(30): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
-c:\users\mishu\vsc\hacksreborn\sfplugin\WallHack_NewNameTags.h(31): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
-c:\users\mishu\vsc\hacksreborn\sfplugin\WallHack_NewNameTags.h(215): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
-c:\users\mishu\vsc\hacksreborn\sfplugin\WallHack_NewNameTags.h(216): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
-c:\users\mishu\vsc\hacksreborn\sfplugin\WallHack_NewNameTags.h(220): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
-c:\users\mishu\vsc\hacksreborn\sfplugin\WallHack_NewNameTags.h(224): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
-c:\users\mishu\vsc\hacksreborn\sfplugin\InputHelper.h(32): warning C4244: аргумент: преобразование "DWORD" в "float", возможна потеря данных
-c:\users\mishu\vsc\hacksreborn\sfplugin\Hack.h(85): warning C4018: <: несоответствие типов со знаком и без знака
-c:\users\mishu\vsc\hacksreborn\sfplugin\Hack.h(120): warning C4996: 'Json::Reader': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\include\json\reader.h(37): note:  см. объявление "Json::Reader"
-c:\users\mishu\vsc\hacksreborn\sfplugin\Hack.h(120): warning C4996: 'Json::Reader::Reader': Use CharReader and CharReaderBuilder instead
-  c:\users\mishu\vsc\hacksreborn\sfplugin\include\json\reader.h(56): note:  см. объявление "Json::Reader::Reader"
-c:\users\mishu\vsc\hacksreborn\sfplugin\Hack.h(121): warning C4996: 'Json::Reader::parse': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\include\json\reader.h(77): note:  см. объявление "Json::Reader::parse"
-c:\users\mishu\vsc\hacksreborn\sfplugin\Hack.h(201): warning C4996: 'Json::Reader::nodes_': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\include\json\reader.h(230): note:  см. объявление "Json::Reader::nodes_"
-  c:\users\mishu\vsc\hacksreborn\sfplugin\Hack.h(201): note: Сообщение диагностики возникло в созданной компилятором функции "Json::Reader::~Reader(void)"
-c:\users\mishu\vsc\hacksreborn\sfplugin\Hack.h(201): warning C4996: 'Json::Reader::errors_': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\include\json\reader.h(231): note:  см. объявление "Json::Reader::errors_"
-  c:\users\mishu\vsc\hacksreborn\sfplugin\Hack.h(201): note: Сообщение диагностики возникло в созданной компилятором функции "Json::Reader::~Reader(void)"
-c:\users\mishu\vsc\hacksreborn\sfplugin\Hack.h(201): warning C4996: 'Json::Reader::document_': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\include\json\reader.h(232): note:  см. объявление "Json::Reader::document_"
-  c:\users\mishu\vsc\hacksreborn\sfplugin\Hack.h(201): note: Сообщение диагностики возникло в созданной компилятором функции "Json::Reader::~Reader(void)"
-c:\users\mishu\vsc\hacksreborn\sfplugin\Hack.h(201): warning C4996: 'Json::Reader::commentsBefore_': Use CharReader and CharReaderBuilder instead.
-  c:\users\mishu\vsc\hacksreborn\sfplugin\include\json\reader.h(238): note:  см. объявление "Json::Reader::commentsBefore_"
-  c:\users\mishu\vsc\hacksreborn\sfplugin\Hack.h(201): note: Сообщение диагностики возникло в созданной компилятором функции "Json::Reader::~Reader(void)"
-main.cpp(32): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
-main.cpp(138): warning C4996: 'freopen': This function or variable may be unsafe. Consider using freopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\stdio.h(242): note:  см. объявление "freopen"
-  Создание кода...
-LINK : fatal error LNK1104: не удается открыть файл "..\..\..\..\..\GTA 140K BY DAPO SHOW\SAMPFUNCS\HacksReborn.sf"
+  SFPlugin.vcxproj -> C:\Users\mishu\VSC\Hacksreborn\SFPlugin\..\..\..\..\..\GTA 140K BY DAPO SHOW\SAMPFUNCS\HacksReborn.sf

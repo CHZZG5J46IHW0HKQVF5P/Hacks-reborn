@@ -1,5 +1,5 @@
-#pragma once
-#include "Hack.h"
+#include "AirBrake.h"
+
 
 void AirBrakeForward(float force, bool isExist, bool isDriver)
 {
@@ -76,70 +76,62 @@ void TPdown(float force, bool isExist, bool isDriver)
 }
 
 
-class AirBrake : public IHack
+
+AirBrake::AirBrake(const char* name)
 {
-public:
-	AirBrake(const char* name)
+	hackName = name;
+}
+
+void AirBrake::onDrawGUI()
+{
+	ImGui::Checkbox(hackName.c_str(), &isEnable);
+	ImGui::SameLine();
+	Lippets::ImGuiSnippets::KeyButton(activationKey, 0);
+}
+void AirBrake::onWndProc(WPARAM wParam, UINT msg, const crTickLocalPlayerInfo& info) 
+{
+	if (msg != WM_KEYDOWN && msg != WM_LBUTTONDOWN && msg != WM_SYSKEYDOWN)
+		return;
+	if (activationKey != 0 && wParam == activationKey)
 	{
-		hackName = name;
+
+		isAirBrakeShouldWork ^= true;
+		notify("Air Brake", isAirBrakeShouldWork);
 	}
-private:
-	bool isAirBrakeShouldWork = false;
-	int activationKey = 0;
-	float fAirBrakeForce = 0.f;
-	void drawGUI()	  override
+	if (isAirBrakeShouldWork)
 	{
-		ImGui::Checkbox(hackName.c_str(), &isEnable);
-		ImGui::SameLine();
-		Lippets::ImGuiSnippets::KeyButton(activationKey, g::keyBtnSplitter);
-	}
-	void wndProcHook(WPARAM wParam, UINT msg, const crTickLocalPlayerInfo& info) override
-	{
-		if (msg != WM_KEYDOWN && msg != WM_LBUTTONDOWN && msg != WM_SYSKEYDOWN)
-			return;	 
-		if (activationKey != 0 && wParam == activationKey)
+		switch (wParam)
 		{
-
-			isAirBrakeShouldWork ^= true;
-			notify("Air Brake", isAirBrakeShouldWork);
-		}
-		if (isAirBrakeShouldWork)
-		{
-			switch (wParam)
-			{
-			case 87: AirBrakeForward(fAirBrakeForce, info.isExist, info.isDriver); break;
-			case 32: TPup(fAirBrakeForce, info.isExist, info.isDriver); break;
-			case 16: TPdown(fAirBrakeForce, info.isExist, info.isDriver); break;
-			default:
-				break;
-			}
-		}
-
-
-	}
-	void drawSettings() override
-	{
-		if (ImGui::BeginMenu("Air Brake"))
-		{
-			ImGui::SliderFloat("Force", &fAirBrakeForce, 0.0f, 3.0f);
-
-			ImGui::EndMenu();
+		case 87: AirBrakeForward(fAirBrakeForce, info.isExist, info.isDriver); break;
+		case 32: TPup(fAirBrakeForce, info.isExist, info.isDriver); break;
+		case 16: TPdown(fAirBrakeForce, info.isExist, info.isDriver); break;
+		default:
+			break;
 		}
 	}
-	void save(Json::Value& data) override
-	{
-		data[hackName] = isEnable;
-		data["activationKey"] = activationKey;
-		data["fAirBrakeForce"] = fAirBrakeForce;
-	}
-	void read(Json::Value& data)   override
-	{
-		isEnable = data[hackName].asBool();
-		activationKey = data["activationKey"].asInt();
-		fAirBrakeForce = data["fAirBrakeForce"].asFloat();
-		if (fAirBrakeForce == 0.f)
-			fAirBrakeForce = 1.f;
-	}
 
-};
 
+}
+void AirBrake::onDrawSettings() 
+{
+	if (ImGui::BeginMenu("Air Brake"))
+	{
+		ImGui::SliderFloat("Force", &fAirBrakeForce, 0.0f, 3.0f);
+
+		ImGui::EndMenu();
+	}
+}
+void AirBrake::save(Json::Value& data) 
+{
+	data[hackName] = isEnable;
+	data["activationKey"] = activationKey;
+	data["fAirBrakeForce"] = fAirBrakeForce;
+}
+void AirBrake::read(Json::Value& data)
+{
+	isEnable = data[hackName].asBool();
+	activationKey = data["activationKey"].asInt();
+	fAirBrakeForce = data["fAirBrakeForce"].asFloat();
+	if (fAirBrakeForce == 0.f)
+		fAirBrakeForce = 1.f;
+}

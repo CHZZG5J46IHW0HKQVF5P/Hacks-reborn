@@ -74,7 +74,7 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FloatingPointModel>Fast</FloatingPointModel>
       <CompileAs>CompileAsCpp</CompileAs>
-      <AdditionalIncludeDirectories>include;$(DXSDK_DIR)\Include;SFAPI;game_api;game_api\sdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Classes\Hacks;Classes;include;$(DXSDK_DIR)\Include;SFAPI;game_api;game_api\sdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zc:threadSafeInit- /std:c++latest %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -89,21 +89,42 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="1lineHacks.cpp" />
+    <ClCompile Include="AirBrake.cpp" />
+    <ClCompile Include="AutoShot.cpp" />
+    <ClCompile Include="BMXSpeedHack.cpp" />
+    <ClCompile Include="CMFont.cpp" />
+    <ClCompile Include="Fix.cpp" />
+    <ClCompile Include="HacksManager.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
     <ClCompile Include="ImGui\imgui_impl_dx9.cpp" />
     <ClCompile Include="ImGui\imgui_impl_win32.cpp" />
+    <ClCompile Include="ImGui\imgui_tables.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="InputHelper.cpp" />
     <ClCompile Include="json\jsoncpp.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MegaBMXJump.cpp" />
+    <ClCompile Include="PlayersList.cpp" />
+    <ClCompile Include="SpeedControl.cpp" />
+    <ClCompile Include="TurboControl.cpp" />
+    <ClCompile Include="WallHack_NewNameTags.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AirBrake.h" />
-    <ClInclude Include="1lineHacks.h" />
-    <ClInclude Include="AutoShot.h" />
-    <ClInclude Include="BMXSpeedHack.h" />
-    <ClInclude Include="CMFont.h" />
+    <ClInclude Include="Classes\CMFont.h" />
+    <ClInclude Include="Classes\Hack.h" />
+    <ClInclude Include="Classes\Hacks\1lineHacks.h" />
+    <ClInclude Include="Classes\Hacks\AirBrake.h" />
+    <ClInclude Include="Classes\Hacks\AutoShot.h" />
+    <ClInclude Include="Classes\Hacks\BMXSpeedHack.h" />
+    <ClInclude Include="Classes\Hacks\Fix.h" />
+    <ClInclude Include="Classes\Hacks\InputHelper.h" />
+    <ClInclude Include="Classes\Hacks\MegaBMXJump.h" />
+    <ClInclude Include="Classes\Hacks\SpeedControl.h" />
+    <ClInclude Include="Classes\Hacks\TurboControl.h" />
+    <ClInclude Include="Classes\Hacks\WallHack_NewNameTags.h" />
     <ClInclude Include="game_api\game\C3DMarker.h" />
     <ClInclude Include="game_api\game\C3DMarkers.h" />
     <ClInclude Include="game_api\game\CAERadioTrackManager.h" />
@@ -255,27 +276,15 @@
     <ClInclude Include="game_api\sdk\UTF8.h" />
     <ClInclude Include="game_api\sdk\WString.h" />
     <ClInclude Include="game_api\sdk\WString.hpp" />
-    <ClInclude Include="Hack.h" />
-    <ClInclude Include="InputHelper.h" />
-    <ClInclude Include="ImGui\imconfig.h" />
-    <ClInclude Include="ImGui\imgui.h" />
-    <ClInclude Include="ImGui\imgui_impl_dx9.h" />
-    <ClInclude Include="ImGui\imgui_impl_win32.h" />
-    <ClInclude Include="ImGui\imgui_internal.h" />
-    <ClInclude Include="ImGui\imstb_rectpack.h" />
-    <ClInclude Include="ImGui\imstb_textedit.h" />
-    <ClInclude Include="ImGui\imstb_truetype.h" />
+    <ClInclude Include="HacksManager.h" />
     <ClInclude Include="main.h" />
-    <ClInclude Include="MegaBMXJump.h" />
+    <ClInclude Include="PlayersList.h" />
     <ClInclude Include="SFAPI\SAMPFUNCS_API.h" />
     <ClInclude Include="SFAPI\SFCLEO.h" />
     <ClInclude Include="SFAPI\SFGame.h" />
     <ClInclude Include="SFAPI\SFRakNet.h" />
     <ClInclude Include="SFAPI\SFRender.h" />
     <ClInclude Include="SFAPI\SFSAMP.h" />
-    <ClInclude Include="SpeedControl.h" />
-    <ClInclude Include="TurboControl.h" />
-    <ClInclude Include="WallHack_NewNameTags.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

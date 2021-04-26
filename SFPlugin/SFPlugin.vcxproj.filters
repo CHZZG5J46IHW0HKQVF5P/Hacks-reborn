@@ -20,10 +20,13 @@
       <UniqueIdentifier>{c84baea7-da8f-4e4b-871f-2274f9ee2f9e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Classes">
-      <UniqueIdentifier>{74b12721-775e-49c0-b264-80d595a3a161}</UniqueIdentifier>
+      <UniqueIdentifier>{35c99d8b-7f94-44f0-a520-fc9cc05ecb38}</UniqueIdentifier>
     </Filter>
     <Filter Include="Classes\Hacks">
-      <UniqueIdentifier>{0dc41df9-6925-40a8-b5d9-83e679139a0c}</UniqueIdentifier>
+      <UniqueIdentifier>{f2f5500e-6003-4968-903b-c4128eafffde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\Stuff">
+      <UniqueIdentifier>{15794d8a-9a19-4612-9899-6573ad796cc9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -499,66 +502,54 @@
     <ClInclude Include="game_api\game_api.h">
       <Filter>GameAPI</Filter>
     </ClInclude>
-    <ClInclude Include="ImGui\imconfig.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGui\imgui.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGui\imgui_impl_dx9.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGui\imgui_impl_win32.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGui\imgui_internal.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGui\imstb_rectpack.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGui\imstb_textedit.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGui\imstb_truetype.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="Hack.h">
-      <Filter>Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="SpeedControl.h">
+    <ClInclude Include="Classes\Hacks\1lineHacks.h">
       <Filter>Classes\Hacks</Filter>
     </ClInclude>
-    <ClInclude Include="MegaBMXJump.h">
+    <ClInclude Include="Classes\Hacks\AirBrake.h">
       <Filter>Classes\Hacks</Filter>
     </ClInclude>
-    <ClInclude Include="AirBrake.h">
+    <ClInclude Include="Classes\Hacks\AutoShot.h">
       <Filter>Classes\Hacks</Filter>
     </ClInclude>
-    <ClInclude Include="WallHack_NewNameTags.h">
+    <ClInclude Include="Classes\Hacks\BMXSpeedHack.h">
       <Filter>Classes\Hacks</Filter>
     </ClInclude>
-    <ClInclude Include="CMFont.h">
-      <Filter>Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="AutoShot.h">
+    <ClInclude Include="Classes\Hacks\Fix.h">
       <Filter>Classes\Hacks</Filter>
     </ClInclude>
-    <ClInclude Include="InputHelper.h">
+    <ClInclude Include="Classes\Hacks\InputHelper.h">
       <Filter>Classes\Hacks</Filter>
     </ClInclude>
-    <ClInclude Include="1lineHacks.h">
+    <ClInclude Include="Classes\Hacks\MegaBMXJump.h">
       <Filter>Classes\Hacks</Filter>
     </ClInclude>
-    <ClInclude Include="BMXSpeedHack.h">
+    <ClInclude Include="Classes\Hacks\SpeedControl.h">
       <Filter>Classes\Hacks</Filter>
     </ClInclude>
-    <ClInclude Include="TurboControl.h">
+    <ClInclude Include="Classes\Hacks\TurboControl.h">
+      <Filter>Classes\Hacks</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\WallHack_NewNameTags.h">
+      <Filter>Classes\Hacks</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\CMFont.h">
+      <Filter>Classes\Stuff</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hack.h">
+      <Filter>Classes\Stuff</Filter>
+    </ClInclude>
+    <ClInclude Include="HacksManager.h">
+      <Filter>Classes\Stuff</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayersList.h">
       <Filter>Classes\Hacks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="json\jsoncpp.cpp">
+      <Filter>json</Filter>
+    </ClCompile>
     <ClCompile Include="ImGui\imgui.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
@@ -574,11 +565,50 @@
     <ClCompile Include="ImGui\imgui_impl_win32.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="ImGui\imgui_tables.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="json\jsoncpp.cpp">
-      <Filter>json</Filter>
+    <ClCompile Include="CMFont.cpp">
+      <Filter>Classes\Stuff</Filter>
+    </ClCompile>
+    <ClCompile Include="HacksManager.cpp">
+      <Filter>Classes\Stuff</Filter>
+    </ClCompile>
+    <ClCompile Include="1lineHacks.cpp">
+      <Filter>Classes\Hacks</Filter>
+    </ClCompile>
+    <ClCompile Include="AirBrake.cpp">
+      <Filter>Classes\Hacks</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoShot.cpp">
+      <Filter>Classes\Hacks</Filter>
+    </ClCompile>
+    <ClCompile Include="BMXSpeedHack.cpp">
+      <Filter>Classes\Hacks</Filter>
+    </ClCompile>
+    <ClCompile Include="Fix.cpp">
+      <Filter>Classes\Hacks</Filter>
+    </ClCompile>
+    <ClCompile Include="InputHelper.cpp">
+      <Filter>Classes\Hacks</Filter>
+    </ClCompile>
+    <ClCompile Include="MegaBMXJump.cpp">
+      <Filter>Classes\Hacks</Filter>
+    </ClCompile>
+    <ClCompile Include="SpeedControl.cpp">
+      <Filter>Classes\Hacks</Filter>
+    </ClCompile>
+    <ClCompile Include="TurboControl.cpp">
+      <Filter>Classes\Hacks</Filter>
+    </ClCompile>
+    <ClCompile Include="WallHack_NewNameTags.cpp">
+      <Filter>Classes\Hacks</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayersList.cpp">
+      <Filter>Classes\Hacks</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

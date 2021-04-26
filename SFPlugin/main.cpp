@@ -1,5 +1,6 @@
 #include <Windows.h>
 #include "main.h"
+#include <cmath>
 bool CALLBACK WndProcHandler(HWND, UINT, WPARAM, LPARAM);
 HRESULT CALLBACK Reset(D3DPRESENT_PARAMETERS*);
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND, UINT, WPARAM, LPARAM);
@@ -19,56 +20,29 @@ bool CALLBACK Present(CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDest
 			eVehicleType vehType = eVehicleType::NONE;
 			if (isInCar) vehType = Vehicles::getVehicleType(Vehicles::getVehicleCVehicle(Vehicles::getVehicleInfo(VEHICLE_SELF)));
 			g::hacksManager.drawHacks(crTickLocalPlayerInfo(isExist, isInCar, isDriver, vehType));
-
 			if (g::isWindowOpen)
 			{
-
 
 				ImGui_ImplDX9_NewFrame();
 				ImGui_ImplWin32_NewFrame();
 				ImGui::NewFrame();
 				{
-					g::keyBtnSplitter = 0;
+					
 					ImGui::SetNextWindowPos(ImVec2(iScrResX / 2, iScrResY / 2), ImGuiCond_Once, ImVec2(0.5F, 0.5F));
 					ImGui::SetNextWindowSize(ImVec2(550.f, 450.f), ImGuiCond_::ImGuiCond_FirstUseEver);
 					ImGui::Begin("hakcs", &g::isWindowOpen);
 					{
-						static GuiMenu currentGuiMenu = GuiMenu::HACKS;
+						static uint currentGuiMenu = 0;
 						if (ImGui::Button("Hacks"))
-							currentGuiMenu = GuiMenu::HACKS;
-						ImGui::SameLine();
-						if (ImGui::Button("Miscs"))
-							currentGuiMenu = GuiMenu::MISC;
+							currentGuiMenu = 0;
 						ImGui::SameLine();
 						if (ImGui::Button("Settings"))
-							currentGuiMenu = GuiMenu::SETTINGS;
-						ImGui::SameLine();
-						if (ImGui::Button("Players"))
-							currentGuiMenu = GuiMenu::PLAYERS;
+							currentGuiMenu = 1;
 
-						switch (currentGuiMenu)
-						{
-						case GuiMenu::HACKS:
-						{
+						if (currentGuiMenu == 0)
 							g::hacksManager.drawGui();
-							break;
-						}
-						case GuiMenu::MISC:
-						{
-							//g::hacksManager.drawGui();
-							break;
-						}
-						case GuiMenu::SETTINGS:
-						{
+						else
 							g::hacksManager.drawSettings();
-							break;
-						}
-						case GuiMenu::PLAYERS:
-						{
-							break;
-						}
-						}
-
 
 					}
 					ImGui::End();
@@ -143,7 +117,6 @@ void __stdcall mainloop()
 			ImGui_ImplDX9_Init(SF->getRender()->getD3DDevice());
 			io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Arial.TTF", 16.0F, NULL, io.Fonts->GetGlyphRangesCyrillic());
 			// init path var
-
 			g::settingsPath = std::experimental::filesystem::current_path().string() + "\\SAMPFUNCS\\Hacks\\";
 			Lippets::Computer::createDirs(g::settingsPath);
 			SF->getGame()->registerGameDestructorCallback(PluginFree);
@@ -212,7 +185,8 @@ bool CALLBACK WndProcHandler(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 	}
 
-	ImGui_ImplWin32_WndProcHandler(hwd, msg, wParam, lParam);
+	if (g::isWindowOpen)
+		ImGui_ImplWin32_WndProcHandler(hwd, msg, wParam, lParam);
 	return true;
 }
 

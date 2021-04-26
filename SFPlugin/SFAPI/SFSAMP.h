@@ -825,12 +825,13 @@ struct stInputBox
 	int		iMouseLeftButton;
 };
 
+
 typedef void(__cdecl *CMDPROC) (PCHAR);
 struct SAMPFUNCS_API stInputInfo
 {
 	void									*pD3DDevice;
 	void									*pDXUTDialog;
-	stInputBox						*pDXUTEditBox;
+	stInputBox							*pDXUTEditBox;
 	CMDPROC									pCMDs[SAMP_MAX_CLIENTCMDS];
 	char									szCMDNames[SAMP_MAX_CLIENTCMDS][33];
 	int										iCMDCount;
