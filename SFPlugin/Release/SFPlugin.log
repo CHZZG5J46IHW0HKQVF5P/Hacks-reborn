@@ -1,8 +1,9 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(377,5): warning MSB8004: каталог Output заканчивается не косой чертой.  Этот экземпляр сборки добавит косую черту, поскольку она необходима для правильного определения каталога Output.
-  main.cpp
-e:\!projects\github\c++\hacks-reborn\sfplugin\classes\hack.h(15): warning C4005: iScrResX: изменение макроопределения
-  c:\sampsnipps.h(7): note: см. предыдущее определение "iScrResX"
-e:\!projects\github\c++\hacks-reborn\sfplugin\classes\hack.h(16): warning C4005: iScrResY: изменение макроопределения
-  c:\sampsnipps.h(8): note: см. предыдущее определение "iScrResY"
-e:\!projects\github\c++\hacks-reborn\sfplugin\main.cpp(38): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+  CMFont.cpp
+c:\lippets\cmclasses\cmfont.cpp(38): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\string.h(125): note:  см. объявление "strcpy"
+  SampSnipps.cpp
+c:\lippets\sampsnipps\sampsnipps.cpp(62): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\string.h(125): note:  см. объявление "strcpy"
+  Создание кода...
   SFPlugin.vcxproj -> E:\!Projects\GitHub\C++\Hacks-reborn\SFPlugin\..\..\..\..\gtasamps\GTA 140K BY DAPO SHOW\SAMPFUNCS\HacksReborn.sf
