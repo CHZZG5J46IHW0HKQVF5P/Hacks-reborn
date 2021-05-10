@@ -3,7 +3,7 @@
 
 InputHelper::InputHelper(const char* name)
 {
-	hackName = name;
+	m_sHackName = name;
 }
 void InputHelper::init()
 {
@@ -11,20 +11,20 @@ void InputHelper::init()
 }
 void InputHelper::onDrawGUI()
 {
-	ImGui::Checkbox(hackName.c_str(), &isEnable);
+	ImGui::Checkbox(m_sHackName.c_str(), &m_bEnabled);
 }
-void InputHelper::onDrawHack(const crTickLocalPlayerInfo& info)
+void InputHelper::onDrawHack(crTickLocalPlayerInfo* info)
 {
 	if (!SF->getSAMP()->getInput()->iInputEnabled)
 		return;
 	char szBuffer[128];
 	std::string LocaleName = Lippets::KeyBoard::GetKeyBoardLocaleName();
-	if (info.isInCar)
+	if (info->isInCar)
 		sprintf_s(szBuffer, "¬аш ID: {00FF00}%d{FFFFFF} ID јвто: {00FF00}%d{FFFFFF} язык: {00FF00}%s", MYID, SF->getSAMP()->getPlayers()->pLocalPlayer->sCurrentVehicleID, LocaleName.c_str());
 	else
 		sprintf_s(szBuffer, "¬аш ID: {00FF00}%d{FFFFFF} язык: {00FF00}%s", MYID, LocaleName.c_str());
 	font.f->Print(szBuffer, 0xffffffff, SF->getSAMP()->getInput()->pDXUTEditBox->dwPosChatInput[0] + offsetX, SF->getSAMP()->getInput()->pDXUTEditBox->dwPosChatInput[1] + offsetY);
-
+	return;
 }
 void InputHelper::onDrawSettings()
 {
@@ -49,17 +49,19 @@ void InputHelper::onDrawSettings()
 		ImGui::EndMenu();
 	}
 }
-void InputHelper::save(Json::Value& data)
+void InputHelper::save(nlohmann::json& data)
 {
-	data[hackName] = isEnable;
+	data[m_sHackName] = m_bEnabled;
 	data["offsetY"] = offsetY;
 	data["offsetX"] = offsetX;
 	font.save(data);
 }
-void InputHelper::read(Json::Value& data)
+void InputHelper::read(nlohmann::json& data)
 {
-	isEnable = data[hackName].asBool();
-	offsetY = data["offsetY"].asInt();
-	offsetX = data["offsetX"].asInt();
+	m_bEnabled = data[m_sHackName].get<bool>();
+	offsetY = data["offsetY"].get<int>();
+	offsetX = data["offsetX"].get<int>();
 	font.read(data);
+	if (offsetY == 0)
+		offsetY = 45;
 }

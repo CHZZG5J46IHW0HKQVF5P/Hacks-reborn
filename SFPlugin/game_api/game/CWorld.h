@@ -186,7 +186,7 @@ public:
     virtual float       GetAircraftMaxHeight        ( void ) = 0;
     virtual void        SetAircraftMaxVelocity      ( float fVelocity ) = 0;
     virtual float       GetAircraftMaxVelocity      ( void ) = 0;
-    virtual void        SetOcclusionsEnabled        ( bool bEnabled ) = 0;
+    virtual void        SetOcclusionsEnabled        ( bool m_bEnabled ) = 0;
     virtual bool        GetOcclusionsEnabled        ( void ) = 0;
     virtual void        FindWorldPositionForRailTrackPosition ( float fRailTrackPosition, int iTrackId, CVector* pOutVecPosition ) = 0;
     virtual int         FindClosestRailTrackNode    ( const CVector& vecPosition, uchar& ucOutTrackId, float& fOutRailDistance ) = 0;

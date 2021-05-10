@@ -2,28 +2,28 @@
 
 AltClicker::AltClicker(const char* name)
 {
-	hackName = name;
+	m_sHackName = name;
 }
 
 void AltClicker::onDrawGUI()
 {
-	ImGui::Checkbox(hackName.c_str(), &isEnable);
+	ImGui::Checkbox(m_sHackName.c_str(), &m_bEnabled);
 	ImGui::SameLine();
-	Lippets::ImGuiSnippets::KeyButton(activationKey, 0);
+	Lippets::ImGuiSnippets::KeyButton(activationKey, g::keyButtonSplitter);
 }
 
-void AltClicker::read(Json::Value& data)
+void AltClicker::read(nlohmann::json& data)
 {
-	isEnable = data[hackName].asBool();
-	iDelay = data["iDelay"].asInt();
-	activationKey = data["activationKey"].asInt();
+	m_bEnabled = data[m_sHackName].get<bool>();
+	iDelay = data["iDelay"].get<int>();
+	activationKey = data["activationKey"].get<int>();
 	if (iDelay == 0)
 		iDelay = 25;
 }
 
-void AltClicker::save(Json::Value& data)
+void AltClicker::save(nlohmann::json& data)
 {
-	data[hackName] = isEnable;
+	data[m_sHackName] = m_bEnabled;
 	data["activationKey"] = activationKey;
 	data["iDelay"] = iDelay;
 }
@@ -38,34 +38,34 @@ void AltClicker::onDrawSettings()
 }
 
 
-void AltClicker::onWndProc(WPARAM wParam, UINT msg, const crTickLocalPlayerInfo& info)
+void AltClicker::onWndProc(WPARAM wParam, UINT msg,  crTickLocalPlayerInfo* info)
 {
 	if (msg != WM_KEYDOWN && msg != WM_LBUTTONDOWN && msg != WM_SYSKEYDOWN)
 		return;
 
 	if (activationKey != 0 && wParam == activationKey)
 	{
-		bWorking ^= true;
+		bWorking = !bWorking;
 		notify("ALT Clicker", bWorking);
 	}
 }
 
-void AltClicker::everyTickAction(const crTickLocalPlayerInfo& info)
+void AltClicker::everyTickAction( crTickLocalPlayerInfo* info)
 {
-	static DWORD dwALTtime = 0;
+	static CMTimer timer;
 	static uint8 eALTstate = 1;
 	if (bWorking)
-		if (dwALTtime < GetTickCount())
+		if (timer.isEnded())
 		{
 			if (eALTstate == 1)
 			{
-				dwALTtime = GetTickCount() + 1;
+				timer.setTimer(1);
 				eALTstate = 2;
 				SF->getGame()->emulateGTAKey(21, 255);
 			}
 			else if (eALTstate == 2)
 			{
-				dwALTtime = GetTickCount() + iDelay;
+				timer.setTimer(iDelay);
 				eALTstate = 1;
 				SF->getGame()->emulateGTAKey(21, 0);
 			}

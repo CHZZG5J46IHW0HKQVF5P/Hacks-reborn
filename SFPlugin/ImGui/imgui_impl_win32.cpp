@@ -378,6 +378,10 @@ IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARA
         memset(io.KeysDown, 0, sizeof(io.KeysDown));
         return 0;
     case WM_CHAR:
+		wchar_t wChar;
+		MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, (char*)&wParam, 1, &wChar, 1);
+		io.AddInputCharacter(wChar);
+		return 0;
         // You can also use ToAscii()+GetKeyboardState() to retrieve characters.
         if (wParam > 0 && wParam < 0x10000)
             io.AddInputCharacterUTF16((unsigned short)wParam);

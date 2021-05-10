@@ -20,10 +20,10 @@ private:
 	DamageInfo dInfo;
 	int iDelay;
 	int sendDamageDeuqeLength = 0;
-	void everyTickAction(const crTickLocalPlayerInfo&) override;
-	bool onRPCOutcoming(stRakNetHookParams*, const crTickLocalPlayerInfo&) override;
+	void everyTickAction( crTickLocalPlayerInfo*) override;
+	bool onRPCOutcoming(stRakNetHookParams*,  crTickLocalPlayerInfo*) override;
 	void onDrawGUI() override;
 	void onDrawSettings() override;
-	void save(Json::Value&) override;
-	void read(Json::Value&) override;
+	void save(nlohmann::json&) override;
+	void read(nlohmann::json&) override;
 };

@@ -201,7 +201,7 @@ public:
     virtual unsigned char       GetBlurLevel ( void ) = 0;
     virtual void                SetBlurLevel ( unsigned char ucLevel ) = 0;
 
-    virtual void                SetJetpackWeaponEnabled     ( eWeaponType weaponType, bool bEnabled );
+    virtual void                SetJetpackWeaponEnabled     ( eWeaponType weaponType, bool m_bEnabled );
     virtual bool                GetJetpackWeaponEnabled     ( eWeaponType weaponType );
 
     virtual eGameVersion        GetGameVersion ( void ) = 0;

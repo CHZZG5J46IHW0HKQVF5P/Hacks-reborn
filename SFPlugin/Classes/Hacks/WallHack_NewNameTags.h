@@ -1,6 +1,6 @@
 #pragma once
 #include "Hack.h"
-#include "C:\Lippets\FIles\SingleFile\Numbers.h"
+#include "C:\Lippets\FIles\Numbers.h"
 
 class ChatBubble
 {
@@ -28,7 +28,7 @@ private:
 	CMFont font = CMFont("WallHack");
 	std::deque<ChatBubble> chatBubbles;
 	// wallhack
-	SLineOfSightFlags LineOfSightFlags;
+	bool bNoNameTags;
 	int activationKey = 0;
 	float fOrigDrawDistance;
 	bool wallHack = true;
@@ -45,13 +45,13 @@ private:
 	//
 	void release() override;
 	void init() override;
-	void save(Json::Value &data) override;
-	void read(Json::Value &data) override;
-	void everyTickAction(const crTickLocalPlayerInfo& info) override;
+	void save(nlohmann::json &data) override;
+	void read(nlohmann::json &data) override;
+	void everyTickAction( crTickLocalPlayerInfo* info) override;
 	void onDrawGUI() override;
 	void switchHack() override;
-	void onWndProc(WPARAM wParam, UINT msg, const crTickLocalPlayerInfo& info) override;
-	bool onRPCIncoming(stRakNetHookParams* params, const crTickLocalPlayerInfo& info) override;
-	void onDrawHack(const crTickLocalPlayerInfo& info) override;
+	void onWndProc(WPARAM wParam, UINT msg,  crTickLocalPlayerInfo* info) override;
+	bool onRPCIncoming(stRakNetHookParams* params,  crTickLocalPlayerInfo* info) override;
+	void onDrawHack( crTickLocalPlayerInfo* info) override;
 	void onDrawSettings() override;
 };

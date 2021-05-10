@@ -210,7 +210,7 @@ public:
 
     virtual void                SetAlwaysLeaveSkidMarks                 ( bool bAlwaysLeaveSkidMarks ) = 0;
     virtual void                SetCanBeDamaged                         ( bool bCanBeDamaged ) = 0;
-    virtual void                SetCanBeTargettedByHeatSeekingMissiles  ( bool bEnabled ) = 0;
+    virtual void                SetCanBeTargettedByHeatSeekingMissiles  ( bool m_bEnabled ) = 0;
     virtual void                SetCanShootPetrolTank                   ( bool bCanShoot ) = 0;
     virtual void                SetChangeColourWhenRemapping            ( bool bChangeColour ) = 0;
     virtual void                SetComedyControls                       ( bool bComedyControls ) = 0;
@@ -255,7 +255,7 @@ public:
     virtual unsigned char        GetMaxPassengerCount                   () = 0;
 
     virtual bool                 IsSmokeTrailEnabled                    () = 0;
-    virtual void                 SetSmokeTrailEnabled                   ( bool bEnabled ) = 0;
+    virtual void                 SetSmokeTrailEnabled                   ( bool m_bEnabled ) = 0;
 
     virtual void                 GetGravity                             ( CVector* pvecGravity ) const = 0;
     virtual void                 SetGravity                             ( const CVector* pvecGravity ) = 0;

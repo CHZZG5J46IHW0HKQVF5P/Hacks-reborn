@@ -12,19 +12,19 @@ void DisableTwinTurbo(bool bDisable)
 
 TurboControl::TurboControl(const char* name)
 {
-	hackName = name;
+	m_sHackName = name;
 }
 void TurboControl::onDrawGUI() 
 {
-	ImGui::Checkbox(hackName.c_str(), &isEnable);
+	ImGui::Checkbox(m_sHackName.c_str(), &m_bEnabled);
 	ImGui::SameLine();
-	Lippets::ImGuiSnippets::KeyButton(activationKey, 0);
+	Lippets::ImGuiSnippets::KeyButton(activationKey, g::keyButtonSplitter);
 
 }
-void TurboControl::onWndProc(WPARAM wParam, UINT msg, const crTickLocalPlayerInfo& info) 
+void TurboControl::onWndProc(WPARAM wParam, UINT msg,  crTickLocalPlayerInfo* info) 
 {
 	if (activationKey != 0 && wParam == activationKey)
-		if (info.isDriver)
+		if (info->isDriver)
 			switch (Stuff::getKeyStateByMsg(msg))
 			{
 			case eKeyState::PRESSED:
@@ -43,14 +43,14 @@ void TurboControl::onWndProc(WPARAM wParam, UINT msg, const crTickLocalPlayerInf
 			}
 
 }
-void TurboControl::save(Json::Value& data) 
+void TurboControl::save(nlohmann::json& data) 
 {
-	data[hackName] = isEnable;
+	data[m_sHackName] = m_bEnabled;
 	data["ActivationKey"] = activationKey;
 
 }
-void TurboControl::read(Json::Value& data) 
+void TurboControl::read(nlohmann::json& data) 
 {
-	isEnable = data[hackName].asBool();
-	activationKey = data["ActivationKey"].asInt();
+	m_bEnabled = data[m_sHackName].get<bool>();
+	activationKey = data["ActivationKey"].get<int>();
 }

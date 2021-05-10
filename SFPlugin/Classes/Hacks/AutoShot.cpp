@@ -3,41 +3,40 @@
 
 AutoShot::AutoShot(const char* name)
 {
-	hackName = name;
+	m_sHackName = name;
 }
 
 void AutoShot::onDrawGUI()
 {
-	ImGui::Checkbox(hackName.c_str(), &isEnable);
+	ImGui::Checkbox(m_sHackName.c_str(), &m_bEnabled);
 	ImGui::SameLine();
-	Lippets::ImGuiSnippets::KeyButton(activationKey, 0);
+	Lippets::ImGuiSnippets::KeyButton(activationKey, g::keyButtonSplitter);
 }
-void AutoShot::onWndProc(WPARAM wParam, UINT msg, const crTickLocalPlayerInfo& info)
+void AutoShot::onWndProc(WPARAM wParam, UINT msg,  crTickLocalPlayerInfo* info)
 {
 	if (msg != WM_KEYDOWN && msg != WM_LBUTTONDOWN && msg != WM_SYSKEYDOWN)
 		return;
 	if (activationKey != 0 && wParam == activationKey)
 	{
-		autoShot ^= true;
+		autoShot = !autoShot;
 		notify("Auto Shot", autoShot);
 	}
 }
-void AutoShot::everyTickAction(const crTickLocalPlayerInfo& info)
+void AutoShot::everyTickAction( crTickLocalPlayerInfo* info)
 {
-	if (!info.isExist || !autoShot || info.isInCar)
+	if (!info->isExist || !autoShot || info->isInCar)
 		return;
-	DWORD targetPedAddr = *(DWORD*)PEDSELF->GetMemoryValue(0x79C);
-	if (targetPedAddr)
+	if (*(DWORD*)PEDSELF->GetMemoryValue(0x79C))
 		SF->getGame()->emulateGTAKey(17, 255);
 }
-void AutoShot::save(Json::Value& data)
+void AutoShot::save(nlohmann::json& data)
 {
 	data["ActivationKey"] = activationKey;
-	data[hackName] = isEnable;
+	data[m_sHackName] = m_bEnabled;
 
 }
-void AutoShot::read(Json::Value& data)
+void AutoShot::read(nlohmann::json& data)
 {
-	isEnable = data[hackName].asBool();
-	activationKey = data["ActivationKey"].asInt();
+	m_bEnabled = data[m_sHackName].get<bool>();
+	activationKey = data["ActivationKey"].get<int>();
 }

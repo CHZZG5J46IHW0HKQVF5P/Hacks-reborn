@@ -12,9 +12,9 @@ private:
 	int offsetX = 0;
 	void init() override;
 	void onDrawGUI() override;
-	void onDrawHack(const crTickLocalPlayerInfo& info) override;
+	void onDrawHack( crTickLocalPlayerInfo* info) override;
 	void onDrawSettings() override;
-	void save(Json::Value& data) override;
-	void read(Json::Value& data) override;
+	void save(nlohmann::json& data) override;
+	void read(nlohmann::json& data) override;
 
 };

@@ -54,10 +54,10 @@ public:
     virtual VOID                        StopRadio                       ( void ) = 0;
     virtual VOID                        StartRadio                      ( unsigned int station ) = 0;
     virtual void                        PauseAmbientSounds              ( bool bPaused ) = 0;
-    virtual VOID                        SetAmbientSoundEnabled          ( eAmbientSoundType eType, bool bEnabled ) = 0;
+    virtual VOID                        SetAmbientSoundEnabled          ( eAmbientSoundType eType, bool m_bEnabled ) = 0;
     virtual bool                        IsAmbientSoundEnabled           ( eAmbientSoundType eType ) = 0;
     virtual void                        ResetAmbientSounds              ( void ) = 0;
-    virtual VOID                        SetWorldSoundEnabled            ( uint uiGroup, uint uiIndex, bool bEnabled ) = 0;
+    virtual VOID                        SetWorldSoundEnabled            ( uint uiGroup, uint uiIndex, bool m_bEnabled ) = 0;
     virtual bool                        IsWorldSoundEnabled             ( uint uiGroup, uint uiIndex ) = 0;
     virtual void                        ResetWorldSounds                ( void ) = 0;
     virtual void                        SetWorldSoundHandler            ( WorldSoundHandler * pHandler ) = 0;

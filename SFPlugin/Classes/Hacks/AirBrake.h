@@ -1,6 +1,8 @@
 #pragma once
 #include "Hack.h"
 
+
+
 class AirBrake : public IHack
 {
 public:
@@ -10,10 +12,10 @@ private:
 	int activationKey = 0;
 	float fAirBrakeForce = 0.f;
 	void onDrawGUI() override;
-	void onWndProc(WPARAM wParam, UINT msg, const crTickLocalPlayerInfo& info) override;
+	void onWndProc(WPARAM wParam, UINT msg,  crTickLocalPlayerInfo* info) override;
 	void onDrawSettings() override;
-	void save(Json::Value& data) override;
-	void read(Json::Value& data) override;
+	void save(nlohmann::json& data) override;
+	void read(nlohmann::json& data) override;
 
 };
 

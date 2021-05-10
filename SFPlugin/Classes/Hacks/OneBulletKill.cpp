@@ -14,28 +14,28 @@ DamageInfo::DamageInfo(UINT16 wPlayerID,
 
 OneBulletKill::OneBulletKill(const char* name)
 {
-	hackName = name;
+	m_sHackName = name;
 }
 
-void OneBulletKill::save(Json::Value& data)
+void OneBulletKill::save(nlohmann::json& data)
 {
-	data[hackName] = isEnable;
+	data[m_sHackName] = m_bEnabled;
 	data["delay"] = iDelay;
 }
 
-void OneBulletKill::read(Json::Value& data)
+void OneBulletKill::read(nlohmann::json& data)
 {
-	isEnable = data[hackName].asBool();
-	iDelay = data["delay"].asInt();
+	m_bEnabled = data[m_sHackName].get<bool>();
+	iDelay = data["delay"].get<int>();
 	if (iDelay == 0)
 		iDelay = 50;
 }
 
-bool OneBulletKill::onRPCOutcoming(stRakNetHookParams* params, const crTickLocalPlayerInfo& info)
+bool OneBulletKill::onRPCOutcoming(stRakNetHookParams* params,  crTickLocalPlayerInfo* info)
 {
-	if (params->packetId != 115) // Give/Take Damage
+	if (params->packetId != RPCEnumeration::RPC_GiveTakeDamage) // Give/Take Damage
 		return true;
-	// bool bGiveOrTake, UINT16 wPlayerID, float damage_amount, UINT32 dWeaponID, UINT32 dBodypart
+
 	bool bGiveOrTake;
 	UINT16 wPlayerID;
 	float damage_amount;
@@ -43,6 +43,10 @@ bool OneBulletKill::onRPCOutcoming(stRakNetHookParams* params, const crTickLocal
 	UINT32 dBodypart;
 	params->bitStream->ResetReadPointer();
 	params->bitStream->Read(bGiveOrTake);
+
+	if (bGiveOrTake)
+		return true;
+
 	params->bitStream->Read(wPlayerID);
 	params->bitStream->Read(damage_amount);
 	params->bitStream->Read(dWeaponID);
@@ -55,35 +59,37 @@ bool OneBulletKill::onRPCOutcoming(stRakNetHookParams* params, const crTickLocal
 		SF->getSAMP()->getPlayers()->pRemotePlayer[wPlayerID]->pPlayerData->fActorArmor;
 
 	sendDamageDeuqeLength = (fPlayerHealth / damage_amount) + 2;
-
 	dInfo = DamageInfo(wPlayerID, damage_amount, dWeaponID, dBodypart);
-
 	return false;
 }
 
-void OneBulletKill::everyTickAction(const crTickLocalPlayerInfo& info)
+
+void OneBulletKill::everyTickAction( crTickLocalPlayerInfo* info)
 {
-	static DWORD lastSendDamageTime = 0;
+	static CMTimer sendDamageTimer;
 	if (sendDamageDeuqeLength > 0)
-		if (lastSendDamageTime < GetTickCount())
+		if (sendDamageTimer.isEnded())
 		{
-			--sendDamageDeuqeLength;
-			SF->getSAMP()->sendGiveDamage(dInfo.wPlayerID, dInfo.damage_amount, dInfo.dWeaponID, dInfo.dBodypart);
-			lastSendDamageTime = GetTickCount() + iDelay;
+			if (PEDSELF->GetWeapon(PEDSELF->GetCurrentWeaponSlot())->GetType() == dInfo.dWeaponID)
+			{
+				--sendDamageDeuqeLength;
+				SF->getSAMP()->sendGiveDamage(dInfo.wPlayerID, dInfo.damage_amount, dInfo.dWeaponID, dInfo.dBodypart);
+				sendDamageTimer.setTimer(iDelay);
+			}
 		}
 
 }
 
 void OneBulletKill::onDrawGUI()
 {
-	ImGui::Checkbox("One Bullet Kill", &isEnable);
+	ImGui::Checkbox("One Bullet Kill", &m_bEnabled);
 }
 
 void OneBulletKill::onDrawSettings()
 {
-	if (ImGui::BeginMenu("New Name Tags"))
+	if (ImGui::BeginMenu("One Bullet Kill"))
 	{
-		ImGui::SliderInt("Delay Between Sending Damage",&iDelay,10,1000);
+		ImGui::SliderInt("Delay Between Sending Damage",&iDelay,70,1000);
 		ImGui::EndMenu();
 	}
 }

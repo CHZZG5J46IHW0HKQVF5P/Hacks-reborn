@@ -92,7 +92,7 @@ class CGameSettings
 {
 public:
     virtual bool            IsWideScreenEnabled     ( void ) = 0;
-    virtual void            SetWideScreenEnabled    ( bool bEnabled ) = 0;
+    virtual void            SetWideScreenEnabled    ( bool m_bEnabled ) = 0;
     virtual unsigned int    GetNumVideoModes        ( void ) = 0;
     virtual VideoMode *     GetVideoModeInfo        ( VideoMode * modeInfo, unsigned int modeIndex ) = 0;
     virtual unsigned int    GetCurrentVideoMode     ( void ) = 0;

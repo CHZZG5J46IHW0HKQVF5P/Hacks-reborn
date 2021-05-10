@@ -1,2 +1,8 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(373,5): warning MSB8004: каталог Output заканчивается не косой чертой.  Этот экземпляр сборки добавит косую черту, поскольку она необходима для правильного определения каталога Output.
-  SFPlugin.vcxproj -> C:\Users\mishu\VSC\Hacksreborn\SFPlugin\..\..\..\..\..\GTA 140K BY DAPO SHOW\SAMPFUNCS\HacksReborn.sf
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(377,5): warning MSB8004: каталог Output заканчивается не косой чертой.  Этот экземпляр сборки добавит косую черту, поскольку она необходима для правильного определения каталога Output.
+  main.cpp
+e:\!projects\c++\!hacksreborn\sfplugin\classes\hack.h(15): warning C4005: iScrResX: изменение макроопределения
+  c:\sampsnipps.h(7): note: см. предыдущее определение "iScrResX"
+e:\!projects\c++\!hacksreborn\sfplugin\classes\hack.h(16): warning C4005: iScrResY: изменение макроопределения
+  c:\sampsnipps.h(8): note: см. предыдущее определение "iScrResY"
+e:\!projects\c++\!hacksreborn\sfplugin\main.cpp(38): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+  SFPlugin.vcxproj -> E:\!Projects\C++\!Hacksreborn\SFPlugin\..\..\..\..\gtasamps\GTA 140K BY DAPO SHOW\SAMPFUNCS\HacksReborn.sf

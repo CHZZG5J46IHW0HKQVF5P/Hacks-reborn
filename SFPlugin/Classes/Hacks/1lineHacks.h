@@ -20,7 +20,6 @@ private:
 	bool bNoCamrestore = false;
 	bool bNoFall = false;
 	bool bSurfOnVehicles = false;
-	bool bWallShot = false;
 	bool bPressNitro = false;
 	bool bNoFallDamage = false;
 	bool bNoBike = false;
@@ -29,23 +28,25 @@ private:
 	bool bNewDl = false;
 	bool bWaterProofEngine = false;
 	bool bBar160hp = false;
-	bool bDontGiveMeBat;
+	bool bFastHeli = false;
+	bool bDontGiveMeBat = false;		
+	bool bMegaBMXJump = false;
 	void  onDrawGUI() override;
 
-	void onDrawHack(const crTickLocalPlayerInfo& info) override;
+	void onDrawHack( crTickLocalPlayerInfo* info) override;
 
 	void switchHack() override;
 
-	void everyTickAction(const crTickLocalPlayerInfo& info) override;
+	void everyTickAction( crTickLocalPlayerInfo* info) override;
 
-	void onWndProc(WPARAM wParam, UINT msg, const crTickLocalPlayerInfo& info) override;
+	void onWndProc(WPARAM wParam, UINT msg,  crTickLocalPlayerInfo* info) override;
 
-	bool onRPCIncoming(stRakNetHookParams *param, const crTickLocalPlayerInfo& info) override;
+	bool onRPCIncoming(stRakNetHookParams *param,  crTickLocalPlayerInfo* info) override;
 
-	bool onPacketOutcoming(stRakNetHookParams *param, const crTickLocalPlayerInfo& info) override;
+	bool onPacketOutcoming(stRakNetHookParams *param,  crTickLocalPlayerInfo* info) override;
 
-	void save(Json::Value& data) override;
+	void save(nlohmann::json& data) override;
 
-	void read(Json::Value& data) override;
+	void read(nlohmann::json& data) override;
 
 };

@@ -3,26 +3,26 @@
 
 Fix::Fix(const char* name)
 {
-	isEnable = true;
+	m_bEnabled = true;
 }
 
-bool Fix::onRPCOutcoming(stRakNetHookParams* params, const crTickLocalPlayerInfo& info)
+bool Fix::onRPCOutcoming(stRakNetHookParams* params, crTickLocalPlayerInfo* info)
 {
 	switch (params->packetId)
 	{
-	case 106:
+	case RPCEnumeration::RPC_DamageVehicle:
 		return false; /*UpdateVehicleDamageStatus*/
 	}
 	return true;
 }
 
-bool Fix::onRPCIncoming(stRakNetHookParams* params, const crTickLocalPlayerInfo& info)
+bool Fix::onRPCIncoming(stRakNetHookParams* params, crTickLocalPlayerInfo* info)
 {
 	switch (params->packetId)
 	{
-	case 35: /*SetPlayerDrunkLevel*/
+	case ScriptRPCEnumeration::RPC_ScrSetPlayerDrunkLevel: /*SetPlayerDrunkLevel*/
 		return false;
-	case 44 /*CREATEOBJECT*/:
+	case ScriptRPCEnumeration::RPC_ScrCreateObject /*CREATEOBJECT*/:
 	{
 		UINT16 wObjectID;
 		UINT32 ModelID;
@@ -33,14 +33,15 @@ bool Fix::onRPCIncoming(stRakNetHookParams* params, const crTickLocalPlayerInfo&
 		if (ModelID == 0) return false;
 		break;
 	}
-	case 93 /*SendClientMessage*/:
+	case ScriptRPCEnumeration::RPC_ScrClientMessage /*SendClientMessage*/:
 	{
 		UINT32 iColor;
 		UINT32 iMsgL;
-		char szMsg[256];
+		char *szMsg;
 		params->bitStream->ResetReadPointer();
 		params->bitStream->Read(iColor);
 		params->bitStream->Read(iMsgL);
+		szMsg = new char[iMsgL];
 		params->bitStream->Read(szMsg, iMsgL);
 		params->bitStream->ResetReadPointer();
 		szMsg[iMsgL] = '\0';
@@ -48,13 +49,17 @@ bool Fix::onRPCIncoming(stRakNetHookParams* params, const crTickLocalPlayerInfo&
 			"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", "Основные команды сервера:", "Пригласи друга и получи бонус", "Наш сайт: arizona-rp.com",
 			"В нашем магазине ты можешь приобрести", "их на желаемый тобой {FFFFFF}бизнес", "Игроки со статусом {FFFFFF}VIP{6495ED}", "В магазине так-же можно приобрести редкие",
 			"а так-же предметы, которые выделят тебя из толпы!", 0))
+		{
+			delete[] szMsg;
 			return false;
+		}
+		delete[] szMsg;
 		break;
 	}
-	case 147:
+	case ScriptRPCEnumeration::RPC_ScrSetVehicleHealth:
 	{
-		if (!info.isDriver)
-			break;
+		if (!info->isDriver)
+			return true;
 		int16 iAutoID;
 		float fHealth;
 		params->bitStream->ResetReadPointer();

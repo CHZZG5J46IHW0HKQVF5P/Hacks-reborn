@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -19,7 +19,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -43,7 +43,7 @@
     <TargetExt>.sf</TargetExt>
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
-    <OutDir>..\..\..\..\..\GTA 140K BY DAPO SHOW\SAMPFUNCS</OutDir>
+    <OutDir>..\..\..\..\gtasamps\GTA 140K BY DAPO SHOW\SAMPFUNCS</OutDir>
     <TargetName>HacksReborn</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -66,7 +66,7 @@
       <SDLCheck>
       </SDLCheck>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <PreprocessorDefinitions>_USE_MATH_DEFINES;_WINDOWS;_USRDLL;WIN32;_WIN32_WINNT=0x501;_USING_V110_SDK71_;SAMPFUNCS_API=__declspec(dllimport);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
@@ -74,8 +74,9 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FloatingPointModel>Fast</FloatingPointModel>
       <CompileAs>CompileAsCpp</CompileAs>
-      <AdditionalIncludeDirectories>Classes\Hacks;Classes;include;$(DXSDK_DIR)\Include;SFAPI;game_api;game_api\sdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>/Zc:threadSafeInit- /std:c++latest %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>Classes\Hacks\Visuals;Classes\CMClasses;ImGui;include;Classes\Hacks;Classes;json;json\json;$(DXSDK_DIR)\Include;SFAPI;game_api;game_api\sdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/Zc:threadSafeInit-  /std:c++17 %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
@@ -89,45 +90,64 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="1lineHacks.cpp" />
-    <ClCompile Include="AirBrake.cpp" />
-    <ClCompile Include="AltClicker.cpp" />
-    <ClCompile Include="AutoShot.cpp" />
-    <ClCompile Include="BMXSpeedHack.cpp" />
-    <ClCompile Include="CMFont.cpp" />
-    <ClCompile Include="Fix.cpp" />
-    <ClCompile Include="HacksManager.cpp" />
+    <ClCompile Include="C:\Lippets\CMClasses\CMFont.cpp" />
+    <ClCompile Include="C:\Lippets\CMClasses\CMLogger.cpp" />
+    <ClCompile Include="C:\Lippets\CMClasses\CMReplacer.cpp" />
+    <ClCompile Include="C:\Lippets\CMClasses\CMTimer.cpp" />
+    <ClCompile Include="C:\Lippets\FIles\Computer.cpp" />
+    <ClCompile Include="C:\Lippets\FIles\Conditions.cpp" />
+    <ClCompile Include="C:\Lippets\FIles\KeyboardMouse.cpp" />
+    <ClCompile Include="C:\Lippets\FIles\Numbers.cpp" />
+    <ClCompile Include="C:\Lippets\FIles\Strings.cpp" />
+    <ClCompile Include="C:\Lippets\SampSnipps\SampSnipps.cpp" />
+    <ClCompile Include="Classes\GlobalFuncs.cpp" />
+    <ClCompile Include="Classes\HacksManager.cpp" />
+    <ClCompile Include="Classes\Hacks\1lineHacks.cpp" />
+    <ClCompile Include="Classes\Hacks\AimBot.cpp" />
+    <ClCompile Include="Classes\Hacks\AirBrake.cpp" />
+    <ClCompile Include="Classes\Hacks\AltClicker.cpp" />
+    <ClCompile Include="Classes\Hacks\ArizonaLEmulator.cpp" />
+    <ClCompile Include="Classes\Hacks\AutoShot.cpp" />
+    <ClCompile Include="Classes\Hacks\Binder.cpp" />
+    <ClCompile Include="Classes\Hacks\BMXSpeedHack.cpp" />
+    <ClCompile Include="Classes\Hacks\CustomRun.cpp" />
+    <ClCompile Include="Classes\Hacks\Fix.cpp" />
+    <ClCompile Include="Classes\Hacks\InputHelper.cpp" />
+    <ClCompile Include="Classes\Hacks\OneBulletKill.cpp" />
+    <ClCompile Include="Classes\Hacks\PlayersList.cpp" />
+    <ClCompile Include="Classes\Hacks\TurboControl.cpp" />
+    <ClCompile Include="Classes\Hacks\WallHack_NewNameTags.cpp" />
+    <ClCompile Include="Classes\Hacks\WallShot.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
     <ClCompile Include="ImGui\imgui_impl_dx9.cpp" />
     <ClCompile Include="ImGui\imgui_impl_win32.cpp" />
+    <ClCompile Include="ImGui\imgui_stdlib.cpp" />
     <ClCompile Include="ImGui\imgui_tables.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
-    <ClCompile Include="InputHelper.cpp" />
-    <ClCompile Include="json\jsoncpp.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MegaBMXJump.cpp" />
-    <ClCompile Include="OneBulletKill.cpp" />
-    <ClCompile Include="PlayersList.cpp" />
-    <ClCompile Include="SpeedControl.cpp" />
-    <ClCompile Include="TurboControl.cpp" />
-    <ClCompile Include="WallHack_NewNameTags.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AltClicker.h" />
-    <ClInclude Include="Classes\CMFont.h" />
+    <ClInclude Include="Classes\GlobalFuncs.h" />
     <ClInclude Include="Classes\Hack.h" />
+    <ClInclude Include="Classes\HacksManager.h" />
     <ClInclude Include="Classes\Hacks\1lineHacks.h" />
+    <ClInclude Include="Classes\Hacks\AimBot.h" />
     <ClInclude Include="Classes\Hacks\AirBrake.h" />
+    <ClInclude Include="Classes\Hacks\AltClicker.h" />
+    <ClInclude Include="Classes\Hacks\ArizonaLEmulator.h" />
     <ClInclude Include="Classes\Hacks\AutoShot.h" />
+    <ClInclude Include="Classes\Hacks\Binder.h" />
     <ClInclude Include="Classes\Hacks\BMXSpeedHack.h" />
+    <ClInclude Include="Classes\Hacks\CustomRun.h" />
     <ClInclude Include="Classes\Hacks\Fix.h" />
     <ClInclude Include="Classes\Hacks\InputHelper.h" />
-    <ClInclude Include="Classes\Hacks\MegaBMXJump.h" />
-    <ClInclude Include="Classes\Hacks\SpeedControl.h" />
+    <ClInclude Include="Classes\Hacks\OneBulletKill.h" />
+    <ClInclude Include="Classes\Hacks\PlayersList.h" />
     <ClInclude Include="Classes\Hacks\TurboControl.h" />
     <ClInclude Include="Classes\Hacks\WallHack_NewNameTags.h" />
+    <ClInclude Include="Classes\Hacks\WallShot.h" />
     <ClInclude Include="game_api\game\C3DMarker.h" />
     <ClInclude Include="game_api\game\C3DMarkers.h" />
     <ClInclude Include="game_api\game\CAERadioTrackManager.h" />
@@ -279,10 +299,7 @@
     <ClInclude Include="game_api\sdk\UTF8.h" />
     <ClInclude Include="game_api\sdk\WString.h" />
     <ClInclude Include="game_api\sdk\WString.hpp" />
-    <ClInclude Include="HacksManager.h" />
     <ClInclude Include="main.h" />
-    <ClInclude Include="OneBulletKill.h" />
-    <ClInclude Include="PlayersList.h" />
     <ClInclude Include="SFAPI\SAMPFUNCS_API.h" />
     <ClInclude Include="SFAPI\SFCLEO.h" />
     <ClInclude Include="SFAPI\SFGame.h" />

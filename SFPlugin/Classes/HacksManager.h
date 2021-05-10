@@ -15,22 +15,40 @@ enum class Priority
 	LOW,
 	DEFAULT
 };
+
+enum class HACK_TYPE
+{
+	VISUAL,
+	SHOOTING,
+	MISC,
+	OTHER
+};
+
+enum class Proc_Func
+{
+	INC_RPC,
+	OUT_RPC,
+	INC_PACKET,
+	OUT_PACKET
+};
+
 class HackManager
 {
 private:
-	std::deque<std::pair<Priority, IHack*>> hacks;
+	std::deque<std::tuple<Priority, HACK_TYPE, IHack*>> m_hacks;
 public:
+	std::deque<std::tuple<Priority, HACK_TYPE, IHack*>>* getHacks();
 	void destroy();
-	void drawHacks(const crTickLocalPlayerInfo& info);
+	bool drawHacks(crTickLocalPlayerInfo* info);
 	void drawGui();
 	void drawSettings();
 	void read();
 	void save();
-	void procKeys(WPARAM wParam, UINT msg, const crTickLocalPlayerInfo& info);
-	bool procIncPRC(stRakNetHookParams* params, const crTickLocalPlayerInfo& info);
-	bool procOutPRC(stRakNetHookParams* params, const crTickLocalPlayerInfo& info);
-	bool procIncPacket(stRakNetHookParams* params, const crTickLocalPlayerInfo& info);
-	bool procOutPacket(stRakNetHookParams* params, const crTickLocalPlayerInfo& info);
-	void procEveryTickAction(const crTickLocalPlayerInfo& info);
+
+	bool procRakNetHook(stRakNetHookParams* params, crTickLocalPlayerInfo* info, Proc_Func procFunc);
+
+	bool procKeys(WPARAM wParam, UINT msg, crTickLocalPlayerInfo* info);
+
+	void procEveryTickAction(crTickLocalPlayerInfo* info);
 	void initHacksOnce();
 };

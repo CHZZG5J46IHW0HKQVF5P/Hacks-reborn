@@ -138,7 +138,7 @@ public:
 
     virtual float           GetDistanceFromCentreOfMassToBaseOfModel () = 0;
 
-    virtual void            SetAlphaTransparencyEnabled ( BOOL bEnabled ) = 0;
+    virtual void            SetAlphaTransparencyEnabled ( BOOL m_bEnabled ) = 0;
     virtual bool            IsAlphaTransparencyEnabled () = 0;
     virtual void            ResetAlphaTransparency  () = 0;
 

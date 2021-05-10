@@ -30,7 +30,7 @@ void AirBrakeForward(float force, bool isExist, bool isDriver)
 	}
 }
 
-void TPup(float force, bool isExist, bool isDriver)
+void TPupdown(float force, bool isExist, bool isDriver, bool bUp)
 {
 	if (isExist)
 	{
@@ -38,73 +38,54 @@ void TPup(float force, bool isExist, bool isDriver)
 		if (isDriver)
 		{
 			pos = *PEDSELF->GetVehicle()->GetPosition();
-			pos.fZ += force;
+			if (bUp)
+				pos.fZ += force;
+			else
+				pos.fZ -= force;
 			PEDSELF->GetVehicle()->SetMoveSpeed(&CVector(0.f, 0.f, 0.f));
 			PEDSELF->GetVehicle()->SetPosition(&pos);
 		}
 		else
 		{
 			pos = *PEDSELF->GetPosition();
-			pos.fZ += force;
+			if (bUp)
+				pos.fZ += force;
+			else
+				pos.fZ -= force;
 			PEDSELF->SetMoveSpeed(&CVector(0.f, 0.f, 0.f));
 			PEDSELF->SetPosition(&pos);
 		}
 	}
 }
-
-
-void TPdown(float force, bool isExist, bool isDriver)
-{
-	if (isExist)
-	{
-		CVector pos;
-		if (isDriver)
-		{
-			pos = *PEDSELF->GetVehicle()->GetPosition();
-			pos.fZ -= force;
-			PEDSELF->GetVehicle()->SetMoveSpeed(&CVector(0.f, 0.f, 0.f));
-			PEDSELF->GetVehicle()->SetPosition(&pos);
-		}
-		else
-		{
-			pos = *PEDSELF->GetPosition();
-			pos.fZ -= force;
-			PEDSELF->SetMoveSpeed(&CVector(0.f, 0.f, 0.f));
-			PEDSELF->SetPosition(&pos);
-		}
-	}
-}
-
-
 
 AirBrake::AirBrake(const char* name)
 {
-	hackName = name;
+	m_sHackName = name;
 }
 
 void AirBrake::onDrawGUI()
 {
-	ImGui::Checkbox(hackName.c_str(), &isEnable);
+	ImGui::Checkbox(m_sHackName.c_str(), &m_bEnabled);
 	ImGui::SameLine();
-	Lippets::ImGuiSnippets::KeyButton(activationKey, 0);
+	Lippets::ImGuiSnippets::KeyButton(activationKey, g::keyButtonSplitter);
 }
-void AirBrake::onWndProc(WPARAM wParam, UINT msg, const crTickLocalPlayerInfo& info) 
+void AirBrake::onWndProc(WPARAM wParam, UINT msg,  crTickLocalPlayerInfo* info)
 {
 	if (msg != WM_KEYDOWN && msg != WM_LBUTTONDOWN && msg != WM_SYSKEYDOWN)
 		return;
 	if (activationKey != 0 && wParam == activationKey)
 	{
 
-		isAirBrakeShouldWork ^= true;
+		isAirBrakeShouldWork = !isAirBrakeShouldWork;//true;
 		notify("Air Brake", isAirBrakeShouldWork);
 	}
 	if (isAirBrakeShouldWork)
 	{
 		switch (wParam)
 		{
-		case 87: AirBrakeForward(fAirBrakeForce, info.isExist, info.isDriver); break;
-		case 32: TPup(fAirBrakeForce, info.isExist, info.isDriver); break;
-		case 16: TPdown(fAirBrakeForce, info.isExist, info.isDriver); break;
+		case 87: AirBrakeForward(fAirBrakeForce, info->isExist, info->isDriver); break;
+		case 32: TPupdown(fAirBrakeForce, info->isExist, info->isDriver,true); break;
+		case 16: TPupdown(fAirBrakeForce, info->isExist, info->isDriver,false); break;
 		default:
 			break;
 		}
@@ -112,7 +93,7 @@ void AirBrake::onWndProc(WPARAM wParam, UINT msg, const crTickLocalPlayerInfo& i
 
 
 }
-void AirBrake::onDrawSettings() 
+void AirBrake::onDrawSettings()
 {
 	if (ImGui::BeginMenu("Air Brake"))
 	{
@@ -121,17 +102,17 @@ void AirBrake::onDrawSettings()
 		ImGui::EndMenu();
 	}
 }
-void AirBrake::save(Json::Value& data) 
+void AirBrake::save(nlohmann::json& data)
 {
-	data[hackName] = isEnable;
+	data[m_sHackName] = m_bEnabled;
 	data["activationKey"] = activationKey;
 	data["fAirBrakeForce"] = fAirBrakeForce;
 }
-void AirBrake::read(Json::Value& data)
+void AirBrake::read(nlohmann::json& data)
 {
-	isEnable = data[hackName].asBool();
-	activationKey = data["activationKey"].asInt();
-	fAirBrakeForce = data["fAirBrakeForce"].asFloat();
+	m_bEnabled = data[m_sHackName].get<bool>();
+	activationKey = data["activationKey"].get<int>();
+	fAirBrakeForce = data["fAirBrakeForce"].get<float>();
 	if (fAirBrakeForce == 0.f)
 		fAirBrakeForce = 1.f;
 }

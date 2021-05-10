@@ -1,5 +1,6 @@
 #include "1lineHacks.h"
 
+
 void EnableNoAnims(bool bEnable)
 {
 	static const char16_t temp = 35669;//*(char16_t*)dwFUNC_DANIM;
@@ -87,37 +88,7 @@ void EnableNoCamRestore(bool bEnable)
 
 }
 
-void EnableWallShot(bool bEnable)
-{
 
-	if (bEnable) {
-		WriteMem(0x00740701, false, true);
-		WriteMem(0x00740703, false, true);
-		WriteMem(0x00740709, false, true);
-
-		WriteMem(0x00740B49, false, true);
-		WriteMem(0x00740B4B, false, true);
-		WriteMem(0x00740B51, false, true);
-
-		WriteMem(0x0073620D, false, true);
-		WriteMem(0x0073620F, false, true);
-		WriteMem(0x00736215, false, true);
-	}
-	else {
-		WriteMem(0x00740701, true, true);
-		WriteMem(0x00740703, true, true);
-		WriteMem(0x00740709, true, true);
-
-		WriteMem(0x00740B49, true, true);
-		WriteMem(0x00740B4B, true, true);
-		WriteMem(0x00740B51, true, true);
-
-		WriteMem(0x0073620D, true, true);
-		WriteMem(0x0073620F, true, true);
-		WriteMem(0x00736215, true, true);
-	}
-
-}
 
 void EnableNoFallDamage(bool bEnable)
 {
@@ -174,12 +145,17 @@ void GiveWeapon(eWeaponType eWeapon, uint32_t ammo)
 	PEDSELF->GiveWeapon(eWeapon, ammo, eWeaponSkill::WEAPONSKILL_MAX_NUMBER);
 }
 
+void EnableMegaBMXJump(bool bEnable)
+{
+	WriteMem<byte>(0x969161, sizeof(byte), bEnable, true);
+	//*(byte*)0x969161 = bEnable;
+}
 
 
 OneLineHacks::OneLineHacks(const char* name)
 {
-	hackName = name;
-	isEnable = true;
+	m_sHackName = name;
+	m_bEnabled = true;
 	SF->getSAMP()->registerChatCommand("setskin", [](std::string args)
 	{
 		if (Players::isLocalPlayerExist())
@@ -210,12 +186,12 @@ OneLineHacks::OneLineHacks(const char* name)
 	});
 	SF->getSAMP()->registerChatCommand("fafk", [](std::string args)
 	{
-		hacksSettings::bFakeAfk ^= true;
+		hacksSettings::bFakeAfk = !hacksSettings::bFakeAfk;// true;
 		notify("Fake AFK", hacksSettings::bFakeAfk);
 	});
 	SF->getSAMP()->registerChatCommand("fasth", [](std::string args)
 	{
-		hacksSettings::bFastHelper ^= true;
+		hacksSettings::bFastHelper = !hacksSettings::bFastHelper;// true;
 		notify("Fast Helper", hacksSettings::bFastHelper);
 	});
 }
@@ -223,6 +199,7 @@ OneLineHacks::OneLineHacks(const char* name)
 
 void OneLineHacks::onDrawGUI()
 {
+
 	if (ImGui::Checkbox("Anti Stun", &bAntiStun))
 		EnableAntiStun(bAntiStun);
 	if (ImGui::Checkbox("Drive Walk UnderWater", &bDriveWalkUnderWater))
@@ -245,8 +222,7 @@ void OneLineHacks::onDrawGUI()
 		EnableNoCamRestore(bNoCamrestore);
 	ImGui::Checkbox("No Fall", &bNoFall);
 	ImGui::Checkbox("Surf On Vehicles", &bSurfOnVehicles);
-	if (ImGui::Checkbox("Wall Shot", &bWallShot))
-		EnableWallShot(bWallShot);
+
 	ImGui::Checkbox("Press Nitro", &bPressNitro);
 	if (ImGui::Checkbox("No Fall Damage", &bNoFallDamage))
 		EnableNoFallDamage(bNoFallDamage);
@@ -262,11 +238,14 @@ void OneLineHacks::onDrawGUI()
 	ImGui::Checkbox("No Reload", &bNoReload);
 	ImGui::Checkbox("Auto Bike", &bAutoBike);
 	ImGui::Checkbox("Dont Give Me Bat", &bDontGiveMeBat);
+	ImGui::Checkbox("Fast Heli", &bFastHeli);
+	ImGui::Checkbox("Mega BMX Jump", &bMegaBMXJump);
 }
 
-void OneLineHacks::onDrawHack(const crTickLocalPlayerInfo& info)
+void OneLineHacks::onDrawHack(crTickLocalPlayerInfo* info)
 {
-	SF->getRender()->DrawPolygon(iScrResX - 10, iScrResY - 10, 10, 10, 0, 7, 0xFF0000FF);
+	if (hacksSettings::bFastHelper)
+		SF->getRender()->DrawPolygon(iScrResX - 10, iScrResY - 10, 10, 10, 0, 7, 0xFF0000FF);
 }
 
 void OneLineHacks::switchHack()
@@ -281,49 +260,57 @@ void OneLineHacks::switchHack()
 	EnableNoFreeze(bNoFreeze);
 	EnableNoAnims(bNoAnims);
 	EnableNoCamRestore(bNoCamrestore);
-	EnableWallShot(bWallShot);
 	EnableNoFallDamage(bNoFallDamage);
 	EnableWaterDrive(bWaterDrive);
 	EnableNewDL(bNewDl);
 	EnableWaterProofEng(bWaterProofEngine);
-	Enable160HPbar(bBar160hp);
+	EnableMegaBMXJump(bMegaBMXJump);
 }
-void OneLineHacks::everyTickAction(const crTickLocalPlayerInfo& info)
+void OneLineHacks::everyTickAction(crTickLocalPlayerInfo* info)
 {
-	if (hacksSettings::bFakeAfk)
+	if (hacksSettings::bFastHelper)
 		SF->getGame()->emulateGTAKey(4, 255);
-	if (info.isDriver)
+	if (info->isDriver)
 	{
+		if (bFastHeli)
+		{
+			if (info->vehType == eVehicleType::CHeli)
+			{
+				PEDSELF->GetVehicle()->SetHeliRotorSpeed(0.25f);
+			}
+		}
 		if (bNoBike)
 		{
-			if (Vehicles::getVehicleType(Vehicles::getVehicleCVehicle(Vehicles::getVehicleInfo(VEHICLE_SELF, false))) != Vehicles::eVehicleType::CBike)
-				return;
-			if (PEDSELF->GetVehicle()->IsDrowning())
+			if (info->vehType != Vehicles::eVehicleType::CBike)
 			{
-				if (PEDSELF->GetCantBeKnockedOffBike() == 1)
-					PEDSELF->SetCantBeKnockedOffBike(0);
+				if (PEDSELF->GetVehicle()->IsDrowning())
+				{
+					if (PEDSELF->GetCantBeKnockedOffBike() == 1)
+						PEDSELF->SetCantBeKnockedOffBike(0);
+				}
+				else
+					if (PEDSELF->GetCantBeKnockedOffBike() == 0)
+						PEDSELF->SetCantBeKnockedOffBike(1);
 			}
-			else
-				if (PEDSELF->GetCantBeKnockedOffBike() == 0)
-					PEDSELF->SetCantBeKnockedOffBike(1);
+
 		}
 		if (bAutoBike)
 		{
 			static uint8 eBikeState = 1;
-			static DWORD dwBikeTime = 0;
+			static CMTimer timer;
 			if (PEDSELF->GetVehicle()->GetGasPedal() == 1.f && !SF->getSAMP()->getInput()->iInputEnabled && !Vehicles::isVehicleInAir(2.5f, VEHICLE_SELF)) //GetAsyncKeyState(87)
 			{
-				if (GetTickCount() > dwBikeTime)
+				if (timer.isEnded())
 				{
 					if (eBikeState == 1)
 					{
-						dwBikeTime = GetTickCount() + 30;
+						timer.setTimer(30);
 						eBikeState = 2;
 					}
 					else if (eBikeState == 2)
 					{
 						keybd_event(VK_BACK, 0, 0, 0);
-						dwBikeTime = GetTickCount() + 5;
+						timer.setTimer(5);
 						eBikeState = 3;
 					}
 					else if (eBikeState == 3)
@@ -344,9 +331,9 @@ void OneLineHacks::everyTickAction(const crTickLocalPlayerInfo& info)
 
 
 }
-void OneLineHacks::onWndProc(WPARAM wParam, UINT msg, const crTickLocalPlayerInfo& info)
+void OneLineHacks::onWndProc(WPARAM wParam, UINT msg, crTickLocalPlayerInfo* info)
 {
-	if (bPressNitro && info.isDriver)
+	if (bPressNitro && info->isDriver)
 		if (wParam == 0 || wParam == 1)
 			if (msg == WM_KEYDOWN || msg == WM_LBUTTONDOWN || msg == WM_SYSKEYDOWN)
 			{
@@ -359,9 +346,9 @@ void OneLineHacks::onWndProc(WPARAM wParam, UINT msg, const crTickLocalPlayerInf
 			}
 }
 
-bool OneLineHacks::onRPCIncoming(stRakNetHookParams *params, const crTickLocalPlayerInfo& info)
+bool OneLineHacks::onRPCIncoming(stRakNetHookParams *params, crTickLocalPlayerInfo* info)
 {
-	if (!bDontGiveMeBat || params->packetId != 22)
+	if (!bDontGiveMeBat || params->packetId != ScriptRPCEnumeration::RPC_ScrGivePlayerWeapon)
 		return true;
 	UINT32 dWeaponID;
 	params->bitStream->ResetReadPointer();
@@ -370,7 +357,7 @@ bool OneLineHacks::onRPCIncoming(stRakNetHookParams *params, const crTickLocalPl
 		return false;
 	return true;
 }
-bool OneLineHacks::onPacketOutcoming(stRakNetHookParams *param, const crTickLocalPlayerInfo& info)
+bool OneLineHacks::onPacketOutcoming(stRakNetHookParams *param, crTickLocalPlayerInfo* info)
 {
 
 	if ((bNoFall || bSurfOnVehicles || hacksSettings::bFakeAfk) && (param->packetId == ID_PLAYER_SYNC))
@@ -397,8 +384,10 @@ bool OneLineHacks::onPacketOutcoming(stRakNetHookParams *param, const crTickLoca
 		PEDSELF->GetWeapon(PEDSELF->GetCurrentWeaponSlot())->SetAmmoInClip(2);
 	return true;
 }
-void OneLineHacks::save(Json::Value& data)
+void OneLineHacks::save(nlohmann::json& data)
 {
+	data["megaBMXjump"] = bMegaBMXJump;
+	data["fastHeli"] = bFastHeli;
 	data["dontGiveMeBat"] = bDontGiveMeBat;
 	data["antiStun"] = bAntiStun;
 	data["driveWalkUnderWater"] = bDriveWalkUnderWater;
@@ -412,7 +401,6 @@ void OneLineHacks::save(Json::Value& data)
 	data["noCamrestore"] = bNoCamrestore;
 	data["noFall"] = bNoFall;
 	data["surfOnVehicles"] = bSurfOnVehicles;
-	data["wallShot"] = bWallShot;
 	data["pressNitro"] = bPressNitro;
 	data["noFallDamage"] = bNoFallDamage;
 	data["noBike"] = bNoBike;
@@ -423,29 +411,30 @@ void OneLineHacks::save(Json::Value& data)
 	data["WaterProofEng"] = bWaterProofEngine;
 	data["160hpbar"] = bBar160hp;
 }
-void OneLineHacks::read(Json::Value& data)
+void OneLineHacks::read(nlohmann::json& data)
 {
-	bDontGiveMeBat = data["dontGiveMeBat"].asBool();
-	bAntiStun = data["antiStun"].asBool();
-	bDriveWalkUnderWater = data["driveWalkUnderWater"].asBool();
-	bFireProtection = data["fireProtection"].asBool();
-	bFastCrosshair = data["fastCrosshair"].asBool();
-	bInfOxygenAndStamina = data["infOxygenAndStamina"].asBool();
-	bMegaJump = data["megaJump"].asBool();
-	bNoSpread = data["noSpread"].asBool();
-	bNoFreeze = data["noFreeze"].asBool();
-	bNoAnims = data["noAnims"].asBool();
-	bNoCamrestore = data["noCamrestore"].asBool();
-	bNoFall = data["noFall"].asBool();
-	bSurfOnVehicles = data["surfOnVehicles"].asBool();
-	bWallShot = data["wallShot"].asBool();
-	bPressNitro = data["pressNitro"].asBool();
-	bNoFallDamage = data["noFallDamage"].asBool();
-	bNoBike = data["noBike"].asBool();
-	bWaterDrive = data["waterDrive"].asBool();
-	bNoReload = data["noReload"].asBool();
-	bAutoBike = data["autoBike"].asBool();
-	bNewDl = data["NewDL"].asBool();
-	bWaterProofEngine = data["WaterProofEng"].asBool();
-	bBar160hp = data["160hpbar"].asBool();
+	bMegaBMXJump = data["megaBMXjump"].get<bool>();
+	bFastHeli = data["fastHeli"].get<bool>();
+	bDontGiveMeBat = data["dontGiveMeBat"].get<bool>();
+	bAntiStun = data["antiStun"].get<bool>();
+	bDriveWalkUnderWater = data["driveWalkUnderWater"].get<bool>();
+	bFireProtection = data["fireProtection"].get<bool>();
+	bFastCrosshair = data["fastCrosshair"].get<bool>();
+	bInfOxygenAndStamina = data["infOxygenAndStamina"].get<bool>();
+	bMegaJump = data["megaJump"].get<bool>();
+	bNoSpread = data["noSpread"].get<bool>();
+	bNoFreeze = data["noFreeze"].get<bool>();
+	bNoAnims = data["noAnims"].get<bool>();
+	bNoCamrestore = data["noCamrestore"].get<bool>();
+	bNoFall = data["noFall"].get<bool>();
+	bSurfOnVehicles = data["surfOnVehicles"].get<bool>();
+	bPressNitro = data["pressNitro"].get<bool>();
+	bNoFallDamage = data["noFallDamage"].get<bool>();
+	bNoBike = data["noBike"].get<bool>();
+	bWaterDrive = data["waterDrive"].get<bool>();
+	bNoReload = data["noReload"].get<bool>();
+	bAutoBike = data["autoBike"].get<bool>();
+	bNewDl = data["NewDL"].get<bool>();
+	bWaterProofEngine = data["WaterProofEng"].get<bool>();
+	bBar160hp = data["160hpbar"].get<bool>();
 }

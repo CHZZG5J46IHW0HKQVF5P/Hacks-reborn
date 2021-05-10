@@ -1,9 +1,10 @@
 #include "PlayersList.h"
-
+#include "GlobalFuncs.h"
 PlayersList::PlayersList(const char* name)
 {
-	this->hackName = name;
-	this->isEnable = true;
+	this->m_sHackName = name;
+	this->m_bEnabled = true;
+	m_bDrawHackNeedImGui = true;
 }
 
 void PlayersList::onDrawGUI()
@@ -12,43 +13,89 @@ void PlayersList::onDrawGUI()
 	ImGui::Checkbox("No Friends Damage", &noFriendDamage);
 }
 
-void PlayersList::save(Json::Value &data)
+void PlayersList::save(nlohmann::json &data)
 {
 	data["noFriendDamage"] = noFriendDamage;
 	data["Connect_logger"] = connectLoger;
-	Json::Value friendsListJson;
-	for (int i = 0; i < friendsList.size(); i++)
-		friendsListJson[std::to_string(i)] = friendsList[i];
-	data["FriendsList"] = friendsListJson;
 
-	Json::Value enemiesListJson;
-	for (int i = 0; i < enemiesList.size(); i++)
-		enemiesListJson[std::to_string(i)] = enemiesList[i];
-	data["EnemiesList"] = enemiesListJson;
+	data["FriendsList"] = friendsList;
+
+	data["EnemiesList"] = enemiesList;
+
+	data["FriendsListWindowPos"]["x"] = friendsListWindowPos.x;
+	data["FriendsListWindowPos"]["y"] = friendsListWindowPos.y;
+
+	data["EnemiesListWindowPos"]["x"] = enemiesListWindowPos.x;
+	data["EnemiesListWindowPos"]["y"] = enemiesListWindowPos.y;
 }
 
-void PlayersList::read(Json::Value &data)
+void PlayersList::read(nlohmann::json &data)
 {
-	noFriendDamage = data["noFriendDamage"].asBool();
-	connectLoger = data["Connect_logger"].asBool();
-	Json::Value friendsListJson = data["FriendsList"];
-	for (int i = 0;; i++)
+	noFriendDamage = data["noFriendDamage"].get<bool>();
+	connectLoger = data["Connect_logger"].get<bool>();
+	friendsList = data["FriendsList"].get<std::vector<std::string>>();
+
+	enemiesList = data["EnemiesList"].get<std::vector<std::string>>();
+
+
+	friendsListWindowPos.x = data["FriendsListWindowPos"]["x"].get<float>();
+	friendsListWindowPos.y = data["FriendsListWindowPos"]["y"].get<float>();
+
+	enemiesListWindowPos.x = data["EnemiesListWindowPos"]["x"].get<float>();
+	enemiesListWindowPos.y = data["EnemiesListWindowPos"]["y"].get<float>();
+
+}
+
+void PlayersList::onDrawHack(crTickLocalPlayerInfo* info)
+{
+
+	if (info->nearestPlayers.empty())
+		return;
+
+	GFuncs::resortPlayersByDistance(&info->nearestPlayers, false);
+	if (std::find_if(info->nearestPlayers.begin(), info->nearestPlayers.end(), [&](const std::pair<int, float>& id_dist)
 	{
-		std::string istr = std::to_string(i);
-		if (friendsListJson[istr].isNull())
-			break;
-		friendsList.push_back(friendsListJson[istr].asString());
+		return std::find(friendsList.begin(), friendsList.end(), SF->getSAMP()->getPlayers()->GetPlayerName(id_dist.first)) != friendsList.end();
+	}) != info->nearestPlayers.end())
+	{
+		ImGui::SetNextWindowPos(friendsListWindowPos, ImGuiCond_FirstUseEver);
+		ImGui::Begin("Friends", 0, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoTitleBar);
+		{
+			ImGui::TextColored(ImVec4(0.f, 1.f, 0.f, 1.f), "Friends");
+			ImGui::Separator();
+			for (auto&& player : info->nearestPlayers)
+			{
+				auto szPlayerName = SF->getSAMP()->getPlayers()->GetPlayerName(player.first);
+				if (std::find(friendsList.begin(), friendsList.end(), std::string(szPlayerName)) == friendsList.end())
+					continue;
+				ImGui::TextColored(ImGui::ColorConvertU32ToFloat4(SF->getSAMP()->getPlayers()->GetPlayerColor(player.first)), "%s[%d] %.1f", szPlayerName, player.first, player.second);
+			}
+			friendsListWindowPos = ImGui::GetWindowPos();
+		}
+		ImGui::End();
 	}
 
-	Json::Value enemiesListJson = data["EnemiesList"];
-	for (int i = 0;; i++)
+	if (std::find_if(info->nearestPlayers.begin(), info->nearestPlayers.end(), [&](const std::pair<int, float>& id_dist)
 	{
-		std::string istr = std::to_string(i);
-		if (enemiesListJson[istr].isNull())
-			break;
-		enemiesList.push_back(enemiesListJson[istr].asString());
+		return std::find(enemiesList.begin(), enemiesList.end(), SF->getSAMP()->getPlayers()->GetPlayerName(id_dist.first)) != enemiesList.end();
+	}) != info->nearestPlayers.end())
+	{
+		ImGui::SetNextWindowPos(enemiesListWindowPos, ImGuiCond_FirstUseEver);
+		ImGui::Begin("Enemies", 0, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoTitleBar);
+		{
+			ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "Enemies");
+			ImGui::Separator();
+			for (auto&& player : info->nearestPlayers)
+			{
+				auto szPlayerName = SF->getSAMP()->getPlayers()->GetPlayerName(player.first);
+				if (std::find(enemiesList.begin(), enemiesList.end(), std::string(szPlayerName)) == enemiesList.end())
+					continue;
+				ImGui::TextColored(ImGui::ColorConvertU32ToFloat4(SF->getSAMP()->getPlayers()->GetPlayerColor(player.first)), "%s[%d] %.1f", szPlayerName, player.first, player.second);
+			}
+			enemiesListWindowPos = ImGui::GetWindowPos();
+		}
+		ImGui::End();
 	}
-
 }
 
 void PlayersList::onDrawSettings()
@@ -65,10 +112,10 @@ void PlayersList::onDrawSettings()
 				if ((std::find(friendsList.begin(), friendsList.end(), playerName) == friendsList.end()) &&
 					(std::find(enemiesList.begin(), enemiesList.end(), playerName) == enemiesList.end()))
 				{
-					char buffer[64];
+					char buffer[128];
 					sprintf_s(buffer, "Add %s To Friends", playerName);
 					if (ImGui::Button(buffer))
-						friendsList.push_back(playerName);
+						friendsList.push_back(std::string(playerName));
 				}
 			}
 			for (int i = 0; i < friendsList.size(); i++)
@@ -90,10 +137,10 @@ void PlayersList::onDrawSettings()
 				if ((std::find(friendsList.begin(), friendsList.end(), playerName) == friendsList.end()) &&
 					(std::find(enemiesList.begin(), enemiesList.end(), playerName) == enemiesList.end()))
 				{
-					char buffer[64];
+					char buffer[128];
 					sprintf_s(buffer, "Add %s To Enemies", playerName);
 					if (ImGui::Button(buffer))
-						enemiesList.push_back(playerName);
+						enemiesList.push_back(std::string(playerName));
 				}
 			}
 			for (int i = 0; i < enemiesList.size(); i++)
@@ -109,7 +156,7 @@ void PlayersList::onDrawSettings()
 	}
 }
 
-bool PlayersList::onPacketOutcoming(stRakNetHookParams* params, const crTickLocalPlayerInfo& info)
+bool PlayersList::onPacketOutcoming(stRakNetHookParams* params, crTickLocalPlayerInfo* info)
 {
 	if (!noFriendDamage || params->packetId != ID_BULLET_SYNC)
 		return true;
@@ -122,21 +169,23 @@ bool PlayersList::onPacketOutcoming(stRakNetHookParams* params, const crTickLoca
 	params->bitStream->Read(wPlayerID);
 	if (!SF->getSAMP()->getPlayers()->IsPlayerDefined(wPlayerID))
 		return true;
-	if (std::find(friendsList.begin(), friendsList.end(),SF->getSAMP()->getPlayers()->GetPlayerName(wPlayerID)) == friendsList.end())
+	if (std::find(friendsList.begin(), friendsList.end(), SF->getSAMP()->getPlayers()->GetPlayerName(wPlayerID)) == friendsList.end())
 		return false;
 	return true;
 }
 
-bool PlayersList::onRPCIncoming(stRakNetHookParams* params, const crTickLocalPlayerInfo& info)
+bool PlayersList::onRPCIncoming(stRakNetHookParams* params, crTickLocalPlayerInfo* info)
 {
 	if (!connectLoger) return true;
 
-	if (params->packetId == 137)
+	if (params->packetId == ScriptRPCEnumeration::RPC_ScrServerJoin)
 	{
 		UINT8 PlayerNameLength;
-		char PlayerName[32];
+		char PlayerName[64];
 		params->bitStream->SetReadOffset(56);
 		params->bitStream->Read(PlayerNameLength);
+		if (PlayerNameLength >= 64)
+			return true;
 		params->bitStream->Read(PlayerName, PlayerNameLength);
 		params->bitStream->ResetReadPointer();
 		PlayerName[PlayerNameLength] = '\0';
@@ -150,7 +199,7 @@ bool PlayersList::onRPCIncoming(stRakNetHookParams* params, const crTickLocalPla
 		}
 		return true;
 	}
-	else if (params->packetId == 138)
+	else if (params->packetId == ScriptRPCEnumeration::RPC_ScrServerQuit)
 	{
 		UINT16 wPlayerID;
 		params->bitStream->ResetReadPointer();

@@ -14,19 +14,28 @@
       <UniqueIdentifier>{d9fdd0cb-3d4f-4868-9a89-199e5cea05c5}</UniqueIdentifier>
     </Filter>
     <Filter Include="ImGui">
-      <UniqueIdentifier>{c4211d64-81f6-45c5-b411-82563aab06ba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="json">
-      <UniqueIdentifier>{c84baea7-da8f-4e4b-871f-2274f9ee2f9e}</UniqueIdentifier>
+      <UniqueIdentifier>{c4a5dab0-882e-45a5-a85e-b71e33538a0a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Classes">
-      <UniqueIdentifier>{35c99d8b-7f94-44f0-a520-fc9cc05ecb38}</UniqueIdentifier>
+      <UniqueIdentifier>{17635d12-5e93-4183-a987-b4ddeebaf7b7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Classes\Hacks">
-      <UniqueIdentifier>{f2f5500e-6003-4968-903b-c4128eafffde}</UniqueIdentifier>
+      <UniqueIdentifier>{a3eccab4-dad4-416d-846a-e72ab510faea}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Classes\Stuff">
-      <UniqueIdentifier>{15794d8a-9a19-4612-9899-6573ad796cc9}</UniqueIdentifier>
+    <Filter Include="Classes\CMClassesCPPs">
+      <UniqueIdentifier>{2ed3f94d-5376-4da5-beef-0b792e1a9535}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\Hacks\Visuals">
+      <UniqueIdentifier>{9af29795-7a60-43ec-8dc2-1e80c9b95706}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\Hacks\Misc">
+      <UniqueIdentifier>{76bd8deb-020a-4435-a127-724c6e4bc3af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\Hacks\Shooting">
+      <UniqueIdentifier>{22b953bb-42e8-47b9-bdc6-0796ef2cc630}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\Hacks\Other">
+      <UniqueIdentifier>{6b8d3445-a53e-4ed0-9950-1b1ef2a7b229}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -502,60 +511,60 @@
     <ClInclude Include="game_api\game_api.h">
       <Filter>GameAPI</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\Hacks\1lineHacks.h">
-      <Filter>Classes\Hacks</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\Hacks\AirBrake.h">
-      <Filter>Classes\Hacks</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\Hacks\AutoShot.h">
-      <Filter>Classes\Hacks</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\Hacks\BMXSpeedHack.h">
-      <Filter>Classes\Hacks</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\Hacks\Fix.h">
-      <Filter>Classes\Hacks</Filter>
+    <ClInclude Include="Classes\Hacks\PlayersList.h">
+      <Filter>Classes\Hacks\Other</Filter>
     </ClInclude>
     <ClInclude Include="Classes\Hacks\InputHelper.h">
-      <Filter>Classes\Hacks</Filter>
+      <Filter>Classes\Hacks\Other</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\Hacks\MegaBMXJump.h">
-      <Filter>Classes\Hacks</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\Hacks\SpeedControl.h">
-      <Filter>Classes\Hacks</Filter>
+    <ClInclude Include="Classes\Hacks\BMXSpeedHack.h">
+      <Filter>Classes\Hacks\Other</Filter>
     </ClInclude>
     <ClInclude Include="Classes\Hacks\TurboControl.h">
-      <Filter>Classes\Hacks</Filter>
+      <Filter>Classes\Hacks\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\AltClicker.h">
+      <Filter>Classes\Hacks\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\Binder.h">
+      <Filter>Classes\Hacks\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\Fix.h">
+      <Filter>Classes\Hacks\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\1lineHacks.h">
+      <Filter>Classes\Hacks\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\ArizonaLEmulator.h">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\AirBrake.h">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\AimBot.h">
+      <Filter>Classes\Hacks\Shooting</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\AutoShot.h">
+      <Filter>Classes\Hacks\Shooting</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\OneBulletKill.h">
+      <Filter>Classes\Hacks\Shooting</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\WallShot.h">
+      <Filter>Classes\Hacks\Shooting</Filter>
     </ClInclude>
     <ClInclude Include="Classes\Hacks\WallHack_NewNameTags.h">
-      <Filter>Classes\Hacks</Filter>
+      <Filter>Classes\Hacks\Visuals</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\CMFont.h">
-      <Filter>Classes\Stuff</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\Hack.h">
-      <Filter>Classes\Stuff</Filter>
-    </ClInclude>
-    <ClInclude Include="HacksManager.h">
-      <Filter>Classes\Stuff</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayersList.h">
-      <Filter>Classes\Hacks</Filter>
-    </ClInclude>
-    <ClInclude Include="OneBulletKill.h">
-      <Filter>Classes\Hacks</Filter>
-    </ClInclude>
-    <ClInclude Include="AltClicker.h">
-      <Filter>Classes\Hacks</Filter>
+    <ClInclude Include="Classes\GlobalFuncs.h" />
+    <ClInclude Include="Classes\Hack.h" />
+    <ClInclude Include="Classes\HacksManager.h" />
+    <ClInclude Include="Classes\Hacks\CustomRun.h">
+      <Filter>Classes\Hacks\Misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="json\jsoncpp.cpp">
-      <Filter>json</Filter>
-    </ClCompile>
     <ClCompile Include="ImGui\imgui.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
@@ -577,50 +586,88 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="CMFont.cpp">
-      <Filter>Classes\Stuff</Filter>
+    <ClCompile Include="ImGui\imgui_stdlib.cpp">
+      <Filter>ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="HacksManager.cpp">
-      <Filter>Classes\Stuff</Filter>
+    <ClCompile Include="C:\Lippets\CMClasses\CMFont.cpp">
+      <Filter>Classes\CMClassesCPPs</Filter>
     </ClCompile>
-    <ClCompile Include="1lineHacks.cpp">
-      <Filter>Classes\Hacks</Filter>
+    <ClCompile Include="C:\Lippets\CMClasses\CMLogger.cpp">
+      <Filter>Classes\CMClassesCPPs</Filter>
     </ClCompile>
-    <ClCompile Include="AirBrake.cpp">
-      <Filter>Classes\Hacks</Filter>
+    <ClCompile Include="C:\Lippets\CMClasses\CMReplacer.cpp">
+      <Filter>Classes\CMClassesCPPs</Filter>
     </ClCompile>
-    <ClCompile Include="AutoShot.cpp">
-      <Filter>Classes\Hacks</Filter>
+    <ClCompile Include="C:\Lippets\CMClasses\CMTimer.cpp">
+      <Filter>Classes\CMClassesCPPs</Filter>
     </ClCompile>
-    <ClCompile Include="BMXSpeedHack.cpp">
-      <Filter>Classes\Hacks</Filter>
+    <ClCompile Include="Classes\Hacks\PlayersList.cpp">
+      <Filter>Classes\Hacks\Other</Filter>
     </ClCompile>
-    <ClCompile Include="Fix.cpp">
-      <Filter>Classes\Hacks</Filter>
+    <ClCompile Include="Classes\Hacks\InputHelper.cpp">
+      <Filter>Classes\Hacks\Other</Filter>
     </ClCompile>
-    <ClCompile Include="InputHelper.cpp">
-      <Filter>Classes\Hacks</Filter>
+    <ClCompile Include="Classes\Hacks\BMXSpeedHack.cpp">
+      <Filter>Classes\Hacks\Other</Filter>
     </ClCompile>
-    <ClCompile Include="MegaBMXJump.cpp">
-      <Filter>Classes\Hacks</Filter>
+    <ClCompile Include="Classes\Hacks\TurboControl.cpp">
+      <Filter>Classes\Hacks\Other</Filter>
     </ClCompile>
-    <ClCompile Include="SpeedControl.cpp">
-      <Filter>Classes\Hacks</Filter>
+    <ClCompile Include="Classes\Hacks\AltClicker.cpp">
+      <Filter>Classes\Hacks\Other</Filter>
     </ClCompile>
-    <ClCompile Include="TurboControl.cpp">
-      <Filter>Classes\Hacks</Filter>
+    <ClCompile Include="Classes\Hacks\Binder.cpp">
+      <Filter>Classes\Hacks\Other</Filter>
     </ClCompile>
-    <ClCompile Include="WallHack_NewNameTags.cpp">
-      <Filter>Classes\Hacks</Filter>
+    <ClCompile Include="Classes\Hacks\Fix.cpp">
+      <Filter>Classes\Hacks\Other</Filter>
     </ClCompile>
-    <ClCompile Include="PlayersList.cpp">
-      <Filter>Classes\Hacks</Filter>
+    <ClCompile Include="Classes\Hacks\1lineHacks.cpp">
+      <Filter>Classes\Hacks\Other</Filter>
     </ClCompile>
-    <ClCompile Include="OneBulletKill.cpp">
-      <Filter>Classes\Hacks</Filter>
+    <ClCompile Include="Classes\Hacks\ArizonaLEmulator.cpp">
+      <Filter>Classes\Hacks\Misc</Filter>
     </ClCompile>
-    <ClCompile Include="AltClicker.cpp">
-      <Filter>Classes\Hacks</Filter>
+    <ClCompile Include="Classes\Hacks\AirBrake.cpp">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\AimBot.cpp">
+      <Filter>Classes\Hacks\Shooting</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\AutoShot.cpp">
+      <Filter>Classes\Hacks\Shooting</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\OneBulletKill.cpp">
+      <Filter>Classes\Hacks\Shooting</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\WallShot.cpp">
+      <Filter>Classes\Hacks\Shooting</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\WallHack_NewNameTags.cpp">
+      <Filter>Classes\Hacks\Visuals</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\GlobalFuncs.cpp" />
+    <ClCompile Include="Classes\HacksManager.cpp" />
+    <ClCompile Include="Classes\Hacks\CustomRun.cpp">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Lippets\SampSnipps\SampSnipps.cpp">
+      <Filter>Classes\CMClassesCPPs</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Lippets\FIles\Computer.cpp">
+      <Filter>Classes\CMClassesCPPs</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Lippets\FIles\Conditions.cpp">
+      <Filter>Classes\CMClassesCPPs</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Lippets\FIles\KeyboardMouse.cpp">
+      <Filter>Classes\CMClassesCPPs</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Lippets\FIles\Numbers.cpp">
+      <Filter>Classes\CMClassesCPPs</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Lippets\FIles\Strings.cpp">
+      <Filter>Classes\CMClassesCPPs</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
