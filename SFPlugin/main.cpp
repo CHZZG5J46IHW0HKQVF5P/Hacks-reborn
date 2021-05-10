@@ -116,7 +116,6 @@ void CALLBACK mainloop()
 			ImGui_ImplWin32_Init(GetActiveWindow());
 			ImGui_ImplDX9_Init(SF->getRender()->getD3DDevice());
 			io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Arial.TTF", 16.0F, NULL, io.Fonts->GetGlyphRangesCyrillic());
-
 			// init path var
 			g::settingsPath = "C:\\HacksReborn\\Settings\\";//std::experimental::filesystem::current_path().string() + "\\SAMPFUNCS\\Hacks\\";
 			Lippets::Computer::createDirs(g::settingsPath);
@@ -191,7 +190,7 @@ bool CALLBACK WndProcHandler(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 		break;
 	}
 
-	if (g::hacksManager.procKeys(wParam, msg, getCurrentTickLocalPlayerInfo()) && g::isWindowOpen)
+	if (g::hacksManager.procKeys(wParam, msg, getCurrentTickLocalPlayerInfo()) || g::isWindowOpen)
 		ImGui_ImplWin32_WndProcHandler(hwd, msg, wParam, lParam);
 	return true;
 }
