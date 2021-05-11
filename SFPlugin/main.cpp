@@ -151,6 +151,8 @@ void CALLBACK mainloop()
 	if (!initialized)
 		return;
 
+
+
 	static CMTimer logLimCheckTimer;
 	if (logLimCheckTimer.isEnded())
 	{

@@ -4,20 +4,18 @@
 
 void setAnimGroupByRunType(RUN_TYPE runType)
 {
-
+	int iModelIndex = PEDSELF->GetModelIndex();
 	switch (runType)
 	{
 	case RUN_TYPE::CJ:
 	{
-		int iModelIndex = PEDSELF->GetModelIndex();
-		RPC_emulating::setskin(MYID,0);
+		RPC_emulating::setskin(MYID, 0);
 		RPC_emulating::setskin(MYID, iModelIndex);
 		*PEDSELF->GetMemoryValue(0x4D4) = 54;
 		break;
 	}
 	case RUN_TYPE::ROLLER:
 	{
-		int iModelIndex = PEDSELF->GetModelIndex();
 		RPC_emulating::setskin(MYID, 99);
 		RPC_emulating::setskin(MYID, iModelIndex);
 		*PEDSELF->GetMemoryValue(0x4D4) = 138;
@@ -25,7 +23,6 @@ void setAnimGroupByRunType(RUN_TYPE runType)
 	}
 	case RUN_TYPE::SWAT:
 	{
-		int iModelIndex = PEDSELF->GetModelIndex();
 		RPC_emulating::setskin(MYID, 285);
 		RPC_emulating::setskin(MYID, iModelIndex);
 		*PEDSELF->GetMemoryValue(0x4D4) = 128;
@@ -33,7 +30,7 @@ void setAnimGroupByRunType(RUN_TYPE runType)
 	}
 	case RUN_TYPE::DEFAULT:
 	{
-		RPC_emulating::setskin(MYID, PEDSELF->GetModelIndex());
+		RPC_emulating::setskin(MYID, iModelIndex);
 		break;
 	}
 	}

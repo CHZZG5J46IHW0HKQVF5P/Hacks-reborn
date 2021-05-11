@@ -31,6 +31,7 @@ private:
 	bool bFastHeli = false;
 	bool bDontGiveMeBat = false;		
 	bool bMegaBMXJump = false;
+	bool bSuperBunnyHop = false;
 	void  onDrawGUI() override;
 
 	void onDrawHack( crTickLocalPlayerInfo* info) override;

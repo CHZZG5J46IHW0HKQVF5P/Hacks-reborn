@@ -240,6 +240,7 @@ void OneLineHacks::onDrawGUI()
 	ImGui::Checkbox("Dont Give Me Bat", &bDontGiveMeBat);
 	ImGui::Checkbox("Fast Heli", &bFastHeli);
 	ImGui::Checkbox("Mega BMX Jump", &bMegaBMXJump);
+	ImGui::Checkbox("Super Bunny Hop", &bSuperBunnyHop);
 }
 
 void OneLineHacks::onDrawHack(crTickLocalPlayerInfo* info)
@@ -270,6 +271,14 @@ void OneLineHacks::everyTickAction(crTickLocalPlayerInfo* info)
 {
 	if (hacksSettings::bFastHelper)
 		SF->getGame()->emulateGTAKey(4, 255);
+	if (info->isExist)
+	{
+		if (bSuperBunnyHop)
+		{
+			if (*PEDSELF->GetMemoryValue(0x46D) == 8388644)
+				GAME->SetTimeScale(9999.f);
+		}
+	}
 	if (info->isDriver)
 	{
 		if (bFastHeli)
@@ -386,6 +395,7 @@ bool OneLineHacks::onPacketOutcoming(stRakNetHookParams *param, crTickLocalPlaye
 }
 void OneLineHacks::save(nlohmann::json& data)
 {
+	data["superBunnyHop"] = bSuperBunnyHop;
 	data["megaBMXjump"] = bMegaBMXJump;
 	data["fastHeli"] = bFastHeli;
 	data["dontGiveMeBat"] = bDontGiveMeBat;
@@ -413,6 +423,7 @@ void OneLineHacks::save(nlohmann::json& data)
 }
 void OneLineHacks::read(nlohmann::json& data)
 {
+	bSuperBunnyHop = data["superBunnyHop"].get<bool>();
 	bMegaBMXJump = data["megaBMXjump"].get<bool>();
 	bFastHeli = data["fastHeli"].get<bool>();
 	bDontGiveMeBat = data["dontGiveMeBat"].get<bool>();

@@ -43,7 +43,7 @@
     <TargetExt>.sf</TargetExt>
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
-    <OutDir>..\..\..\..\gtasamps\GTA 140K BY DAPO SHOW\SAMPFUNCS</OutDir>
+    <OutDir>..\..\..\..\..\gtasamps\GTA 140K BY DAPO SHOW\SAMPFUNCS</OutDir>
     <TargetName>HacksReborn</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
