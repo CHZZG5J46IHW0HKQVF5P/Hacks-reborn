@@ -71,40 +71,39 @@ inline void notify(const std::string& text, bool e)
 	Stuff::AddMessageJumpQ(text + (e ? " ~g~On" : " ~r~Off"));
 }
 
-
-enum HackProperties
+enum HackFunctions : char
 {
-	NEED_IMGUI,
-	DRAWHACK,
-	RPCINC,
-	RPCOUT,
-	PACKETINC,
-	PACKETOUT,
-	EVERYTICK_ACTION,
-	PROCKEYS
+	RPC_INC,
+	RPC_OUT,
+	PACKET_INC,
+	PACKET_OUT,
+	EVERY_TICK,
+	WND_PROC,
+	DRAW_HACK
 };
 
 class IHack
 {
+
 public:
+	DWORD m_dwDontCall__ = 0;
 	std::string m_sHackName;
-	DWORD m_dwProperties;
-	//bool m_bDrawHackNeedImGui = false;
+	bool m_bDrawHackNeedImGui = false;
 	bool m_bEnabled = false;
 	virtual bool isHackWorking() { return m_bEnabled; };
 	virtual void save(nlohmann::json&) {};
 	virtual void read(nlohmann::json&) {};
 	virtual ~IHack() = default;
 	virtual void switchHack() {};
-	virtual bool onRPCIncoming(stRakNetHookParams*, crTickLocalPlayerInfo*) { return true; };
-	virtual bool onRPCOutcoming(stRakNetHookParams*, crTickLocalPlayerInfo*) { return true; };
-	virtual bool onPacketIncoming(stRakNetHookParams*, crTickLocalPlayerInfo*) { return true; };
-	virtual bool onPacketOutcoming(stRakNetHookParams*, crTickLocalPlayerInfo*) { return true; };
-	virtual void onWndProc(WPARAM, UINT, crTickLocalPlayerInfo*) {};
-	virtual void everyTickAction(crTickLocalPlayerInfo*) {};
+	virtual bool onRPCIncoming(stRakNetHookParams*, crTickLocalPlayerInfo*) { m_dwDontCall__ |= RPC_INC; return true; };
+	virtual bool onRPCOutcoming(stRakNetHookParams*, crTickLocalPlayerInfo*) { m_dwDontCall__ |= RPC_OUT; return true; };
+	virtual bool onPacketIncoming(stRakNetHookParams*, crTickLocalPlayerInfo*) { m_dwDontCall__ |= PACKET_INC; return true; };
+	virtual bool onPacketOutcoming(stRakNetHookParams*, crTickLocalPlayerInfo*) { m_dwDontCall__ |= PACKET_OUT; return true; };
+	virtual void onWndProc(WPARAM, UINT, crTickLocalPlayerInfo*) { m_dwDontCall__ |= WND_PROC; };
+	virtual void everyTickAction(crTickLocalPlayerInfo*) { m_dwDontCall__ |= EVERY_TICK; };
 	virtual void onDrawGUI() {};
 	virtual void onDrawSettings() {};
-	virtual void onDrawHack(crTickLocalPlayerInfo*) { };
+	virtual void onDrawHack(crTickLocalPlayerInfo*) { m_dwDontCall__ |= DRAW_HACK; };
 	virtual void release() {};
 	virtual void init() {};
 };

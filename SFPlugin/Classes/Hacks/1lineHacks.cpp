@@ -154,11 +154,6 @@ void EnableMegaBMXJump(bool bEnable)
 
 OneLineHacks::OneLineHacks(const char* name)
 {
-	m_dwProperties |= (HackProperties::EVERYTICK_ACTION |
-		HackProperties::DRAWHACK |
-		HackProperties::PACKETOUT |
-		HackProperties::RPCINC |
-		HackProperties::PROCKEYS);
 	m_sHackName = name;
 	m_bEnabled = true;
 	SF->getSAMP()->registerChatCommand("setskin", [](std::string args)

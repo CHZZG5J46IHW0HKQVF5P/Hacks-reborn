@@ -4,7 +4,6 @@
 
 Binder::Binder(const char* name)
 {
-	m_dwProperties |= (HackProperties::EVERYTICK_ACTION | HackProperties::RPCOUT );
 	m_bEnabled = true;
 	m_sHackName = name;
 

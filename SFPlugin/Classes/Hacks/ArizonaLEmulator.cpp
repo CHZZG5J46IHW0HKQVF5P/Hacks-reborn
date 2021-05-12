@@ -2,7 +2,6 @@
 
 ArizonaLEmulator::ArizonaLEmulator(const char* m_sHackName)
 {
-	m_dwProperties |= (HackProperties::RPCOUT);
 	this->m_sHackName = m_sHackName;
 }
 

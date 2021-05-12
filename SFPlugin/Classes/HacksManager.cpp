@@ -131,10 +131,10 @@ bool HackManager::drawHacks(crTickLocalPlayerInfo* info)
 	for (auto &&hack : m_hacks)
 	{
 		auto&& pHack = std::get<IHack*>(hack);
-		if (pHack->m_bEnabled && (pHack->m_dwProperties & HackProperties::DRAWHACK))
+		if (pHack->m_bEnabled && !(pHack->m_dwDontCall__ & HackFunctions::DRAW_HACK)) 
 		{
 			g::loggerPtr->log("[DRAW HACK]" + pHack->m_sHackName);
-			if (!bImGuiNewFrameWasCalled && (pHack->m_dwProperties & HackProperties::NEED_IMGUI))
+			if (!bImGuiNewFrameWasCalled && pHack->m_bDrawHackNeedImGui)
 			{
 				bImGuiNewFrameWasCalled = true;
 				ImGui_ImplDX9_NewFrame();
@@ -174,10 +174,10 @@ bool HackManager::procKeys(WPARAM wParam, UINT msg, crTickLocalPlayerInfo* info)
 	for (auto &&hack : m_hacks)
 	{
 		auto&& pHack = std::get<IHack*>(hack);
-		if (pHack->m_bEnabled && (pHack->m_dwProperties & HackProperties::PROCKEYS))
+		if (pHack->m_bEnabled && !(pHack->m_dwDontCall__ & HackFunctions::WND_PROC))
 		{
 			g::loggerPtr->log("[PROC KEYS]" + pHack->m_sHackName);
-			if ((pHack->m_dwProperties & HackProperties::NEED_IMGUI))
+			if (pHack->m_bDrawHackNeedImGui)
 				bNeedImGuiProcKeys = true;
 			pHack->onWndProc(wParam, msg, info);
 		}
@@ -194,7 +194,7 @@ bool HackManager::procRakNetHook(stRakNetHookParams* params, crTickLocalPlayerIn
 		for (auto &&hack : m_hacks)
 		{
 			auto&& pHack = std::get<IHack*>(hack);
-			if (pHack->m_bEnabled && (pHack->m_dwProperties & HackProperties::RPCINC))
+			if (pHack->m_bEnabled && !(pHack->m_dwDontCall__ & HackFunctions::RPC_INC))
 			{
 				g::loggerPtr->log("[INC RPC]" + pHack->m_sHackName);
 				if (!pHack->onRPCIncoming(params, info))
@@ -208,7 +208,7 @@ bool HackManager::procRakNetHook(stRakNetHookParams* params, crTickLocalPlayerIn
 		for (auto &&hack : m_hacks)
 		{
 			auto&& pHack = std::get<IHack*>(hack);
-			if (pHack->m_bEnabled && (pHack->m_dwProperties & HackProperties::RPCOUT))
+			if (pHack->m_bEnabled && !(pHack->m_dwDontCall__ & HackFunctions::RPC_OUT))
 			{
 				g::loggerPtr->log("[OUT RPC]" + pHack->m_sHackName);
 				if (!pHack->onRPCOutcoming(params, info))
@@ -222,7 +222,7 @@ bool HackManager::procRakNetHook(stRakNetHookParams* params, crTickLocalPlayerIn
 		for (auto &&hack : m_hacks)
 		{
 			auto&& pHack = std::get<IHack*>(hack);
-			if (pHack->m_bEnabled && (pHack->m_dwProperties & HackProperties::PACKETINC))
+			if (pHack->m_bEnabled && !(pHack->m_dwDontCall__ & HackFunctions::PACKET_INC))
 			{
 				g::loggerPtr->log("[INC PACKET]" + pHack->m_sHackName);
 				if (!pHack->onPacketIncoming(params, info))
@@ -236,7 +236,7 @@ bool HackManager::procRakNetHook(stRakNetHookParams* params, crTickLocalPlayerIn
 		for (auto &&hack : m_hacks)
 		{
 			auto&& pHack = std::get<IHack*>(hack);
-			if (pHack->m_bEnabled && (pHack->m_dwProperties & HackProperties::PACKETOUT))
+			if (pHack->m_bEnabled && !(pHack->m_dwDontCall__ & HackFunctions::PACKET_OUT))
 			{
 				g::loggerPtr->log("[OUT PACKET]" + pHack->m_sHackName);
 				if (!pHack->onPacketOutcoming(params, info))
@@ -255,7 +255,7 @@ void HackManager::procEveryTickAction(crTickLocalPlayerInfo* info)
 	for (auto &&hack : m_hacks)
 	{
 		auto&& pHack = std::get<IHack*>(hack);
-		if (pHack->m_bEnabled && (pHack->m_dwProperties & HackProperties::EVERYTICK_ACTION))
+		if (pHack->m_bEnabled && !(pHack->m_dwDontCall__ & HackFunctions::EVERY_TICK)) 
 		{
 			g::loggerPtr->log("[EVERY TICK ACTION]" + pHack->m_sHackName);
 			pHack->everyTickAction(info);

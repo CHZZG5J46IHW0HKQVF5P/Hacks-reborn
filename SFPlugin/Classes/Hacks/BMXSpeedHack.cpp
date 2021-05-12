@@ -3,7 +3,6 @@
 
 BMXspeedhack::BMXspeedhack(const char* name)
 {
-	m_dwProperties |= (HackProperties::EVERYTICK_ACTION | HackProperties::PROCKEYS);
 	m_sHackName = name;
 }
 

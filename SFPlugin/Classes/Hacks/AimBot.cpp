@@ -9,7 +9,6 @@
 
 Aimbot::Aimbot(const char* name)
 {
-	m_dwProperties |= (HackProperties::EVERYTICK_ACTION);
 	m_sHackName = name;
 }
 

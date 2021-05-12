@@ -2,7 +2,6 @@
 
 VIPAutoSender::VIPAutoSender(const char* szHackName)
 {
-	m_dwProperties |= (HackProperties::RPCINC | HackProperties::RPCOUT | HackProperties::EVERYTICK_ACTION);
 	m_sHackName = szHackName;
 	m_bEnabled = 1;
 }

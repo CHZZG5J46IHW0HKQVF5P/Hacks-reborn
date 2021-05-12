@@ -2,7 +2,7 @@
 #include "GlobalFuncs.h"
 PlayersList::PlayersList(const char* name)
 {
-	m_dwProperties |= (HackProperties::DRAWHACK | HackProperties::NEED_IMGUI | HackProperties::PACKETOUT | HackProperties::RPCINC);
+	m_bDrawHackNeedImGui = true;
 	m_sHackName = name;
 	m_bEnabled = true;
 }
