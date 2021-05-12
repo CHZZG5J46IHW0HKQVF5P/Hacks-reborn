@@ -20,8 +20,7 @@ enum class HACK_TYPE
 {
 	VISUAL,
 	SHOOTING,
-	MISC,
-	OTHER
+	MISC
 };
 
 enum class Proc_Func

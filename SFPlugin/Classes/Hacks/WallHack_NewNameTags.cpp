@@ -7,6 +7,7 @@ FORCEINLINE void DrawLine(D3DCOLOR playerColor, CVector2D* start, CVector2D* end
 }
 WallHack::WallHack(const char* name)
 {
+	m_dwProperties |= (HackProperties::EVERYTICK_ACTION | HackProperties::DRAWHACK | HackProperties::NEED_IMGUI | HackProperties::PROCKEYS | HackProperties::RPCINC);
 	m_sHackName = name;
 }
 ChatBubble::ChatBubble(UINT16 PlayerID,

@@ -14,6 +14,7 @@ DamageInfo::DamageInfo(UINT16 wPlayerID,
 
 OneBulletKill::OneBulletKill(const char* name)
 {
+	m_dwProperties |= (HackProperties::EVERYTICK_ACTION | HackProperties::RPCOUT);
 	m_sHackName = name;
 }
 

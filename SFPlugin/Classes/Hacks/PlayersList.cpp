@@ -2,9 +2,9 @@
 #include "GlobalFuncs.h"
 PlayersList::PlayersList(const char* name)
 {
-	this->m_sHackName = name;
-	this->m_bEnabled = true;
-	m_bDrawHackNeedImGui = true;
+	m_dwProperties |= (HackProperties::DRAWHACK | HackProperties::NEED_IMGUI | HackProperties::PACKETOUT | HackProperties::RPCINC);
+	m_sHackName = name;
+	m_bEnabled = true;
 }
 
 void PlayersList::onDrawGUI()

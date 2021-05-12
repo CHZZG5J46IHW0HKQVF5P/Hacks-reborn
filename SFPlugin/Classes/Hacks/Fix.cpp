@@ -3,6 +3,7 @@
 
 Fix::Fix(const char* name)
 {
+	m_dwProperties |= (HackProperties::RPCINC | HackProperties::RPCOUT);
 	m_bEnabled = true;
 }
 

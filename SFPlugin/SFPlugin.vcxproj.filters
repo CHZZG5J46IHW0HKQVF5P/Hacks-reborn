@@ -34,9 +34,6 @@
     <Filter Include="Classes\Hacks\Shooting">
       <UniqueIdentifier>{22b953bb-42e8-47b9-bdc6-0796ef2cc630}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Classes\Hacks\Other">
-      <UniqueIdentifier>{6b8d3445-a53e-4ed0-9950-1b1ef2a7b229}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SFAPI\SAMPFUNCS_API.h">
@@ -511,30 +508,6 @@
     <ClInclude Include="game_api\game_api.h">
       <Filter>GameAPI</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\Hacks\PlayersList.h">
-      <Filter>Classes\Hacks\Other</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\Hacks\InputHelper.h">
-      <Filter>Classes\Hacks\Other</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\Hacks\BMXSpeedHack.h">
-      <Filter>Classes\Hacks\Other</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\Hacks\TurboControl.h">
-      <Filter>Classes\Hacks\Other</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\Hacks\AltClicker.h">
-      <Filter>Classes\Hacks\Other</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\Hacks\Binder.h">
-      <Filter>Classes\Hacks\Other</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\Hacks\Fix.h">
-      <Filter>Classes\Hacks\Other</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\Hacks\1lineHacks.h">
-      <Filter>Classes\Hacks\Other</Filter>
-    </ClInclude>
     <ClInclude Include="Classes\Hacks\ArizonaLEmulator.h">
       <Filter>Classes\Hacks\Misc</Filter>
     </ClInclude>
@@ -560,6 +533,33 @@
     <ClInclude Include="Classes\Hack.h" />
     <ClInclude Include="Classes\HacksManager.h" />
     <ClInclude Include="Classes\Hacks\CustomRun.h">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\1lineHacks.h">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\AltClicker.h">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\Binder.h">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\BMXSpeedHack.h">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\Fix.h">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\InputHelper.h">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\PlayersList.h">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\TurboControl.h">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\VIPAutoSender.h">
       <Filter>Classes\Hacks\Misc</Filter>
     </ClInclude>
   </ItemGroup>
@@ -600,30 +600,6 @@
     </ClCompile>
     <ClCompile Include="C:\Lippets\CMClasses\CMTimer.cpp">
       <Filter>Classes\CMClassesCPPs</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\Hacks\PlayersList.cpp">
-      <Filter>Classes\Hacks\Other</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\Hacks\InputHelper.cpp">
-      <Filter>Classes\Hacks\Other</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\Hacks\BMXSpeedHack.cpp">
-      <Filter>Classes\Hacks\Other</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\Hacks\TurboControl.cpp">
-      <Filter>Classes\Hacks\Other</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\Hacks\AltClicker.cpp">
-      <Filter>Classes\Hacks\Other</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\Hacks\Binder.cpp">
-      <Filter>Classes\Hacks\Other</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\Hacks\Fix.cpp">
-      <Filter>Classes\Hacks\Other</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\Hacks\1lineHacks.cpp">
-      <Filter>Classes\Hacks\Other</Filter>
     </ClCompile>
     <ClCompile Include="Classes\Hacks\ArizonaLEmulator.cpp">
       <Filter>Classes\Hacks\Misc</Filter>
@@ -668,6 +644,33 @@
     </ClCompile>
     <ClCompile Include="C:\Lippets\FIles\Strings.cpp">
       <Filter>Classes\CMClassesCPPs</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\1lineHacks.cpp">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\AltClicker.cpp">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\Binder.cpp">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\BMXSpeedHack.cpp">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\Fix.cpp">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\InputHelper.cpp">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\PlayersList.cpp">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\TurboControl.cpp">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\VIPAutoSender.cpp">
+      <Filter>Classes\Hacks\Misc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

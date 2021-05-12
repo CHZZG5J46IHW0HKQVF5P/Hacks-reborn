@@ -12,6 +12,7 @@ extern SAMPFUNCS *SF;
 #include "nlohmann/json.hpp"
 #include "C:\Lippets\CMClasses\CMFont.h"
 #include "C:\Lippets\CMClasses\CMTimer.h"
+
 #define iScrResX *(int*)0xC9C040
 #define iScrResY *(int*)0xC9C044
 #define cshX iScrResX * 0.5299999714f
@@ -71,11 +72,24 @@ inline void notify(const std::string& text, bool e)
 }
 
 
+enum HackProperties
+{
+	NEED_IMGUI,
+	DRAWHACK,
+	RPCINC,
+	RPCOUT,
+	PACKETINC,
+	PACKETOUT,
+	EVERYTICK_ACTION,
+	PROCKEYS
+};
+
 class IHack
 {
 public:
 	std::string m_sHackName;
-	bool m_bDrawHackNeedImGui = false;
+	DWORD m_dwProperties;
+	//bool m_bDrawHackNeedImGui = false;
 	bool m_bEnabled = false;
 	virtual bool isHackWorking() { return m_bEnabled; };
 	virtual void save(nlohmann::json&) {};

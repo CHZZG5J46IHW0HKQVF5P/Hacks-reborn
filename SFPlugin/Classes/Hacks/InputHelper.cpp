@@ -3,6 +3,7 @@
 
 InputHelper::InputHelper(const char* name)
 {
+	m_dwProperties |= (HackProperties::DRAWHACK);
 	m_sHackName = name;
 }
 void InputHelper::init()

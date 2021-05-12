@@ -1,4 +1,5 @@
 #include "main.h"
+#include <variant>
 SAMPFUNCS *SF = new SAMPFUNCS();
 
 
@@ -150,9 +151,6 @@ void CALLBACK mainloop()
 	}
 	if (!initialized)
 		return;
-
-
-
 	static CMTimer logLimCheckTimer;
 	if (logLimCheckTimer.isEnded())
 	{

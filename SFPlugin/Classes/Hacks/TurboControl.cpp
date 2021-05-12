@@ -12,6 +12,7 @@ void DisableTwinTurbo(bool bDisable)
 
 TurboControl::TurboControl(const char* name)
 {
+	m_dwProperties |= (HackProperties::PROCKEYS);
 	m_sHackName = name;
 }
 void TurboControl::onDrawGUI() 

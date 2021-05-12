@@ -60,6 +60,7 @@ void TPupdown(float force, bool isExist, bool isDriver, bool bUp)
 
 AirBrake::AirBrake(const char* name)
 {
+	m_dwProperties |= (HackProperties::PROCKEYS);
 	m_sHackName = name;
 }
 
