@@ -2,7 +2,7 @@
 #include "SAMPFUNCS_API.h"
 #include "game_api.h"
 extern SAMPFUNCS *SF;
-#include "C:\SampSnipps.h"
+#include "C:\Lippets\SampSnipps\SampSnipps.h"
 #include "imgui_single.h"
 #include "C:\Lippets\FIles\Computer.h"
 #include "C:\Lippets\FIles\Conditions.h"
@@ -12,7 +12,7 @@ extern SAMPFUNCS *SF;
 #include "nlohmann/json.hpp"
 #include "C:\Lippets\CMClasses\CMFont.h"
 #include "C:\Lippets\CMClasses\CMTimer.h"
-
+#include <bitset>
 #define iScrResX *(int*)0xC9C040
 #define iScrResY *(int*)0xC9C044
 #define cshX iScrResX * 0.5299999714f
@@ -45,25 +45,11 @@ struct crTickLocalPlayerInfo
 	bool isExist;
 	bool isInCar;
 	bool isDriver;
+	int iCurrentVehicleID;
 	Vehicles::eVehicleType vehType;
 	std::deque<std::pair<int, float>> nearestPlayers;
 	std::deque<std::pair<int, float>> nearestVehicles;
 	inline crTickLocalPlayerInfo() {}
-	inline crTickLocalPlayerInfo(
-		bool isExist,
-		bool isInCar,
-		bool isDriver,
-		Vehicles::eVehicleType vehType,
-		const std::deque<std::pair<int, float>>& nearestPlayers,
-		const std::deque<std::pair<int, float>>& nearestVehicles)
-	{
-		this->isExist = isExist;
-		this->isInCar = isInCar;
-		this->isDriver = isDriver;
-		this->vehType = vehType;
-		this->nearestPlayers = nearestPlayers;
-		this->nearestVehicles = nearestVehicles;
-	}
 };
 
 inline void notify(const std::string& text, bool e)
@@ -71,7 +57,7 @@ inline void notify(const std::string& text, bool e)
 	Stuff::AddMessageJumpQ(text + (e ? " ~g~On" : " ~r~Off"));
 }
 
-enum HackFunctions : char
+enum HackFunction
 {
 	RPC_INC,
 	RPC_OUT,
@@ -86,7 +72,7 @@ class IHack
 {
 
 public:
-	DWORD m_dwDontCall__ = 0;
+	std::bitset<8> m_bitsDontCall__;
 	std::string m_sHackName;
 	bool m_bDrawHackNeedImGui = false;
 	bool m_bEnabled = false;
@@ -95,15 +81,15 @@ public:
 	virtual void read(nlohmann::json&) {};
 	virtual ~IHack() = default;
 	virtual void switchHack() {};
-	virtual bool onRPCIncoming(stRakNetHookParams*, crTickLocalPlayerInfo*) { m_dwDontCall__ |= RPC_INC; return true; };
-	virtual bool onRPCOutcoming(stRakNetHookParams*, crTickLocalPlayerInfo*) { m_dwDontCall__ |= RPC_OUT; return true; };
-	virtual bool onPacketIncoming(stRakNetHookParams*, crTickLocalPlayerInfo*) { m_dwDontCall__ |= PACKET_INC; return true; };
-	virtual bool onPacketOutcoming(stRakNetHookParams*, crTickLocalPlayerInfo*) { m_dwDontCall__ |= PACKET_OUT; return true; };
-	virtual void onWndProc(WPARAM, UINT, crTickLocalPlayerInfo*) { m_dwDontCall__ |= WND_PROC; };
-	virtual void everyTickAction(crTickLocalPlayerInfo*) { m_dwDontCall__ |= EVERY_TICK; };
+	virtual bool onRPCIncoming(stRakNetHookParams*, crTickLocalPlayerInfo*) { m_bitsDontCall__.set(RPC_INC); return true; };
+	virtual bool onRPCOutcoming(stRakNetHookParams*, crTickLocalPlayerInfo*) { m_bitsDontCall__.set(RPC_OUT); return true; };
+	virtual bool onPacketIncoming(stRakNetHookParams*, crTickLocalPlayerInfo*) { m_bitsDontCall__.set(PACKET_INC);  return true; };
+	virtual bool onPacketOutcoming(stRakNetHookParams*, crTickLocalPlayerInfo*) { m_bitsDontCall__.set(PACKET_OUT);  return true; };
+	virtual void onWndProc(WPARAM, UINT, crTickLocalPlayerInfo*) { m_bitsDontCall__.set(WND_PROC); };
+	virtual void everyTickAction(crTickLocalPlayerInfo*) { m_bitsDontCall__.set(EVERY_TICK); };
 	virtual void onDrawGUI() {};
 	virtual void onDrawSettings() {};
-	virtual void onDrawHack(crTickLocalPlayerInfo*) { m_dwDontCall__ |= DRAW_HACK; };
+	virtual void onDrawHack(crTickLocalPlayerInfo*) { m_bitsDontCall__.set(DRAW_HACK); };
 	virtual void release() {};
 	virtual void init() {};
 };

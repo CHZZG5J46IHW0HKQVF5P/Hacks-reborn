@@ -23,13 +23,6 @@ enum class HACK_TYPE
 	MISC
 };
 
-enum class Proc_Func
-{
-	INC_RPC,
-	OUT_RPC,
-	INC_PACKET,
-	OUT_PACKET
-};
 
 class HackManager
 {
@@ -44,7 +37,7 @@ public:
 	void read();
 	void save();
 
-	bool procRakNetHook(stRakNetHookParams* params, crTickLocalPlayerInfo* info, Proc_Func procFunc);
+	bool procRakNetHook(stRakNetHookParams* params, crTickLocalPlayerInfo* info, RakNetScriptHookType procFunc);
 
 	bool procKeys(WPARAM wParam, UINT msg, crTickLocalPlayerInfo* info);
 

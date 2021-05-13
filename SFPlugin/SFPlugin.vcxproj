@@ -116,7 +116,6 @@
     <ClCompile Include="Classes\Hacks\OneBulletKill.cpp" />
     <ClCompile Include="Classes\Hacks\PlayersList.cpp" />
     <ClCompile Include="Classes\Hacks\TurboControl.cpp" />
-    <ClCompile Include="Classes\Hacks\VIPAutoSender.cpp" />
     <ClCompile Include="Classes\Hacks\WallHack_NewNameTags.cpp" />
     <ClCompile Include="Classes\Hacks\WallShot.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
@@ -147,7 +146,6 @@
     <ClInclude Include="Classes\Hacks\OneBulletKill.h" />
     <ClInclude Include="Classes\Hacks\PlayersList.h" />
     <ClInclude Include="Classes\Hacks\TurboControl.h" />
-    <ClInclude Include="Classes\Hacks\VIPAutoSender.h" />
     <ClInclude Include="Classes\Hacks\WallHack_NewNameTags.h" />
     <ClInclude Include="Classes\Hacks\WallShot.h" />
     <ClInclude Include="game_api\game\C3DMarker.h" />

@@ -18,7 +18,7 @@ public:
 
 class Command
 {
-public:													
+public:
 	std::string shortCmd;
 	bool bSendOrigin;
 	std::vector<std::pair<std::string, bool>> commandsTexts;
@@ -33,8 +33,8 @@ class Binder : public IHack
 public:
 	Binder(const char*name);
 private:
-	bool isBinderEnabled;
-	bool isCommandsEnabled;
+	bool isBinderEnabled, isBinderWindowOpen;
+	bool isCommandsEnabled, isCommandsWindowOpen;
 	int iBinderDelay;
 	int iCommandsDelay;
 	CMReplacer replacer;
@@ -45,8 +45,8 @@ private:
 
 
 	void sendMessageToSay(std::string);
-	void everyTickAction( crTickLocalPlayerInfo*) override;
-	bool onRPCOutcoming(stRakNetHookParams*,  crTickLocalPlayerInfo*) override;
+	void everyTickAction(crTickLocalPlayerInfo*) override;
+	bool onRPCOutcoming(stRakNetHookParams*, crTickLocalPlayerInfo*) override;
 	void save(nlohmann::json&) override;
 	void read(nlohmann::json&) override;
 	void onDrawGUI() override;

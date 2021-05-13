@@ -559,9 +559,6 @@
     <ClInclude Include="Classes\Hacks\TurboControl.h">
       <Filter>Classes\Hacks\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\Hacks\VIPAutoSender.h">
-      <Filter>Classes\Hacks\Misc</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -667,9 +664,6 @@
       <Filter>Classes\Hacks\Misc</Filter>
     </ClCompile>
     <ClCompile Include="Classes\Hacks\TurboControl.cpp">
-      <Filter>Classes\Hacks\Misc</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\Hacks\VIPAutoSender.cpp">
       <Filter>Classes\Hacks\Misc</Filter>
     </ClCompile>
   </ItemGroup>

@@ -27,8 +27,8 @@ void OneBulletKill::read(nlohmann::json& data)
 {
 	m_bEnabled = data[m_sHackName].get<bool>();
 	iDelay = data["delay"].get<int>();
-	if (iDelay == 0)
-		iDelay = 50;
+	if (iDelay <= 70 || iDelay >= 1000)
+		iDelay = 100;
 }
 
 bool OneBulletKill::onRPCOutcoming(stRakNetHookParams* params,  crTickLocalPlayerInfo* info)

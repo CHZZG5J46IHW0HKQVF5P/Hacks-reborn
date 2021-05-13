@@ -16,7 +16,6 @@
 #include "WallShot.h"
 #include "ArizonaLEmulator.h"
 #include "CustomRun.h"
-#include "VIPAutoSender.h"
 
 
 #include "C:\Lippets\CMClasses\CMLogger.h"
@@ -35,8 +34,7 @@ void HackManager::initHacksOnce()
 	if (isInitialized)
 		return;
 
-	m_hacks.push_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new ArizonaLEmulator("Arizona Launcher Emulator")));
-	m_hacks.push_back(std::make_tuple(Priority::HIGH, HACK_TYPE::MISC, new ArizonaLEmulator("Arizona Launcher Emulator")));
+	m_hacks.clear();
 	m_hacks.push_back(std::make_tuple(Priority::HIGH, HACK_TYPE::MISC, new PlayersList("Players List")));
 	m_hacks.push_back(std::make_tuple(Priority::HIGH, HACK_TYPE::SHOOTING, new OneBulletKill("One Bullet Kill")));
 	m_hacks.push_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::SHOOTING, new WallShot("Wall Shot")));
@@ -52,7 +50,7 @@ void HackManager::initHacksOnce()
 	m_hacks.push_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new Fix("Fix")));
 	m_hacks.push_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new OneLineHacks("OneLineHacks")));
 	m_hacks.push_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new CustomRun("CustomRun")));
-	m_hacks.push_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new VIPAutoSender("VIPAutoSender")));
+	m_hacks.push_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new ArizonaLEmulator("Arizona Launcher Emulator")));
 	std::sort(m_hacks.begin(), m_hacks.end(), [](const std::tuple<Priority, HACK_TYPE, IHack*> pair1, const std::tuple<Priority, HACK_TYPE, IHack*>  pair2)
 	{
 		return std::get<Priority>(pair1) < std::get<Priority>(pair2);
@@ -60,9 +58,10 @@ void HackManager::initHacksOnce()
 
 	read();
 	for (auto&& hack : m_hacks)
+	{
 		std::get<IHack*>(hack)->init();
-	for (auto&& hack : m_hacks)
 		std::get<IHack*>(hack)->switchHack();
+	}
 
 	isInitialized = true;
 }
@@ -88,12 +87,14 @@ void HackManager::destroy()
 
 void HackManager::read()
 {
-
 	for (auto&& hack : m_hacks)
 	{
 		try
 		{
+			if (!Lippets::Computer::isFileExits(g::settingsPath + std::get<IHack*>(hack)->m_sHackName + ".json"))
+				continue;
 			std::ifstream in(g::settingsPath + std::get<IHack*>(hack)->m_sHackName + ".json");
+			
 			if (!in.is_open())
 				continue;
 
@@ -103,8 +104,8 @@ void HackManager::read()
 			nlohmann::json data;
 
 			data = nlohmann::json::parse(str);
-
-			std::get<IHack*>(hack)->read(data);
+			if (!data.is_null())
+				std::get<IHack*>(hack)->read(data);
 		}
 		catch (...)
 		{
@@ -131,7 +132,7 @@ bool HackManager::drawHacks(crTickLocalPlayerInfo* info)
 	for (auto &&hack : m_hacks)
 	{
 		auto&& pHack = std::get<IHack*>(hack);
-		if (pHack->m_bEnabled && !(pHack->m_dwDontCall__ & HackFunctions::DRAW_HACK)) 
+		if (pHack->m_bEnabled && !pHack->m_bitsDontCall__.test(DRAW_HACK))
 		{
 			g::loggerPtr->log("[DRAW HACK]" + pHack->m_sHackName);
 			if (!bImGuiNewFrameWasCalled && pHack->m_bDrawHackNeedImGui)
@@ -144,8 +145,6 @@ bool HackManager::drawHacks(crTickLocalPlayerInfo* info)
 			pHack->onDrawHack(info);
 		}
 	}
-
-
 	return bImGuiNewFrameWasCalled;
 }
 void HackManager::drawGui()
@@ -174,7 +173,7 @@ bool HackManager::procKeys(WPARAM wParam, UINT msg, crTickLocalPlayerInfo* info)
 	for (auto &&hack : m_hacks)
 	{
 		auto&& pHack = std::get<IHack*>(hack);
-		if (pHack->m_bEnabled && !(pHack->m_dwDontCall__ & HackFunctions::WND_PROC))
+		if (pHack->m_bEnabled && !pHack->m_bitsDontCall__.test(WND_PROC))
 		{
 			g::loggerPtr->log("[PROC KEYS]" + pHack->m_sHackName);
 			if (pHack->m_bDrawHackNeedImGui)
@@ -185,16 +184,16 @@ bool HackManager::procKeys(WPARAM wParam, UINT msg, crTickLocalPlayerInfo* info)
 	return bNeedImGuiProcKeys;
 }
 
-bool HackManager::procRakNetHook(stRakNetHookParams* params, crTickLocalPlayerInfo* info, Proc_Func procFunc)
+bool HackManager::procRakNetHook(stRakNetHookParams* params, crTickLocalPlayerInfo* info, RakNetScriptHookType procFunc)
 {
 	switch (procFunc)
 	{
-	case Proc_Func::INC_RPC:
+	case RakNetScriptHookType::RAKHOOK_TYPE_INCOMING_RPC:
 	{
 		for (auto &&hack : m_hacks)
 		{
 			auto&& pHack = std::get<IHack*>(hack);
-			if (pHack->m_bEnabled && !(pHack->m_dwDontCall__ & HackFunctions::RPC_INC))
+			if (pHack->m_bEnabled && !pHack->m_bitsDontCall__.test(RPC_INC))
 			{
 				g::loggerPtr->log("[INC RPC]" + pHack->m_sHackName);
 				if (!pHack->onRPCIncoming(params, info))
@@ -203,12 +202,12 @@ bool HackManager::procRakNetHook(stRakNetHookParams* params, crTickLocalPlayerIn
 		}
 		return true;
 	}
-	case Proc_Func::OUT_RPC:
+	case RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_RPC:
 	{
 		for (auto &&hack : m_hacks)
 		{
 			auto&& pHack = std::get<IHack*>(hack);
-			if (pHack->m_bEnabled && !(pHack->m_dwDontCall__ & HackFunctions::RPC_OUT))
+			if (pHack->m_bEnabled && !pHack->m_bitsDontCall__.test(RPC_OUT))
 			{
 				g::loggerPtr->log("[OUT RPC]" + pHack->m_sHackName);
 				if (!pHack->onRPCOutcoming(params, info))
@@ -217,12 +216,12 @@ bool HackManager::procRakNetHook(stRakNetHookParams* params, crTickLocalPlayerIn
 		}
 		return true;
 	}
-	case Proc_Func::INC_PACKET:
+	case RakNetScriptHookType::RAKHOOK_TYPE_INCOMING_PACKET:
 	{
 		for (auto &&hack : m_hacks)
 		{
 			auto&& pHack = std::get<IHack*>(hack);
-			if (pHack->m_bEnabled && !(pHack->m_dwDontCall__ & HackFunctions::PACKET_INC))
+			if (pHack->m_bEnabled && !pHack->m_bitsDontCall__.test(PACKET_INC))
 			{
 				g::loggerPtr->log("[INC PACKET]" + pHack->m_sHackName);
 				if (!pHack->onPacketIncoming(params, info))
@@ -231,12 +230,12 @@ bool HackManager::procRakNetHook(stRakNetHookParams* params, crTickLocalPlayerIn
 		}
 		return true;
 	}
-	case Proc_Func::OUT_PACKET:
+	case RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_PACKET:
 	{
 		for (auto &&hack : m_hacks)
 		{
 			auto&& pHack = std::get<IHack*>(hack);
-			if (pHack->m_bEnabled && !(pHack->m_dwDontCall__ & HackFunctions::PACKET_OUT))
+			if (pHack->m_bEnabled && !pHack->m_bitsDontCall__.test(PACKET_OUT))
 			{
 				g::loggerPtr->log("[OUT PACKET]" + pHack->m_sHackName);
 				if (!pHack->onPacketOutcoming(params, info))
@@ -255,7 +254,7 @@ void HackManager::procEveryTickAction(crTickLocalPlayerInfo* info)
 	for (auto &&hack : m_hacks)
 	{
 		auto&& pHack = std::get<IHack*>(hack);
-		if (pHack->m_bEnabled && !(pHack->m_dwDontCall__ & HackFunctions::EVERY_TICK)) 
+		if (pHack->m_bEnabled && !pHack->m_bitsDontCall__.test(EVERY_TICK))
 		{
 			g::loggerPtr->log("[EVERY TICK ACTION]" + pHack->m_sHackName);
 			pHack->everyTickAction(info);

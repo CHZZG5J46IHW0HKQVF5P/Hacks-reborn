@@ -18,7 +18,7 @@ public:
 	OneBulletKill(const char*);
 private:
 	DamageInfo dInfo;
-	int iDelay;
+	int iDelay = 0;
 	int sendDamageDeuqeLength = 0;
 	void everyTickAction( crTickLocalPlayerInfo*) override;
 	bool onRPCOutcoming(stRakNetHookParams*,  crTickLocalPlayerInfo*) override;

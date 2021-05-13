@@ -3,6 +3,7 @@
 
 Fix::Fix(const char* name)
 {
+	m_sHackName = name;
 	m_bEnabled = true;
 }
 

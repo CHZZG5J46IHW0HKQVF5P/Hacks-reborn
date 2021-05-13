@@ -141,15 +141,13 @@ bool WallHack::onRPCIncoming(stRakNetHookParams* params, crTickLocalPlayerInfo* 
 }
 void WallHack::onDrawHack(crTickLocalPlayerInfo* info)
 {
-	if (bNoNameTags && !wallHack)
+	if (bNoNameTags && !drawWallHack)
 		return;
 
 	GFuncs::resortPlayersByDistance(&info->nearestPlayers, true);
 	for (auto&& player : info->nearestPlayers)//(int i = 0; i < 1000; i++)
 	{
-		
-			
-			int i = player.first;
+		int i = player.first;
 		CVector PedPos;
 		GAME->GetPools()->GetPed((DWORD*)SF->getSAMP()->getPlayers()->pRemotePlayer[i]->pPlayerData->pSAMP_Actor->pGTA_Ped)->GetTransformedBonePosition(eBone::BONE_HEAD, &PedPos);
 

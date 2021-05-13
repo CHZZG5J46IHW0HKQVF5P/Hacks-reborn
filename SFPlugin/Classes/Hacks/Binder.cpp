@@ -196,10 +196,13 @@ void Binder::read(nlohmann::json& data)
 
 void Binder::onDrawGUI()
 {
-	ImGui::Checkbox("Binder", &isBinderEnabled);
-	ImGui::Checkbox("Commands", &isCommandsEnabled);
-
-	if (isBinderEnabled)
+	IG::Checkbox("Binder", &isBinderEnabled);
+	IG::SameLine();
+	IG::Checkbox("Editor###binder", &isBinderWindowOpen);
+	IG::Checkbox("Commands", &isCommandsEnabled);
+	IG::SameLine();
+	IG::Checkbox("Editor###commands", &isCommandsWindowOpen);
+	if (isBinderWindowOpen)
 	{
 		ImGui::Begin("Binder");
 		Lippets::ImGuiSnippets::BorderedInputInt("Delay", &iBinderDelay, 10, 20000, 1, 1);
@@ -250,7 +253,7 @@ void Binder::onDrawGUI()
 		}
 		ImGui::End();
 	}
-	if (isCommandsEnabled)
+	if (isCommandsWindowOpen)
 	{
 		ImGui::Begin("Commands");
 		Lippets::ImGuiSnippets::BorderedInputInt("Delay", &iCommandsDelay, 10, 20000, 1, 1);
@@ -347,6 +350,7 @@ void Binder::sendMessageToSay(std::string message)
 
 void Binder::everyTickAction(crTickLocalPlayerInfo* info)
 {
+	
 	int* iLastTargetPlayerID = (int*)replacer.getAdditionVarible("iLastTargetPlayerID");
 	if (SF->getSAMP()->getPlayers()->pLocalPlayer->sAimingAtPid < 1000)
 		*iLastTargetPlayerID = SF->getSAMP()->getPlayers()->pLocalPlayer->sAimingAtPid;

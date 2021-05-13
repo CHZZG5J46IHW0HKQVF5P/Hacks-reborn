@@ -10,6 +10,7 @@ crTickLocalPlayerInfo* getCurrentTickLocalPlayerInfo()
 	eVehicleType vehType = eVehicleType::NONE;
 	if (isInCar) vehType = Vehicles::getVehicleType(Vehicles::getVehicleCVehicle(Vehicles::getVehicleInfo(VEHICLE_SELF)));
 	static crTickLocalPlayerInfo info;
+	info.iCurrentVehicleID = Players::getLocalPlayerCarID();
 	info.isDriver = Players::isLocalPlayerDriver();
 	info.isInCar = isInCar;
 	info.isExist = Players::isLocalPlayerExist();
@@ -22,6 +23,7 @@ crTickLocalPlayerInfo* getCurrentTickLocalPlayerInfo()
 
 bool CALLBACK Present(CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDestWindowOverride, CONST RGNDATA* pDirtyRegion)
 {
+
 	if (!SF->getGame()->isGTAMenuActive())
 		if (SUCCEEDED(SF->getRender()->BeginRender()))
 		{
@@ -82,22 +84,22 @@ bool CALLBACK Present(CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDest
 
 bool CALLBACK incRPCHook(stRakNetHookParams* params)
 {
-	return g::hacksManager.procRakNetHook(params, getCurrentTickLocalPlayerInfo(), Proc_Func::INC_RPC);
+	return g::hacksManager.procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_INCOMING_RPC);
 }
 
 bool CALLBACK outRPCHook(stRakNetHookParams* params)
 {
-	return g::hacksManager.procRakNetHook(params, getCurrentTickLocalPlayerInfo(), Proc_Func::OUT_RPC);
+	return g::hacksManager.procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_RPC);
 }
 
 bool CALLBACK incPacketHook(stRakNetHookParams* params)
 {
-	return g::hacksManager.procRakNetHook(params, getCurrentTickLocalPlayerInfo(), Proc_Func::INC_PACKET);
+	return g::hacksManager.procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_INCOMING_PACKET);
 }
 
 bool CALLBACK outPacketHook(stRakNetHookParams* params)
 {
-	return g::hacksManager.procRakNetHook(params, getCurrentTickLocalPlayerInfo(), Proc_Func::OUT_PACKET);
+	return g::hacksManager.procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_PACKET);
 }
 
 void CALLBACK mainloop()
@@ -118,7 +120,8 @@ void CALLBACK mainloop()
 			ImGui_ImplDX9_Init(SF->getRender()->getD3DDevice());
 			io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Arial.TTF", 16.0F, NULL, io.Fonts->GetGlyphRangesCyrillic());
 			// init path var
-			g::settingsPath = "C:\\HacksReborn\\Settings\\";//std::experimental::filesystem::current_path().string() + "\\SAMPFUNCS\\Hacks\\";
+			g::settingsPath = "C:\\HacksReborn\\Settings\\";//
+			//std::experimental::filesystem::current_path().string() + "\\SAMPFUNCS\\Hacks\\";
 			Lippets::Computer::createDirs(g::settingsPath);
 
 			SF->getSAMP()->registerChatCommand("hacks", [](std::string text)
@@ -151,6 +154,7 @@ void CALLBACK mainloop()
 	}
 	if (!initialized)
 		return;
+
 	static CMTimer logLimCheckTimer;
 	if (logLimCheckTimer.isEnded())
 	{
@@ -200,6 +204,9 @@ VOID CALLBACK PluginFree()
 {
 	delete g::loggerPtr;
 	g::hacksManager.destroy();
+	ImGui_ImplDX9_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
 }
 
 HRESULT CALLBACK Reset(D3DPRESENT_PARAMETERS* pPresentationParameters)
