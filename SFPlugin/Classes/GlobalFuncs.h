@@ -2,11 +2,6 @@
 
 #include "HacksManager.h"
 
-namespace g
-{
-	extern HackManager hacksManager;
-};
-
 
 namespace GFuncs
 {
@@ -16,7 +11,7 @@ namespace GFuncs
 	template<class T>
 	bool isHackWorking()
 	{
-		auto&& hacks = g::hacksManager.getHacks();
+		auto&& hacks = HackManager::getInstance()->getHacks();
 		for (auto&& hack : *hacks)
 		{
 			auto var = dynamic_cast<T*>(std::get<IHack*>(hack));
@@ -30,7 +25,7 @@ namespace GFuncs
 	template<class T>
 	T* getHackPtr()
 	{
-		auto&& hacks = g::hacksManager.getHacks();
+		auto&& hacks = HackManager::getInstance()->getHacks();
 		for (auto&& hack : *hacks)
 		{
 			auto var = dynamic_cast<T*>(std::get<IHack*>(hack));

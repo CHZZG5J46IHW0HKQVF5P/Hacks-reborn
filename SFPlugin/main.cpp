@@ -27,7 +27,7 @@ bool CALLBACK Present(CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDest
 	if (!SF->getGame()->isGTAMenuActive())
 		if (SUCCEEDED(SF->getRender()->BeginRender()))
 		{
-			bool bImGuiNewFrameWasCalled = g::hacksManager.drawHacks(getCurrentTickLocalPlayerInfo());
+			bool bImGuiNewFrameWasCalled = HackManager::getInstance()->drawHacks(getCurrentTickLocalPlayerInfo());
 
 			if (g::isWindowOpen)
 			{
@@ -53,15 +53,15 @@ bool CALLBACK Present(CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDest
 						ImGui::Separator();
 
 						if (currentGuiMenu == 0)
-							g::hacksManager.drawGui();
+							HackManager::getInstance()->drawGui();
 						else
-							g::hacksManager.drawSettings();
+							HackManager::getInstance()->drawSettings();
 					}
 					ImGui::End();
 					if (!g::isWindowOpen)
 					{
 						SF->getSAMP()->getMisc()->ToggleCursor(0, 0);
-						g::hacksManager.save();
+						HackManager::getInstance()->save();
 					}
 					ImGui::EndFrame();
 					ImGui::Render();
@@ -84,22 +84,22 @@ bool CALLBACK Present(CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDest
 
 bool CALLBACK incRPCHook(stRakNetHookParams* params)
 {
-	return g::hacksManager.procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_INCOMING_RPC);
+	return HackManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_INCOMING_RPC);
 }
 
 bool CALLBACK outRPCHook(stRakNetHookParams* params)
 {
-	return g::hacksManager.procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_RPC);
+	return HackManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_RPC);
 }
 
 bool CALLBACK incPacketHook(stRakNetHookParams* params)
 {
-	return g::hacksManager.procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_INCOMING_PACKET);
+	return HackManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_INCOMING_PACKET);
 }
 
 bool CALLBACK outPacketHook(stRakNetHookParams* params)
 {
-	return g::hacksManager.procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_PACKET);
+	return HackManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_PACKET);
 }
 
 void CALLBACK mainloop()
@@ -114,6 +114,7 @@ void CALLBACK mainloop()
 			g::loggerPtr = new CMLogger("E:\\!Logs\\hacksreborn.txt", 200000);
 			// imgui
 
+			HackManager hackManager();
 			ImGui::CreateContext();
 			ImGuiIO& io = ImGui::GetIO(); (void)io;
 			ImGui_ImplWin32_Init(GetActiveWindow());
@@ -149,7 +150,7 @@ void CALLBACK mainloop()
 			hacksSettings::LineOfSightFlags.bCheckCarTires = true;
 			//*(byte*)(0x96916D) = 1;
 
-			g::hacksManager.initHacksOnce();
+			HackManager::getInstance()->initHacksOnce();
 		}
 	}
 	if (!initialized)
@@ -173,7 +174,7 @@ void CALLBACK mainloop()
 		}
 	}
 
-	g::hacksManager.procEveryTickAction(getCurrentTickLocalPlayerInfo());
+	HackManager::getInstance()->procEveryTickAction(getCurrentTickLocalPlayerInfo());
 }
 
 
@@ -194,7 +195,7 @@ bool CALLBACK WndProcHandler(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 		break;
 	}
 
-	if (g::hacksManager.procKeys(wParam, msg, getCurrentTickLocalPlayerInfo()) || g::isWindowOpen)
+	if (HackManager::getInstance()->procKeys(wParam, msg, getCurrentTickLocalPlayerInfo()) || g::isWindowOpen)
 		ImGui_ImplWin32_WndProcHandler(hwd, msg, wParam, lParam);
 	return true;
 }
@@ -203,7 +204,7 @@ bool CALLBACK WndProcHandler(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 VOID CALLBACK PluginFree()
 {
 	delete g::loggerPtr;
-	g::hacksManager.destroy();
+	HackManager::getInstance()->destroy();
 	ImGui_ImplDX9_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();

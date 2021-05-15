@@ -27,6 +27,16 @@ namespace g
 };
 
 
+HackManager::HackManager()
+{
+
+}
+
+HackManager* HackManager::getInstance()
+{
+	static HackManager instance;
+	return &instance;
+}
 
 void HackManager::initHacksOnce()
 {
@@ -94,7 +104,7 @@ void HackManager::read()
 			if (!Lippets::Computer::isFileExits(g::settingsPath + std::get<IHack*>(hack)->m_sHackName + ".json"))
 				continue;
 			std::ifstream in(g::settingsPath + std::get<IHack*>(hack)->m_sHackName + ".json");
-			
+
 			if (!in.is_open())
 				continue;
 

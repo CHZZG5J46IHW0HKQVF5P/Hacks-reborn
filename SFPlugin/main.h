@@ -25,10 +25,6 @@ namespace hacksSettings
 
 #include "HacksManager.h"
 
-namespace g
-{
-	HackManager hacksManager;
-};
 
 bool CALLBACK WndProcHandler(HWND, UINT, WPARAM, LPARAM);
 HRESULT CALLBACK Reset(D3DPRESENT_PARAMETERS*);
