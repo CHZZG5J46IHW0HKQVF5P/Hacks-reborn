@@ -1,14 +1,13 @@
 #pragma once
 #include "SAMPFUNCS_API.h"
 #include "game_api.h"
-#include <cmath>
+#include "plog\Log.h"
+#include "plog\Initializers\RollingFileInitializer.h"
 extern SAMPFUNCS *SF;
-#include "C:\Lippets\CMClasses\CMLogger.h"
 
 
 namespace g
 {
-	CMLogger* loggerPtr;
 	std::string settingsPath;
 	int keyButtonSplitter;
 	bool isWindowOpen;

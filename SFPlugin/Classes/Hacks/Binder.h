@@ -44,6 +44,7 @@ private:
 	std::string sLastCmdArgs;
 
 
+	void release() override;
 	void sendMessageToSay(std::string);
 	void everyTickAction(crTickLocalPlayerInfo*) override;
 	bool onRPCOutcoming(stRakNetHookParams*, crTickLocalPlayerInfo*) override;

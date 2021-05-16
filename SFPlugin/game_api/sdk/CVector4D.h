@@ -12,7 +12,6 @@
 #ifndef __CVector4D_H
 #define __CVector4D_H
 
-#include <cmath>
 #include "CVector.h"
 
 /**

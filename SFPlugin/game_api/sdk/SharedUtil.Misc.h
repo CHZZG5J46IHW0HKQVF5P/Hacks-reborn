@@ -12,7 +12,6 @@
 *****************************************************************************/
 
 
-#include <cmath>
 #include <direct.h>
 
 namespace SharedUtil

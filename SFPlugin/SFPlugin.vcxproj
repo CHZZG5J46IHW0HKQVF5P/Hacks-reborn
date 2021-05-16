@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{AC0C243A-FAEA-4062-9682-3FC9E0B4D835}</ProjectGuid>
     <RootNamespace>SFPlugin</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -73,9 +73,9 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <CompileAs>CompileAsCpp</CompileAs>
-      <AdditionalIncludeDirectories>Classes\Hacks\Visuals;Classes\CMClasses;ImGui;include;Classes\Hacks;Classes;json;json\json;$(DXSDK_DIR)\Include;SFAPI;game_api;game_api\sdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>/Zc:threadSafeInit-  /std:c++latest %(AdditionalOptions)</AdditionalOptions>
+      <CompileAs>Default</CompileAs>
+      <AdditionalIncludeDirectories>include\plog;Classes\Hacks\Visuals;Classes\CMClasses;ImGui;include;Classes\Hacks;Classes;json;json\json;$(DXSDK_DIR)\Include;SFAPI;game_api;game_api\sdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/Zc:threadSafeInit-  /std:c++17 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -91,7 +91,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="C:\Lippets\CMClasses\CMFont.cpp" />
-    <ClCompile Include="C:\Lippets\CMClasses\CMLogger.cpp" />
     <ClCompile Include="C:\Lippets\CMClasses\CMReplacer.cpp" />
     <ClCompile Include="C:\Lippets\CMClasses\CMTimer.cpp" />
     <ClCompile Include="C:\Lippets\FIles\Computer.cpp" />
@@ -110,6 +109,7 @@
     <ClCompile Include="Classes\Hacks\AutoShot.cpp" />
     <ClCompile Include="Classes\Hacks\Binder.cpp" />
     <ClCompile Include="Classes\Hacks\BMXSpeedHack.cpp" />
+    <ClCompile Include="Classes\Hacks\CustomRender.cpp" />
     <ClCompile Include="Classes\Hacks\CustomRun.cpp" />
     <ClCompile Include="Classes\Hacks\Fix.cpp" />
     <ClCompile Include="Classes\Hacks\InputHelper.cpp" />
@@ -140,6 +140,7 @@
     <ClInclude Include="Classes\Hacks\AutoShot.h" />
     <ClInclude Include="Classes\Hacks\Binder.h" />
     <ClInclude Include="Classes\Hacks\BMXSpeedHack.h" />
+    <ClInclude Include="Classes\Hacks\CustomRender.h" />
     <ClInclude Include="Classes\Hacks\CustomRun.h" />
     <ClInclude Include="Classes\Hacks\Fix.h" />
     <ClInclude Include="Classes\Hacks\InputHelper.h" />

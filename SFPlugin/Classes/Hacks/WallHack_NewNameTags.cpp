@@ -79,8 +79,7 @@ void WallHack::everyTickAction(crTickLocalPlayerInfo* info)
 		if (iGameState == 15 || iGameState == 14)
 			fOrigDrawDistance = SF->getSAMP()->getInfo()->pSettings->fNameTagsDistance;
 	}
-	if (SF->getSAMP()->getInfo()->pSettings->byteShowNameTags != 0)
-		SF->getSAMP()->getInfo()->pSettings->byteShowNameTags = 0;
+	SF->getSAMP()->getInfo()->pSettings->byteShowNameTags = 0;
 }
 void WallHack::onDrawGUI()
 {
@@ -162,7 +161,7 @@ void WallHack::onDrawHack(crTickLocalPlayerInfo* info)
 
 		PedPos.fZ += fNameTagYOffset + (fDistance * 0.05f);
 		CVector onScreenPos;
-		D3D::CalcScreenCoors(&PedPos, &onScreenPos);
+		D3D::CalcScreenCoords(&PedPos, &onScreenPos);
 		if (onScreenPos.fZ < 1.f)
 			continue;
 
@@ -323,7 +322,7 @@ void WallHack::onDrawHack(crTickLocalPlayerInfo* info)
 				continue;
 			PedPos.fZ += fNameTagYOffset + (fDistance * 0.05f);
 			CVector onScreenPos;
-			D3D::CalcScreenCoors(&PedPos, &onScreenPos);
+			D3D::CalcScreenCoords(&PedPos, &onScreenPos);
 			if (onScreenPos.fZ < 1.f)
 				continue;
 			if (!GAME->GetWorld()->IsLineOfSightClear(&matrix.vPos, &PedPos, hacksSettings::LineOfSightFlags))

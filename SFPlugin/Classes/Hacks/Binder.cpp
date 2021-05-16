@@ -85,6 +85,11 @@ Binder::Binder(const char* name)
 	});
 }
 
+void Binder::release()
+{
+	replacer.~CMReplacer();
+}
+
 bool Bind::areSubKeysPressed()
 {
 	if (ctrl)

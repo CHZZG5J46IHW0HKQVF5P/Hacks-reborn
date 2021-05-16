@@ -559,6 +559,9 @@
     <ClInclude Include="Classes\Hacks\TurboControl.h">
       <Filter>Classes\Hacks\Misc</Filter>
     </ClInclude>
+    <ClInclude Include="Classes\Hacks\CustomRender.h">
+      <Filter>Classes\Hacks\Visuals</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -587,9 +590,6 @@
       <Filter>ImGui</Filter>
     </ClCompile>
     <ClCompile Include="C:\Lippets\CMClasses\CMFont.cpp">
-      <Filter>Classes\CMClassesCPPs</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Lippets\CMClasses\CMLogger.cpp">
       <Filter>Classes\CMClassesCPPs</Filter>
     </ClCompile>
     <ClCompile Include="C:\Lippets\CMClasses\CMReplacer.cpp">
@@ -665,6 +665,9 @@
     </ClCompile>
     <ClCompile Include="Classes\Hacks\TurboControl.cpp">
       <Filter>Classes\Hacks\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\CustomRender.cpp">
+      <Filter>Classes\Hacks\Visuals</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -24,16 +24,16 @@ enum class HACK_TYPE
 };
 
 
-class HackManager
+class HacksManager
 {
 private:
-	HackManager();
+	HacksManager();
 	std::deque<std::tuple<Priority, HACK_TYPE, IHack*>> m_hacks;
 public:
 
-	HackManager(HackManager &other) = delete;
-	void operator=(const HackManager &) = delete;
-	static HackManager *getInstance();
+	HacksManager(HacksManager &other) = delete;
+	void operator=(const HacksManager &) = delete;
+	static HacksManager *getInstance();
 	std::deque<std::tuple<Priority, HACK_TYPE, IHack*>>* getHacks();
 	void destroy();
 	bool drawHacks(crTickLocalPlayerInfo* info);

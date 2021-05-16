@@ -1,4 +1,5 @@
 #pragma once
+#define _MATH_DEFINES_DEFINED
 #include "SAMPFUNCS_API.h"
 #include "game_api.h"
 extern SAMPFUNCS *SF;

@@ -3,7 +3,7 @@
 
 bool GFuncs::isHackWorking(const char* szHackName)
 {
-	auto&& hacks = HackManager::getInstance()->getHacks();
+	auto&& hacks = HacksManager::getInstance()->getHacks();
 	for (auto&& hack : *hacks)
 		if (std::get<IHack*>(hack)->m_sHackName == szHackName)
 			return std::get<IHack*>(hack)->isHackWorking();

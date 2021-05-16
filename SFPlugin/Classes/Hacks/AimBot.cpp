@@ -82,9 +82,9 @@ void Aimbot::aim(int iTargetID)
 
 		float* crosshairOffset = (float*)0xB6EC10;
 		float mult = tan(pCamera->GetCam(pCamera->GetActiveCam())->GetFOV() * 0.5f * 0.017853292f);
-		float fx = M_PI - atan2(1.0f, mult * (crosshairOffset[1] - 0.5f + crosshairOffset[1] - 0.5f));
+		float fx = (3.14159265358979323846) - atan2(1.0f, mult * (crosshairOffset[1] - 0.5f + crosshairOffset[1] - 0.5f));
 
-		float AngleX = atan2f(vector.fY, -vector.fX) - M_PI / 2;
+		float AngleX = atan2f(vector.fY, -vector.fX) - (3.14159265358979323846) / 2;
 
 		*(float*)0xB6F258 = -(AngleX - fx);
 	}
@@ -98,3 +98,4 @@ void Aimbot::everyTickAction(crTickLocalPlayerInfo* info)
 		if (SF->getGame()->isKeyDown(1) && SF->getGame()->isKeyDown(2))
 			aim(getPlayerTarget(info));
 }
+

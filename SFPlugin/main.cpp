@@ -1,11 +1,11 @@
 #include "main.h"
-#include <variant>
 SAMPFUNCS *SF = new SAMPFUNCS();
 
 
 
 crTickLocalPlayerInfo* getCurrentTickLocalPlayerInfo()
 {
+
 	bool isInCar = Players::isLocalPlayerInCar();
 	eVehicleType vehType = eVehicleType::NONE;
 	if (isInCar) vehType = Vehicles::getVehicleType(Vehicles::getVehicleCVehicle(Vehicles::getVehicleInfo(VEHICLE_SELF)));
@@ -27,7 +27,7 @@ bool CALLBACK Present(CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDest
 	if (!SF->getGame()->isGTAMenuActive())
 		if (SUCCEEDED(SF->getRender()->BeginRender()))
 		{
-			bool bImGuiNewFrameWasCalled = HackManager::getInstance()->drawHacks(getCurrentTickLocalPlayerInfo());
+			bool bImGuiNewFrameWasCalled = HacksManager::getInstance()->drawHacks(getCurrentTickLocalPlayerInfo());
 
 			if (g::isWindowOpen)
 			{
@@ -38,6 +38,8 @@ bool CALLBACK Present(CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDest
 					ImGui::NewFrame();
 				}
 				{
+					ImGui::ShowDemoWindow();
+
 					ImGui::SetNextWindowPos(ImVec2(iScrResX / 2, iScrResY / 2), ImGuiCond_Once, ImVec2(0.5F, 0.5F));
 					ImGui::SetNextWindowSize(ImVec2(550.f, 450.f), ImGuiCond_::ImGuiCond_FirstUseEver);
 					ImGui::Begin("hakcs", &g::isWindowOpen);
@@ -53,15 +55,15 @@ bool CALLBACK Present(CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDest
 						ImGui::Separator();
 
 						if (currentGuiMenu == 0)
-							HackManager::getInstance()->drawGui();
+							HacksManager::getInstance()->drawGui();
 						else
-							HackManager::getInstance()->drawSettings();
+							HacksManager::getInstance()->drawSettings();
 					}
 					ImGui::End();
 					if (!g::isWindowOpen)
 					{
 						SF->getSAMP()->getMisc()->ToggleCursor(0, 0);
-						HackManager::getInstance()->save();
+						HacksManager::getInstance()->save();
 					}
 					ImGui::EndFrame();
 					ImGui::Render();
@@ -84,22 +86,22 @@ bool CALLBACK Present(CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDest
 
 bool CALLBACK incRPCHook(stRakNetHookParams* params)
 {
-	return HackManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_INCOMING_RPC);
+	return HacksManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_INCOMING_RPC);
 }
 
 bool CALLBACK outRPCHook(stRakNetHookParams* params)
 {
-	return HackManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_RPC);
+	return HacksManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_RPC);
 }
 
 bool CALLBACK incPacketHook(stRakNetHookParams* params)
 {
-	return HackManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_INCOMING_PACKET);
+	return HacksManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_INCOMING_PACKET);
 }
 
 bool CALLBACK outPacketHook(stRakNetHookParams* params)
 {
-	return HackManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_PACKET);
+	return HacksManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_PACKET);
 }
 
 void CALLBACK mainloop()
@@ -110,11 +112,10 @@ void CALLBACK mainloop()
 		if (GAME && GAME->GetSystemState() == eSystemState::GS_PLAYING_GAME && SF->getSAMP()->IsInitialized())
 		{
 
+			plog::init(plog::Severity::info, "E:\\!Logs\\hacksreborn.log", 100000, 1);
 			initialized = true;
-			g::loggerPtr = new CMLogger("E:\\!Logs\\hacksreborn.txt", 200000);
 			// imgui
-
-			HackManager hackManager();
+			HacksManager hackManager();
 			ImGui::CreateContext();
 			ImGuiIO& io = ImGui::GetIO(); (void)io;
 			ImGui_ImplWin32_Init(GetActiveWindow());
@@ -150,18 +151,11 @@ void CALLBACK mainloop()
 			hacksSettings::LineOfSightFlags.bCheckCarTires = true;
 			//*(byte*)(0x96916D) = 1;
 
-			HackManager::getInstance()->initHacksOnce();
+			HacksManager::getInstance()->initHacksOnce();
 		}
 	}
 	if (!initialized)
 		return;
-
-	static CMTimer logLimCheckTimer;
-	if (logLimCheckTimer.isEnded())
-	{
-		g::loggerPtr->clearLogFileIFlimitReached();
-		logLimCheckTimer.setTimer(60000);
-	}
 
 	if (g::isWindowOpen)
 	{
@@ -174,7 +168,7 @@ void CALLBACK mainloop()
 		}
 	}
 
-	HackManager::getInstance()->procEveryTickAction(getCurrentTickLocalPlayerInfo());
+	HacksManager::getInstance()->procEveryTickAction(getCurrentTickLocalPlayerInfo());
 }
 
 
@@ -195,7 +189,7 @@ bool CALLBACK WndProcHandler(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 		break;
 	}
 
-	if (HackManager::getInstance()->procKeys(wParam, msg, getCurrentTickLocalPlayerInfo()) || g::isWindowOpen)
+	if (HacksManager::getInstance()->procKeys(wParam, msg, getCurrentTickLocalPlayerInfo()) || g::isWindowOpen)
 		ImGui_ImplWin32_WndProcHandler(hwd, msg, wParam, lParam);
 	return true;
 }
@@ -203,8 +197,7 @@ bool CALLBACK WndProcHandler(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 VOID CALLBACK PluginFree()
 {
-	delete g::loggerPtr;
-	HackManager::getInstance()->destroy();
+	HacksManager::getInstance()->destroy();
 	ImGui_ImplDX9_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
