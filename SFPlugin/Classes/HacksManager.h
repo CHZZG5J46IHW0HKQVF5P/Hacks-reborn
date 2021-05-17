@@ -35,13 +35,13 @@ public:
 	static HacksManager *getInstance();
 	std::vector<std::tuple<Priority, HACK_TYPE, IHack*>>* getHacks();
 	void destroy();
-	bool drawHacks(crTickLocalPlayerInfo* info);
+	bool drawHacks();
 	void drawGui();
 	void drawSettings();
 	void read();
 	void save();
-	bool procRakNetHook(stRakNetHookParams* params, crTickLocalPlayerInfo* info, RakNetScriptHookType procFunc);
-	bool procKeys(WPARAM wParam, UINT msg, crTickLocalPlayerInfo* info);
-	void procEveryTickAction(crTickLocalPlayerInfo* info);
+	bool procRakNetHook(stRakNetHookParams* params,  RakNetScriptHookType procFunc);
+	bool procKeys(WPARAM wParam, UINT msg);
+	void procEveryTickAction();
 	void initHacksOnce();
 };

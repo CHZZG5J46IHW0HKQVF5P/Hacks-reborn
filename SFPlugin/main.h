@@ -23,7 +23,11 @@ namespace hacksSettings
 };
 
 #include "HacksManager.h"
-
+   
+namespace g
+{
+	crTickLocalPlayerInfo* pInfo = new crTickLocalPlayerInfo();
+}
 
 bool CALLBACK WndProcHandler(HWND, UINT, WPARAM, LPARAM);
 HRESULT CALLBACK Reset(D3DPRESENT_PARAMETERS*);

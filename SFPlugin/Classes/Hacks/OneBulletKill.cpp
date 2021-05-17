@@ -31,7 +31,7 @@ void OneBulletKill::read(nlohmann::json& data)
 		iDelay = 100;
 }
 
-bool OneBulletKill::onRPCOutcoming(stRakNetHookParams* params,  crTickLocalPlayerInfo* info)
+bool OneBulletKill::onRPCOutcoming(stRakNetHookParams* params)
 {
 	if (params->packetId != RPCEnumeration::RPC_GiveTakeDamage) // Give/Take Damage
 		return true;
@@ -64,7 +64,7 @@ bool OneBulletKill::onRPCOutcoming(stRakNetHookParams* params,  crTickLocalPlaye
 }
 
 
-void OneBulletKill::everyTickAction( crTickLocalPlayerInfo* info)
+void OneBulletKill::everyTickAction( )
 {
 	static CMTimer sendDamageTimer;
 	if (sendDamageDeuqeLength > 0)

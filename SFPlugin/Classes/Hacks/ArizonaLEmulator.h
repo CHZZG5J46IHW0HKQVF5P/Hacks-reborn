@@ -8,6 +8,6 @@ public:
 private:
 	void save(nlohmann::json& data) override;
 	void read(nlohmann::json& data) override;
-	bool onRPCOutcoming(stRakNetHookParams*,  crTickLocalPlayerInfo*) override;
+	bool onRPCOutcoming(stRakNetHookParams*  ) override;
 	void onDrawGUI() override;
 };

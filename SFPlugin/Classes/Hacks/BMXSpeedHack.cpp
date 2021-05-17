@@ -20,7 +20,7 @@ void BMXspeedhack::onDrawSettings()
 		ImGui::EndMenu();
 	}
 }
-void BMXspeedhack::onWndProc(WPARAM wParam, UINT msg,  crTickLocalPlayerInfo* info)
+void BMXspeedhack::onWndProc(WPARAM wParam, UINT msg)
 {
 	if (activationKey != 0 && wParam == activationKey)
 		if (msg == WM_KEYDOWN || msg == WM_LBUTTONDOWN || msg == WM_SYSKEYDOWN)
@@ -33,9 +33,9 @@ void BMXspeedhack::onWndProc(WPARAM wParam, UINT msg,  crTickLocalPlayerInfo* in
 		}
 
 }
-void BMXspeedhack::everyTickAction( crTickLocalPlayerInfo* info)
+void BMXspeedhack::everyTickAction( )
 {
-	if (!info->isDriver || info->vehType != Vehicles::eVehicleType::CBMX || !bmxspeedHack)
+	if (!g::pInfo->isDriver || g::pInfo->vehType != Vehicles::eVehicleType::CBMX || !bmxspeedHack)
 		return;
 	static uint8 BMXState = 1;
 	static CMTimer timer;

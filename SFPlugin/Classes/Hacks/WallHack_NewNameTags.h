@@ -47,11 +47,11 @@ private:
 	void init() override;
 	void save(nlohmann::json &data) override;
 	void read(nlohmann::json &data) override;
-	void everyTickAction(crTickLocalPlayerInfo* info) override;
+	void everyTickAction() override;
 	void onDrawGUI() override;
 	void switchHack() override;
-	void onWndProc(WPARAM wParam, UINT msg, crTickLocalPlayerInfo* info) override;
-	bool onRPCIncoming(stRakNetHookParams* params, crTickLocalPlayerInfo* info) override;
-	void onDrawHack(crTickLocalPlayerInfo* info) override;
+	void onWndProc(WPARAM wParam, UINT msg) override;
+	bool onRPCIncoming(stRakNetHookParams* params) override;
+	void onDrawHack() override;
 	void onDrawSettings() override;
 };

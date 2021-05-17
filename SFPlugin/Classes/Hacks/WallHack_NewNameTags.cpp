@@ -70,7 +70,7 @@ void WallHack::read(nlohmann::json &data)
 	if (iYBoxOffset == 0)
 		iYBoxOffset = 4;
 }
-void WallHack::everyTickAction(crTickLocalPlayerInfo* info)
+void WallHack::everyTickAction()
 {
 	static int iGameState = 0;
 	if (iGameState != SF->getSAMP()->getInfo()->iGameState)
@@ -103,7 +103,7 @@ void WallHack::switchHack()
 		SF->getSAMP()->getInfo()->pSettings->fNameTagsDistance = fOrigDrawDistance;
 	}
 }
-void WallHack::onWndProc(WPARAM wParam, UINT msg, crTickLocalPlayerInfo* info)
+void WallHack::onWndProc(WPARAM wParam, UINT msg)
 {
 	if (msg != WM_KEYDOWN && msg != WM_LBUTTONDOWN && msg != WM_SYSKEYDOWN)
 		return;
@@ -115,7 +115,7 @@ void WallHack::onWndProc(WPARAM wParam, UINT msg, crTickLocalPlayerInfo* info)
 		notify("Wall Hack", drawWallHack);
 	}
 }
-bool WallHack::onRPCIncoming(stRakNetHookParams* params, crTickLocalPlayerInfo* info)
+bool WallHack::onRPCIncoming(stRakNetHookParams* params)
 {
 	if (params->packetId != ScriptRPCEnumeration::RPC_ScrChatBubble)
 		return true;
@@ -138,13 +138,13 @@ bool WallHack::onRPCIncoming(stRakNetHookParams* params, crTickLocalPlayerInfo* 
 	delete[] text;
 	return false;
 }
-void WallHack::onDrawHack(crTickLocalPlayerInfo* info)
+void WallHack::onDrawHack()
 {
 	if (bNoNameTags && !drawWallHack)
 		return;
 
-	GFuncs::resortPlayersByDistance(&info->nearestPlayers, true);
-	for (auto&& player : info->nearestPlayers)//(int i = 0; i < 1000; i++)
+	GFuncs::resortPlayersByDistance(&g::pInfo->nearestPlayers, true);
+	for (auto&& player : g::pInfo->nearestPlayers)//(int i = 0; i < 1000; i++)
 	{
 		int i = player.first;
 		CVector PedPos;

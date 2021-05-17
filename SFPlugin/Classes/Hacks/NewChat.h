@@ -1,3 +1,4 @@
+/*
 #include "Hack.h"
 
 class NewChat : public IHack
@@ -5,8 +6,9 @@ class NewChat : public IHack
 public:
 	NewChat(const char*);
 private:
-	void onDrawHack(crTickLocalPlayerInfo*) override;
-	void everyTickAction(crTickLocalPlayerInfo*) override;
-
-
+	void onDrawHack() override;
+	bool onRPCIncoming(stRakNetHookParams*) override;
+	void everyTickAction() override;
+	void onWndProc(WPARAM, UINT) override;
 };
+*/

@@ -13,13 +13,13 @@ void InputHelper::onDrawGUI()
 {
 	ImGui::Checkbox(m_sHackName.c_str(), &m_bEnabled);
 }
-void InputHelper::onDrawHack(crTickLocalPlayerInfo* info)
+void InputHelper::onDrawHack()
 {
 	if (!SF->getSAMP()->getInput()->iInputEnabled)
 		return;
 	char szBuffer[128];
 	std::string LocaleName = Lippets::KeyBoard::GetKeyBoardLocaleName();
-	if (info->isInCar)
+	if (g::pInfo->isInCar)
 		sprintf_s(szBuffer, "¬аш ID: {00FF00}%d{FFFFFF} ID јвто: {00FF00}%d{FFFFFF} язык: {00FF00}%s", MYID, SF->getSAMP()->getPlayers()->pLocalPlayer->sCurrentVehicleID, LocaleName.c_str());
 	else
 		sprintf_s(szBuffer, "¬аш ID: {00FF00}%d{FFFFFF} язык: {00FF00}%s", MYID, LocaleName.c_str());

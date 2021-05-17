@@ -7,7 +7,7 @@ Fix::Fix(const char* name)
 	m_bEnabled = true;
 }
 
-bool Fix::onRPCOutcoming(stRakNetHookParams* params, crTickLocalPlayerInfo* info)
+bool Fix::onRPCOutcoming(stRakNetHookParams* params)
 {
 	switch (params->packetId)
 	{
@@ -17,7 +17,7 @@ bool Fix::onRPCOutcoming(stRakNetHookParams* params, crTickLocalPlayerInfo* info
 	return true;
 }
 
-bool Fix::onRPCIncoming(stRakNetHookParams* params, crTickLocalPlayerInfo* info)
+bool Fix::onRPCIncoming(stRakNetHookParams* params)
 {
 	switch (params->packetId)
 	{
@@ -59,7 +59,7 @@ bool Fix::onRPCIncoming(stRakNetHookParams* params, crTickLocalPlayerInfo* info)
 	}
 	case ScriptRPCEnumeration::RPC_ScrSetVehicleHealth:
 	{
-		if (!info->isDriver)
+		if (!g::pInfo->isDriver)
 			return true;
 		int16 iAutoID;
 		float fHealth;

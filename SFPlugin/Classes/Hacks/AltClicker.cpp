@@ -38,7 +38,7 @@ void AltClicker::onDrawSettings()
 }
 
 
-void AltClicker::onWndProc(WPARAM wParam, UINT msg,  crTickLocalPlayerInfo* info)
+void AltClicker::onWndProc(WPARAM wParam, UINT msg)
 {
 	if (msg != WM_KEYDOWN && msg != WM_LBUTTONDOWN && msg != WM_SYSKEYDOWN)
 		return;
@@ -50,7 +50,7 @@ void AltClicker::onWndProc(WPARAM wParam, UINT msg,  crTickLocalPlayerInfo* info
 	}
 }
 
-void AltClicker::everyTickAction( crTickLocalPlayerInfo* info)
+void AltClicker::everyTickAction( )
 {
 	static CMTimer timer;
 	static uint8 eALTstate = 1;

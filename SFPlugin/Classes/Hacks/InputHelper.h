@@ -12,7 +12,7 @@ private:
 	int offsetX = 0;
 	void init() override;
 	void onDrawGUI() override;
-	void onDrawHack( crTickLocalPlayerInfo* info) override;
+	void onDrawHack( ) override;
 	void onDrawSettings() override;
 	void save(nlohmann::json& data) override;
 	void read(nlohmann::json& data) override;

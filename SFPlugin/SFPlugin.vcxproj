@@ -77,8 +77,8 @@
       <AdditionalIncludeDirectories>include\plog;Classes\Hacks\Visuals;Classes\CMClasses;ImGui;include;Classes\Hacks;Classes;json;json\json;$(DXSDK_DIR)\Include;SFAPI;game_api;game_api\sdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zc:threadSafeInit-  /std:c++17 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
-      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
@@ -112,9 +112,9 @@
     <ClCompile Include="Classes\Hacks\Binder.cpp" />
     <ClCompile Include="Classes\Hacks\BMXSpeedHack.cpp" />
     <ClCompile Include="Classes\Hacks\CustomRender.cpp" />
-    <ClCompile Include="Classes\Hacks\CustomRun.cpp" />
     <ClCompile Include="Classes\Hacks\Fix.cpp" />
     <ClCompile Include="Classes\Hacks\InputHelper.cpp" />
+    <ClCompile Include="Classes\Hacks\NewChat.cpp" />
     <ClCompile Include="Classes\Hacks\OneBulletKill.cpp" />
     <ClCompile Include="Classes\Hacks\PlayersList.cpp" />
     <ClCompile Include="Classes\Hacks\TurboControl.cpp" />
@@ -126,7 +126,6 @@
     <ClCompile Include="ImGui\imgui_impl_dx9.cpp" />
     <ClCompile Include="ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="ImGui\imgui_stdlib.cpp" />
-    <ClCompile Include="ImGui\imgui_tables.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -143,9 +142,9 @@
     <ClInclude Include="Classes\Hacks\Binder.h" />
     <ClInclude Include="Classes\Hacks\BMXSpeedHack.h" />
     <ClInclude Include="Classes\Hacks\CustomRender.h" />
-    <ClInclude Include="Classes\Hacks\CustomRun.h" />
     <ClInclude Include="Classes\Hacks\Fix.h" />
     <ClInclude Include="Classes\Hacks\InputHelper.h" />
+    <ClInclude Include="Classes\Hacks\NewChat.h" />
     <ClInclude Include="Classes\Hacks\OneBulletKill.h" />
     <ClInclude Include="Classes\Hacks\PlayersList.h" />
     <ClInclude Include="Classes\Hacks\TurboControl.h" />

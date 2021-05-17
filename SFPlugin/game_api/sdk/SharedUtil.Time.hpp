@@ -214,7 +214,7 @@ unsigned long GetTickCountInternal ( void )
     mach_timebase_info( &info );
 
     // Calculate the time in milliseconds
-    uint64_t nNanoTime = nAbsTime * ( info->numer / info->denom );
+    uint64_t nNanoTime = nAbsTime * ( g::pInfo->numer / g::pInfo->denom );
     return ( nNanoTime / 1000000 );
 }
 

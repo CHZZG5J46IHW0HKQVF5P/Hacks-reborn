@@ -9,8 +9,8 @@ private:
 	bool autoShot = false;
 	int activationKey = 0;
 	void onDrawGUI() override;
-	void onWndProc(WPARAM wParam, UINT msg,  crTickLocalPlayerInfo* info) override;
-	void everyTickAction( crTickLocalPlayerInfo* info) override;
+	void onWndProc(WPARAM wParam, UINT msg  ) override;
+	void everyTickAction( ) override;
 	void save(nlohmann::json& data) override;
 	void read(nlohmann::json& data) override;
 };

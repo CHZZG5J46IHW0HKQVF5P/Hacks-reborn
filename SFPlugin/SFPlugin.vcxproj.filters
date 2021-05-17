@@ -532,9 +532,6 @@
     <ClInclude Include="Classes\GlobalFuncs.h" />
     <ClInclude Include="Classes\Hack.h" />
     <ClInclude Include="Classes\HacksManager.h" />
-    <ClInclude Include="Classes\Hacks\CustomRun.h">
-      <Filter>Classes\Hacks\Misc</Filter>
-    </ClInclude>
     <ClInclude Include="Classes\Hacks\1lineHacks.h">
       <Filter>Classes\Hacks\Misc</Filter>
     </ClInclude>
@@ -562,33 +559,12 @@
     <ClInclude Include="Classes\Hacks\CustomRender.h">
       <Filter>Classes\Hacks\Visuals</Filter>
     </ClInclude>
+    <ClInclude Include="Classes\Hacks\NewChat.h">
+      <Filter>Classes\Hacks\Visuals</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="ImGui\imgui.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_demo.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_draw.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_impl_dx9.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_impl_win32.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_tables.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_widgets.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_stdlib.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
     <ClCompile Include="C:\Lippets\CMClasses\CMFont.cpp">
       <Filter>Classes\CMClassesCPPs</Filter>
     </ClCompile>
@@ -621,9 +597,6 @@
     </ClCompile>
     <ClCompile Include="Classes\GlobalFuncs.cpp" />
     <ClCompile Include="Classes\HacksManager.cpp" />
-    <ClCompile Include="Classes\Hacks\CustomRun.cpp">
-      <Filter>Classes\Hacks\Misc</Filter>
-    </ClCompile>
     <ClCompile Include="C:\Lippets\SampSnipps\SampSnipps.cpp">
       <Filter>Classes\CMClassesCPPs</Filter>
     </ClCompile>
@@ -668,6 +641,30 @@
     </ClCompile>
     <ClCompile Include="Classes\Hacks\CustomRender.cpp">
       <Filter>Classes\Hacks\Visuals</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\NewChat.cpp">
+      <Filter>Classes\Hacks\Visuals</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_demo.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_draw.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_dx9.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_win32.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_stdlib.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_widgets.cpp">
+      <Filter>ImGui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

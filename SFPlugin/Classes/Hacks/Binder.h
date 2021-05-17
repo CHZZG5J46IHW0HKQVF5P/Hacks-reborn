@@ -46,8 +46,8 @@ private:
 
 	void release() override;
 	void sendMessageToSay(std::string);
-	void everyTickAction(crTickLocalPlayerInfo*) override;
-	bool onRPCOutcoming(stRakNetHookParams*, crTickLocalPlayerInfo*) override;
+	void everyTickAction() override;
+	bool onRPCOutcoming(stRakNetHookParams* ) override;
 	void save(nlohmann::json&) override;
 	void read(nlohmann::json&) override;
 	void onDrawGUI() override;

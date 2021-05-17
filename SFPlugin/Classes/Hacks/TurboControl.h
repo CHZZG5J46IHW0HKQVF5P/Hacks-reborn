@@ -10,7 +10,7 @@ public:
 private:
 	int activationKey = 0;
 	void onDrawGUI() override;
-	void onWndProc(WPARAM wParam, UINT msg,  crTickLocalPlayerInfo* info) override;
+	void onWndProc(WPARAM wParam, UINT msg) override;
 	void save(nlohmann::json& data) override;
 	void read(nlohmann::json& data) override;
 };

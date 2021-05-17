@@ -69,7 +69,7 @@ void AirBrake::onDrawGUI()
 	ImGui::SameLine();
 	Lippets::ImGuiSnippets::KeyButton(activationKey, g::keyButtonSplitter);
 }
-void AirBrake::onWndProc(WPARAM wParam, UINT msg,  crTickLocalPlayerInfo* info)
+void AirBrake::onWndProc(WPARAM wParam, UINT msg)
 {
 	if (msg != WM_KEYDOWN && msg != WM_LBUTTONDOWN && msg != WM_SYSKEYDOWN)
 		return;
@@ -83,9 +83,9 @@ void AirBrake::onWndProc(WPARAM wParam, UINT msg,  crTickLocalPlayerInfo* info)
 	{
 		switch (wParam)
 		{
-		case 87: AirBrakeForward(fAirBrakeForce, info->isExist, info->isDriver); break;
-		case 32: TPupdown(fAirBrakeForce, info->isExist, info->isDriver,true); break;
-		case 16: TPupdown(fAirBrakeForce, info->isExist, info->isDriver,false); break;
+		case 87: AirBrakeForward(fAirBrakeForce, g::pInfo->isExist, g::pInfo->isDriver); break;
+		case 32: TPupdown(fAirBrakeForce, g::pInfo->isExist, g::pInfo->isDriver,true); break;
+		case 16: TPupdown(fAirBrakeForce, g::pInfo->isExist, g::pInfo->isDriver,false); break;
 		default:
 			break;
 		}

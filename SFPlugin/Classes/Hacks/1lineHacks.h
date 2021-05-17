@@ -1,6 +1,13 @@
 #pragma once
 #include "Hack.h"
 
+enum class RUN_TYPE
+{
+	DEFAULT, //= -1
+	CJ,//= 54
+	ROLLER,//= 138
+	SWAT //= 128
+};
 
 class OneLineHacks : public IHack
 {
@@ -29,22 +36,25 @@ private:
 	bool bWaterProofEngine = false;
 	bool bBar160hp = false;
 	bool bFastHeli = false;
-	bool bDontGiveMeBat = false;		
+	bool bDontGiveMeBat = false;
 	bool bMegaBMXJump = false;
 	bool bSuperBunnyHop = false;
+	RUN_TYPE CurrentRunType = RUN_TYPE::DEFAULT;
 	void  onDrawGUI() override;
 
-	void onDrawHack( crTickLocalPlayerInfo* info) override;
+	void onDrawHack() override;
 
 	void switchHack() override;
 
-	void everyTickAction( crTickLocalPlayerInfo* info) override;
+	void everyTickAction() override;
 
-	void onWndProc(WPARAM wParam, UINT msg,  crTickLocalPlayerInfo* info) override;
+	void onDrawSettings() override;
 
-	bool onRPCIncoming(stRakNetHookParams *param,  crTickLocalPlayerInfo* info) override;
+	void onWndProc(WPARAM wParam, UINT msg) override;
 
-	bool onPacketOutcoming(stRakNetHookParams *param,  crTickLocalPlayerInfo* info) override;
+	bool onRPCIncoming(stRakNetHookParams *param) override;
+
+	bool onPacketOutcoming(stRakNetHookParams *param) override;
 
 	void save(nlohmann::json& data) override;
 

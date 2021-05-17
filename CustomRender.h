@@ -1,7 +1,6 @@
 #pragma once
 #include "Hack.h"
-#include <memory>
-#include "C:\\Lippets\\FIles\\LUtils.h"
+
 #define pickup SF->getSAMP()->getInfo()->pPools->pPickup->pickup
 #define object SF->getSAMP()->getInfo()->pPools->pObject->object
 #define text3d SF->getSAMP()->getInfo()->pPools->pText3D->textLabel
@@ -10,8 +9,8 @@ class RenderBase
 public:
 	bool m_bIsEnabled = true;
 	std::string m_sName;
-	virtual void read(nlohmann::json&) {};
-	virtual void save(nlohmann::json&) {};
+	virtual void read(nlohmann::json&) = 0;
+	virtual void save(nlohmann::json&) = 0;
 };
 
 struct CustomRenderData
@@ -45,10 +44,8 @@ public:
 	std::string m_sRenderinName;
 	std::vector<int> m_ids;
 	void render(RenderPickup_ObjectData*);
-
 	void save(nlohmann::json&) override;
 	void read(nlohmann::json&) override;
-
 };
 
 class Text3dRender : public RenderBase
@@ -57,10 +54,8 @@ public:
 	std::string m_sRenderinName;
 	std::vector<std::string > m_textToSearch;
 	void render(Render3DTextData*);
-
 	void save(nlohmann::json&) override;
 	void read(nlohmann::json&) override;
-
 };
 
 class ObjectRender : public RenderBase
@@ -69,10 +64,8 @@ public:
 	std::string m_sRenderinName;
 	std::vector<int> m_ids;
 	void render(RenderPickup_ObjectData*);
-
 	void save(nlohmann::json&) override;
 	void read(nlohmann::json&) override;
-
 };
 
 
@@ -80,13 +73,12 @@ public:
 class RenderClass
 {
 private:
-	std::vector<std::shared_ptr<ObjectRender>> m_objectsRenders;
-	std::vector< std::shared_ptr<Text3dRender>> m_text3dRenders;
-	std::vector<std::shared_ptr<PickupRender>> m_pickupRenders;
+	std::vector<ObjectRender*> m_objectsRenders;
+	std::vector<Text3dRender*> m_text3dRenders;
+	std::vector<PickupRender*> m_pickupRenders;
 public:
 	~RenderClass();
 	RenderClass(const char*);
-
 	void read(nlohmann::json&);
 	void save(nlohmann::json&);
 
@@ -99,7 +91,7 @@ public:
 
 	bool m_bIsEnabled = false;
 	std::string m_sName;
-
+	
 	void drawEditor(size_t i);
 	void drawMenu(size_t i);
 	void renderPickups(RenderPickup_ObjectData*);
@@ -121,14 +113,13 @@ public:
 private:
 	bool m_bIsEditorWindowOpened = false;
 	bool m_bIsMenuOpened = false;
+	std::vector<RenderBase*> m_nodeRendersPtrs;
 	std::vector<RenderClass> m_classes;
 	bool areAnyClassesEnabled();
 	void drawMenu();
 	void release() override;
-
 	void save(nlohmann::json&) override;
 	void read(nlohmann::json&) override;
-
 	void onDrawGUI() override;
 	void onDrawHack() override;
 

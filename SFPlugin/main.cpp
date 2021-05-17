@@ -3,23 +3,19 @@ SAMPFUNCS *SF = new SAMPFUNCS();
 
 
 
-crTickLocalPlayerInfo* getCurrentTickLocalPlayerInfo(bool bCanPickLast = false)
+void initcrTickLocalPlayerInfo()
 {
-	static crTickLocalPlayerInfo info;
-	if (bCanPickLast)
-		return &info;
 	bool isInCar = Players::isLocalPlayerInCar();
 	eVehicleType vehType = eVehicleType::NONE;
 	if (isInCar) vehType = Vehicles::getVehicleType(Vehicles::getVehicleCVehicle(Vehicles::getVehicleInfo(VEHICLE_SELF)));
-	
-	info.iCurrentVehicleID = Players::getLocalPlayerCarID();
-	info.isDriver = Players::isLocalPlayerDriver();
-	info.isInCar = isInCar;
-	info.isExist = Players::isLocalPlayerExist();
-	info.vehType = vehType;
-	info.nearestPlayers = Players::getNearestPlayers();
-	info.nearestVehicles = Vehicles::getNearestVehicles();
-	return &info;
+
+	g::pInfo->iCurrentVehicleID = Players::getLocalPlayerCarID();
+	g::pInfo->isDriver = Players::isLocalPlayerDriver();
+	g::pInfo->isInCar = isInCar;
+	g::pInfo->isExist = Players::isLocalPlayerExist();
+	g::pInfo->vehType = vehType;
+	g::pInfo->nearestPlayers = Players::getNearestPlayers();
+	g::pInfo->nearestVehicles = Vehicles::getNearestVehicles();
 }
 
 
@@ -29,7 +25,8 @@ bool CALLBACK Present(CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDest
 	if (!SF->getGame()->isGTAMenuActive())
 		if (SUCCEEDED(SF->getRender()->BeginRender()))
 		{
-			bool bImGuiNewFrameWasCalled = HacksManager::getInstance()->drawHacks(getCurrentTickLocalPlayerInfo());
+			initcrTickLocalPlayerInfo();
+			bool bImGuiNewFrameWasCalled = HacksManager::getInstance()->drawHacks();
 
 			if (g::isWindowOpen)
 			{
@@ -88,32 +85,30 @@ bool CALLBACK Present(CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDest
 
 bool CALLBACK incRPCHook(stRakNetHookParams* params)
 {
-	return HacksManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(1), RakNetScriptHookType::RAKHOOK_TYPE_INCOMING_RPC);
+	return HacksManager::getInstance()->procRakNetHook(params, RakNetScriptHookType::RAKHOOK_TYPE_INCOMING_RPC);
 }
 
 bool CALLBACK outRPCHook(stRakNetHookParams* params)
 {
-	return HacksManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(1), RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_RPC);
+	return HacksManager::getInstance()->procRakNetHook(params, RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_RPC);
 }
 
 bool CALLBACK incPacketHook(stRakNetHookParams* params)
 {
-	return HacksManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(1), RakNetScriptHookType::RAKHOOK_TYPE_INCOMING_PACKET);
+	return HacksManager::getInstance()->procRakNetHook(params, RakNetScriptHookType::RAKHOOK_TYPE_INCOMING_PACKET);
 }
 
 bool CALLBACK outPacketHook(stRakNetHookParams* params)
 {
-	return HacksManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(1), RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_PACKET);
+	return HacksManager::getInstance()->procRakNetHook(params, RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_PACKET);
 }
 
 void CALLBACK mainloop()
 {
 	static bool initialized = false;
 	if (!initialized)
-	{
 		if (GAME && GAME->GetSystemState() == eSystemState::GS_PLAYING_GAME && SF->getSAMP()->IsInitialized())
 		{
-
 			plog::init(plog::Severity::info, "E:\\!Logs\\hacksreborn.log", 100000, 1);
 			initialized = true;
 			// imgui
@@ -155,7 +150,7 @@ void CALLBACK mainloop()
 
 			HacksManager::getInstance()->initHacksOnce();
 		}
-	}
+
 	if (!initialized)
 		return;
 	if (g::isWindowOpen)
@@ -169,7 +164,8 @@ void CALLBACK mainloop()
 		}
 	}
 
-	HacksManager::getInstance()->procEveryTickAction(getCurrentTickLocalPlayerInfo());
+	initcrTickLocalPlayerInfo();
+	HacksManager::getInstance()->procEveryTickAction();
 }
 
 
@@ -190,7 +186,8 @@ bool CALLBACK WndProcHandler(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 		break;
 	}
 
-	if (HacksManager::getInstance()->procKeys(wParam, msg, getCurrentTickLocalPlayerInfo()) || g::isWindowOpen)
+	//initcrTickLocalPlayerInfo();
+	if (HacksManager::getInstance()->procKeys(wParam, msg) || g::isWindowOpen)
 		ImGui_ImplWin32_WndProcHandler(hwd, msg, wParam, lParam);
 	return true;
 }

@@ -12,7 +12,7 @@ void AutoShot::onDrawGUI()
 	ImGui::SameLine();
 	Lippets::ImGuiSnippets::KeyButton(activationKey, g::keyButtonSplitter);
 }
-void AutoShot::onWndProc(WPARAM wParam, UINT msg,  crTickLocalPlayerInfo* info)
+void AutoShot::onWndProc(WPARAM wParam, UINT msg)
 {
 	if (msg != WM_KEYDOWN && msg != WM_LBUTTONDOWN && msg != WM_SYSKEYDOWN)
 		return;
@@ -22,9 +22,9 @@ void AutoShot::onWndProc(WPARAM wParam, UINT msg,  crTickLocalPlayerInfo* info)
 		notify("Auto Shot", autoShot);
 	}
 }
-void AutoShot::everyTickAction( crTickLocalPlayerInfo* info)
+void AutoShot::everyTickAction( )
 {
-	if (!info->isExist || !autoShot || info->isInCar)
+	if (!g::pInfo->isExist || !autoShot || g::pInfo->isInCar)
 		return;
 	if (*(DWORD*)PEDSELF->GetMemoryValue(0x79C))
 		SF->getGame()->emulateGTAKey(17, 255);

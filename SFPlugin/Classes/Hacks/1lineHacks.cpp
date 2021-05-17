@@ -1,5 +1,5 @@
 #include "1lineHacks.h"
-
+#include "nameof/nameof.hpp"
 
 void EnableNoAnims(bool bEnable)
 {
@@ -152,6 +152,41 @@ void EnableMegaBMXJump(bool bEnable)
 }
 
 
+
+void setAnimGroupByRunType(RUN_TYPE runType)
+{
+	int iModelIndex = PEDSELF->GetModelIndex();
+	switch (runType)
+	{
+	case RUN_TYPE::CJ:
+	{
+		RPC_emulating::setskin(MYID, 0);
+		RPC_emulating::setskin(MYID, iModelIndex);
+		*PEDSELF->GetMemoryValue(0x4D4) = 54;
+		break;
+	}
+	case RUN_TYPE::ROLLER:
+	{
+		RPC_emulating::setskin(MYID, 99);
+		RPC_emulating::setskin(MYID, iModelIndex);
+		*PEDSELF->GetMemoryValue(0x4D4) = 138;
+		break;
+	}
+	case RUN_TYPE::SWAT:
+	{
+		RPC_emulating::setskin(MYID, 285);
+		RPC_emulating::setskin(MYID, iModelIndex);
+		*PEDSELF->GetMemoryValue(0x4D4) = 128;
+		break;
+	}
+	case RUN_TYPE::DEFAULT:
+	{
+		RPC_emulating::setskin(MYID, iModelIndex);
+		break;
+	}
+	}
+}
+
 OneLineHacks::OneLineHacks(const char* name)
 {
 	m_sHackName = name;
@@ -196,6 +231,21 @@ OneLineHacks::OneLineHacks(const char* name)
 	});
 }
 
+
+void OneLineHacks::onDrawSettings()
+{
+	if (ImGui::BeginMenu("Custom Run Anim"))
+	{
+		static RUN_TYPE choosedRunType = RUN_TYPE::DEFAULT;
+		for (int i = 0; i <= (int)RUN_TYPE::SWAT; i++)
+			if (ImGui::Button(nameof::nameof_enum((RUN_TYPE)i).data()))
+			{
+				CurrentRunType = (RUN_TYPE)i;
+				setAnimGroupByRunType(CurrentRunType);
+			}
+		ImGui::EndMenu();
+	}
+}
 
 void OneLineHacks::onDrawGUI()
 {
@@ -243,7 +293,7 @@ void OneLineHacks::onDrawGUI()
 	ImGui::Checkbox("Super Bunny Hop", &bSuperBunnyHop);
 }
 
-void OneLineHacks::onDrawHack(crTickLocalPlayerInfo* info)
+void OneLineHacks::onDrawHack()
 {
 	if (hacksSettings::bFastHelper)
 		SF->getRender()->DrawPolygon(iScrResX - 10, iScrResY - 10, 10, 10, 0, 7, 0xFF0000FF);
@@ -266,12 +316,13 @@ void OneLineHacks::switchHack()
 	EnableNewDL(bNewDl);
 	EnableWaterProofEng(bWaterProofEngine);
 	EnableMegaBMXJump(bMegaBMXJump);
+	setAnimGroupByRunType(CurrentRunType);
 }
-void OneLineHacks::everyTickAction(crTickLocalPlayerInfo* info)
+void OneLineHacks::everyTickAction()
 {
 	if (hacksSettings::bFastHelper)
 		SF->getGame()->emulateGTAKey(4, 255);
-	if (info->isExist)
+	if (g::pInfo->isExist)
 	{
 		if (bSuperBunnyHop)
 		{
@@ -279,18 +330,18 @@ void OneLineHacks::everyTickAction(crTickLocalPlayerInfo* info)
 				GAME->SetTimeScale(9999.f);
 		}
 	}
-	if (info->isDriver)
+	if (g::pInfo->isDriver)
 	{
 		if (bFastHeli)
 		{
-			if (info->vehType == eVehicleType::CHeli)
+			if (g::pInfo->vehType == eVehicleType::CHeli)
 			{
 				PEDSELF->GetVehicle()->SetHeliRotorSpeed(0.25f);
 			}
 		}
 		if (bNoBike)
 		{
-			if (info->vehType != Vehicles::eVehicleType::CBike)
+			if (g::pInfo->vehType != Vehicles::eVehicleType::CBike)
 			{
 				if (PEDSELF->GetVehicle()->IsDrowning())
 				{
@@ -340,9 +391,9 @@ void OneLineHacks::everyTickAction(crTickLocalPlayerInfo* info)
 
 
 }
-void OneLineHacks::onWndProc(WPARAM wParam, UINT msg, crTickLocalPlayerInfo* info)
+void OneLineHacks::onWndProc(WPARAM wParam, UINT msg)
 {
-	if (bPressNitro && info->isDriver)
+	if (bPressNitro && g::pInfo->isDriver)
 		if (wParam == 0 || wParam == 1)
 			if (msg == WM_KEYDOWN || msg == WM_LBUTTONDOWN || msg == WM_SYSKEYDOWN)
 			{
@@ -355,7 +406,7 @@ void OneLineHacks::onWndProc(WPARAM wParam, UINT msg, crTickLocalPlayerInfo* inf
 			}
 }
 
-bool OneLineHacks::onRPCIncoming(stRakNetHookParams *params, crTickLocalPlayerInfo* info)
+bool OneLineHacks::onRPCIncoming(stRakNetHookParams *params)
 {
 	if (!bDontGiveMeBat || params->packetId != ScriptRPCEnumeration::RPC_ScrGivePlayerWeapon)
 		return true;
@@ -366,7 +417,7 @@ bool OneLineHacks::onRPCIncoming(stRakNetHookParams *params, crTickLocalPlayerIn
 		return false;
 	return true;
 }
-bool OneLineHacks::onPacketOutcoming(stRakNetHookParams *param, crTickLocalPlayerInfo* info)
+bool OneLineHacks::onPacketOutcoming(stRakNetHookParams *param)
 {
 
 	if ((bNoFall || bSurfOnVehicles || hacksSettings::bFakeAfk) && (param->packetId == ID_PLAYER_SYNC))
@@ -395,6 +446,7 @@ bool OneLineHacks::onPacketOutcoming(stRakNetHookParams *param, crTickLocalPlaye
 }
 void OneLineHacks::save(nlohmann::json& data)
 {
+	data["RunType"] = (int)CurrentRunType;
 	data["superBunnyHop"] = bSuperBunnyHop;
 	data["megaBMXjump"] = bMegaBMXJump;
 	data["fastHeli"] = bFastHeli;
@@ -423,6 +475,7 @@ void OneLineHacks::save(nlohmann::json& data)
 }
 void OneLineHacks::read(nlohmann::json& data)
 {
+	CurrentRunType = (RUN_TYPE)data["RunType"].get<int>();
 	bSuperBunnyHop = data["superBunnyHop"].get<bool>();
 	bMegaBMXJump = data["megaBMXjump"].get<bool>();
 	bFastHeli = data["fastHeli"].get<bool>();

@@ -40,17 +40,17 @@ void Aimbot::read(nlohmann::json& data)
 }
 
 
-int Aimbot::getPlayerTarget(crTickLocalPlayerInfo* info)
+int Aimbot::getPlayerTarget()
 {
 	auto&& nearestToCrosshairPlayers = Players::getNearestToCrosshairPlayers(!GFuncs::isHackWorking<WallShot>());
 	if (nearestToCrosshairPlayers.empty())
 		return -1;
 
-	GFuncs::resortPlayersByDistance(&info->nearestPlayers, false);
+	GFuncs::resortPlayersByDistance(&g::pInfo->nearestPlayers, false);
 
 
 	for (auto&& playerId_Dist : nearestToCrosshairPlayers)
-		if (std::find_if(info->nearestPlayers.begin(), info->nearestPlayers.end(), [&](const std::pair<int, float>& pair)
+		if (std::find_if(g::pInfo->nearestPlayers.begin(), g::pInfo->nearestPlayers.end(), [&](const std::pair<int, float>& pair)
 		{
 			if (bCanAimToSameColored)
 				return pair.first == playerId_Dist.first;
@@ -59,7 +59,7 @@ int Aimbot::getPlayerTarget(crTickLocalPlayerInfo* info)
 				if (SF->getSAMP()->getPlayers()->GetPlayerColor(pair.first) != SF->getSAMP()->getPlayers()->GetPlayerColor(MYID))
 					return pair.first == playerId_Dist.first;
 			}
-		}) != info->nearestPlayers.end())
+		}) != g::pInfo->nearestPlayers.end())
 			return playerId_Dist.first;
 		return -1;
 }
@@ -90,12 +90,12 @@ void Aimbot::aim(int iTargetID)
 	}
 }
 
-void Aimbot::everyTickAction(crTickLocalPlayerInfo* info)
+void Aimbot::everyTickAction()
 {
 	eWeaponSlot gun = PEDSELF->GetWeapon(PEDSELF->GetCurrentWeaponSlot())->GetSlot();
 	if (Lippets::Conditions::multEqual<eWeaponSlot>(gun, 6,
 		WEAPONSLOT_TYPE_HANDGUN, WEAPONSLOT_TYPE_HEAVY, WEAPONSLOT_TYPE_RIFLE, WEAPONSLOT_TYPE_SHOTGUN, WEAPONSLOT_TYPE_SMG, WEAPONSLOT_TYPE_MG))
 		if (SF->getGame()->isKeyDown(1) && SF->getGame()->isKeyDown(2))
-			aim(getPlayerTarget(info));
+			aim(getPlayerTarget());
 }
 

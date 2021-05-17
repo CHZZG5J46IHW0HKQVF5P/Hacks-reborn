@@ -304,7 +304,7 @@ void Binder::onDrawGUI()
 	}
 }
 
-bool Binder::onRPCOutcoming(stRakNetHookParams* params, crTickLocalPlayerInfo* info)
+bool Binder::onRPCOutcoming(stRakNetHookParams* params)
 {
 	if (!isCommandsEnabled || params->packetId != RPCEnumeration::RPC_ServerCommand || commands.empty())// || commands[0].shortCmd.empty() || commands[0].commandsTexts.empty() || choosenCommandID != -1)
 		return true;
@@ -353,7 +353,7 @@ void Binder::sendMessageToSay(std::string message)
 		SF->getSAMP()->getPlayers()->pLocalPlayer->Say((char*)message.data());
 }
 
-void Binder::everyTickAction(crTickLocalPlayerInfo* info)
+void Binder::everyTickAction()
 {
 	
 	int* iLastTargetPlayerID = (int*)replacer.getAdditionVarible("iLastTargetPlayerID");

@@ -1,29 +1,121 @@
 #include "CustomRender.h"
 
 
+CustomRender::CustomRender(const char* szName)
+{
+	this->m_sHackName = szName;
+	m_bEnabled = false;
+	this->customRenderData.vec4Color.w = 1.f;
+	this->customRenderData.vec4Color.z = 1.f;
+	this->customRenderData.font.Init();
+}
+
+RenderClass::RenderClass(const char* szName)
+{
+	m_sName = szName;
+}
+
+void ObjectRender::render(RenderPickup_ObjectData* pRenderObjectData)
+{
+	if (std::find(m_ids.begin(), m_ids.end(), pRenderObjectData->iModel) != m_ids.end())
+	{
+		UINT32 color = ImGui::ColorConvertFloat4ToU32(CustomRender::customRenderData.vec4Color);
+
+		SF->getRender()->DrawLine(pRenderObjectData->onScreenCoords.fX,
+			pRenderObjectData->onScreenCoords.fY, CustomRender::customRenderData.onScreenPedCoords.fX,
+			CustomRender::customRenderData.onScreenPedCoords.fY, 1, color);
+
+		SF->getRender()->DrawPolygon(pRenderObjectData->onScreenCoords.fX,
+			pRenderObjectData->onScreenCoords.fY, 3, 3, 0.0, 8, color);
+
+		char buf[128];
+		sprintf(buf, "%s {ffffff}[%1.f]", Lippets::Strings::UTF8_to_CP1251(m_sRenderinName).c_str(), pRenderObjectData->fDistance);
+		CustomRender::customRenderData.font.f->Print(buf, color, pRenderObjectData->onScreenCoords.fX + 5, pRenderObjectData->onScreenCoords.fY - 7, false);
+	}
+}
+void Text3dRender::render(Render3DTextData* p3DTextData)
+{
+	for (auto&& toSearch : m_textToSearch)
+		if (!strstr(p3DTextData->szText, (toSearch).c_str()))
+			return;
+
+	UINT32 color = ImGui::ColorConvertFloat4ToU32(CustomRender::customRenderData.vec4Color);
+
+	SF->getRender()->DrawLine(p3DTextData->onScreenCoords.fX,
+		p3DTextData->onScreenCoords.fY, CustomRender::customRenderData.onScreenPedCoords.fX,
+		CustomRender::customRenderData.onScreenPedCoords.fY, 1, color);
+
+	SF->getRender()->DrawPolygon(p3DTextData->onScreenCoords.fX,
+		p3DTextData->onScreenCoords.fY, 3, 3, 0.0, 8, color);
+
+	char buf[128];
+	sprintf(buf, "%s {ffffff}[%1.f]", (m_sName).c_str(), p3DTextData->fDistance);
+	CustomRender::customRenderData.font.f->Print(buf, color, p3DTextData->onScreenCoords.fX + 5, p3DTextData->onScreenCoords.fY - 7, false);
+
+}
+void PickupRender::render(RenderPickup_ObjectData* pRenderPickupData)
+{
+	if (std::find(m_ids.begin(), m_ids.end(), pRenderPickupData->iModel) != m_ids.end())
+	{
+		UINT32 color = ImGui::ColorConvertFloat4ToU32(CustomRender::customRenderData.vec4Color);
+
+		SF->getRender()->DrawLine(pRenderPickupData->onScreenCoords.fX,
+			pRenderPickupData->onScreenCoords.fY, CustomRender::customRenderData.onScreenPedCoords.fX,
+			CustomRender::customRenderData.onScreenPedCoords.fY, 1, color);
+
+		SF->getRender()->DrawPolygon(pRenderPickupData->onScreenCoords.fX,
+			pRenderPickupData->onScreenCoords.fY, 3, 3, 0.0, 8, color);
+
+		char buf[128];
+		sprintf(buf, "%s {ffffff}[%1.f]", (m_sRenderinName).c_str(), pRenderPickupData->fDistance);
+		CustomRender::customRenderData.font.f->Print(buf, color, pRenderPickupData->onScreenCoords.fX + 5, pRenderPickupData->onScreenCoords.fY - 7, false);
+	}
+}
+
+
+bool RenderClass::areAnyObjectRendersEnabled()
+{
+	for (auto&& pRender : m_objectsRenders)
+		if (pRender->m_bIsEnabled)
+			return true;
+	return false;
+}
+bool RenderClass::areAnyickupRendersEnabled()
+{
+	for (auto&& pRender : m_pickupRenders)
+		if (pRender->m_bIsEnabled)
+			return true;
+	return false;
+}
+bool RenderClass::areAnyText3DRendersEnabled()
+{
+	for (auto&& pRender : m_text3dRenders)
+		if (pRender->m_bIsEnabled)
+			return true;
+	return false;
+}
+
 void RenderClass::drawEditor(size_t spl)
 {
 	ImGui::InputText("Class Name", &m_sName);
 	// PickUps
 	if (ImGui::CollapsingHeader("Pickups"))
 	{
-		if (ImGui::Button("Create New Pickup Render"))
-			m_pickupRenders.emplace_back(new PickupRender());
 		for (size_t i = 0; i < m_pickupRenders.size(); i++)
 		{
 			auto&& pickupRender = m_pickupRenders[i];
 			char buff[128];
-
+			sprintf(buff, "Delete###pickupdeletebtn%d%d", spl, i);
+			if (ImGui::Button(buff))
+			{
+				delete m_pickupRenders[i];
+				m_pickupRenders.erase(m_pickupRenders.begin() + i);
+				i--;
+			}
 			sprintf(buff, "%s###pickupEditor%d%d", pickupRender->m_sName.c_str(), spl, i);
 			ImGui::Bullet();
 			if (ImGui::TreeNode(buff))
 			{
-				sprintf(buff, "Delete###pickupdeletebtn%d%d", spl, i);
-				if (ImGui::Button(buff))
-				{
-					m_pickupRenders.erase(m_pickupRenders.begin() + i);
-					i--;
-				}
 				sprintf(buff, "Name###pickupname%d%d", spl, i);
 				ImGui::InputText(buff, &pickupRender->m_sName);
 				sprintf(buff, "Rendering Name###pickuprenderingname%d%d", spl, i);
@@ -46,29 +138,27 @@ void RenderClass::drawEditor(size_t spl)
 				}
 				ImGui::TreePop();
 			}
+
 		}
 	}
 	// Objects
 	if (ImGui::CollapsingHeader("Objects"))
 	{
-		if (ImGui::Button("Create New Object Render"))
-			m_objectsRenders.emplace_back(new ObjectRender());
 		for (size_t i = 0; i < m_objectsRenders.size(); i++)
 		{
 			auto&& objectRender = m_objectsRenders[i];
 			char buff[128];
-
+			sprintf(buff, "Delete###objectdeletebtn%d%d", spl, i);
+			if (ImGui::Button(buff))
+			{
+				delete m_objectsRenders[i];
+				m_objectsRenders.erase(m_objectsRenders.begin() + i);
+				i--;
+			}
 			sprintf(buff, "%s###objectEditor%d%d", objectRender->m_sName.c_str(), spl, i);
 			ImGui::Bullet();
 			if (ImGui::TreeNode(buff))
 			{
-				sprintf(buff, "Delete###objectdeletebtn%d%d", spl, i);
-				if (ImGui::Button(buff))
-				{
-
-					m_objectsRenders.erase(m_objectsRenders.begin() + i);
-					i--;
-				}
 				sprintf(buff, "Name###obhectname%d%d", spl, i);
 				ImGui::InputText(buff, &objectRender->m_sName);
 				sprintf(buff, "Rendering Name###objectrenderingname%d%d", spl, i);
@@ -97,23 +187,21 @@ void RenderClass::drawEditor(size_t spl)
 	// 3dTexts
 	if (ImGui::CollapsingHeader("3dTexts"))
 	{
-		if (ImGui::Button("Create New 3DText Render"))
-			m_text3dRenders.emplace_back(new Text3dRender());
 		for (size_t i = 0; i < m_text3dRenders.size(); i++)
 		{
 			auto&& text3dRender = m_text3dRenders[i];
 			char buff[128];
-
+			sprintf(buff, "Delete###3dtextdeletebtn%d%d", spl, i);
+			if (ImGui::Button(buff))
+			{
+				delete m_text3dRenders[i];
+				m_text3dRenders.erase(m_text3dRenders.begin() + i);
+				i--;
+			}
 			sprintf(buff, "%s###3dtextEditor%d%d", text3dRender->m_sName.c_str(), spl, i);
 			ImGui::Bullet();
 			if (ImGui::TreeNode(buff))
 			{
-				sprintf(buff, "Delete###3dtextdeletebtn%d%d", spl, i);
-				if (ImGui::Button(buff))
-				{
-					m_text3dRenders.erase(m_text3dRenders.begin() + i);
-					i--;
-				}
 				sprintf(buff, "Name###3dtextname%d%d", spl, i);
 				ImGui::InputText(buff, &text3dRender->m_sName);
 				sprintf(buff, "Rendering Name###3dtextRenderinsname%d%d", spl, i);
@@ -140,12 +228,10 @@ void RenderClass::drawEditor(size_t spl)
 
 		}
 	}
-
 }
 
 void RenderClass::drawMenu(size_t i)
 {
-
 	char buff[128];
 	memset(buff, 0, 128);
 	sprintf(buff, "%s###classCheckbox%d", m_sName.c_str(), i);
@@ -173,7 +259,6 @@ void RenderClass::drawMenu(size_t i)
 
 		ImGui::EndPopup();
 	}
-
 }
 
 void CustomRender::drawMenu()
@@ -201,28 +286,121 @@ void CustomRender::onDrawGUI()
 		{
 			if (ImGui::BeginMenu("Create"))
 			{
-
-				static char name[128];
-				ImGui::InputText("Class Name", name, 128);
-				if (ImGui::Button("Create"))
-					m_classes.emplace_back(RenderClass(name));
-
+				if (ImGui::BeginMenu("Object"))
+				{
+					static char buff[128];
+					static char cRenderClass = 0;
+					if (ImGui::Button("Object")) cRenderClass = 0;
+					if (ImGui::Button("Pickup")) cRenderClass = 1;
+					if (ImGui::Button("3DText")) cRenderClass = 2;
+					switch (cRenderClass)
+					{
+					case 0:
+						ImGui::Text("Object"); break;
+					case 1:
+						ImGui::Text("Pickup"); break;
+					case 2:
+						ImGui::Text("3DText"); break;
+					}
+					ImGui::InputText("Name", buff, 128);
+					if (ImGui::Button("Create"))
+					{
+						RenderBase *render;
+						switch (cRenderClass)
+						{
+						case 0:
+							render = new ObjectRender();
+							break;
+						case 1:
+							render = new PickupRender();
+							break;
+						case 2:
+							render = new Text3dRender();
+							break;
+						}
+						render->m_sName = buff;
+						m_nodeRendersPtrs.push_back(render);
+					}
+					ImGui::EndMenu();
+				}
+				if (ImGui::BeginMenu("Class"))
+				{
+					static char name[128];
+					ImGui::InputText("Class Name", name, 128);
+					if (ImGui::Button("Create"))
+						m_classes.push_back(RenderClass(name));
+					ImGui::EndMenu();
+				}
 				ImGui::EndMenu();
 			}
 		}
 
 		char buff[64];
 		static int iChoosenClassToEdit = -1;
+		for (size_t j = 0; j < m_nodeRendersPtrs.size(); j++)
+		{
+			ImGui::TextColored(ImVec4(1, 0, 0, 1), m_nodeRendersPtrs[j]->m_sName.c_str());
+			sprintf(buff, "add_to_class###addtoclasspopup%d", j);
+			if (ImGui::IsItemClicked())
+				ImGui::OpenPopup(buff);
+			if (ImGui::BeginPopup(buff))
+			{
+				char buff[128];
+				sprintf(buff, "Delete###nodeobjectDeletebtn%d", j);
+
+				if (ImGui::Button(buff))
+				{
+					delete m_nodeRendersPtrs[j];
+					m_nodeRendersPtrs.erase(m_nodeRendersPtrs.begin() + j);
+					j--;
+					ImGui::EndPopup();
+					break;
+				}
+				for (size_t i = 0; i < m_classes.size(); i++)
+				{
+
+					sprintf(buff, "%s###addclassbtn%d", m_classes[i].m_sName.c_str(), i);
+					if (ImGui::Selectable(buff))
+					{
+						PickupRender* pickupRender = dynamic_cast<PickupRender*>(m_nodeRendersPtrs[j]);
+						if (pickupRender)
+							m_classes[i].addPickupRender(pickupRender);
+						else
+						{
+							ObjectRender* objectRender = dynamic_cast<ObjectRender*>(m_nodeRendersPtrs[j]);
+							if (objectRender)
+								m_classes[i].addObjectRender(objectRender);
+							else
+							{
+								Text3dRender* text3drender = dynamic_cast<Text3dRender*>(m_nodeRendersPtrs[j]);
+								if (text3drender)
+									m_classes[i].addText3DRender(text3drender);
+							}
+						}
+
+						m_nodeRendersPtrs.erase(m_nodeRendersPtrs.begin() + j);
+						j = -1;
+
+						break;
+					}
+
+				}
+				ImGui::EndPopup();
+			}
+		}
+
 
 		for (size_t i = 0; i < m_classes.size(); i++)
 		{
 			ImGui::TextColored(ImVec4(0, 1, 0, 1), m_classes[i].m_sName.c_str());
-			if (ImGui::IsItemClicked())
-				iChoosenClassToEdit = i;
 			ImGui::SameLine();
 			sprintf(buff, "Delete###deleteclassBTN%d", i);
 			if (ImGui::Button(buff))
 				m_classes.erase(m_classes.begin() + i);
+				
+			if (ImGui::IsItemClicked())
+				iChoosenClassToEdit = i;
+
 		}
 		if (iChoosenClassToEdit != -1)
 		{
@@ -344,6 +522,8 @@ void CustomRender::save(nlohmann::json& data)
 		m_classes[i].save(data["class"][std::to_string(i).c_str()]);
 
 }
+
+
 void ObjectRender::save(nlohmann::json& data)
 {
 	data["IDS"] = m_ids;
@@ -387,6 +567,8 @@ void Text3dRender::read(nlohmann::json& data)
 	m_sRenderinName = data["renderingName"].get<std::string>();
 	m_bIsEnabled = data["enabled"].get<bool>();
 }
+
+
 void RenderClass::save(nlohmann::json& data)
 {
 	data["name"] = m_sName;
@@ -407,7 +589,7 @@ void RenderClass::read(nlohmann::json& data)
 	{
 		if (data["rendersObj"][std::to_string(i).c_str()].is_null())
 			break;
-		m_objectsRenders.emplace_back(new ObjectRender());
+		m_objectsRenders.push_back(new ObjectRender());
 		m_objectsRenders[i]->read(data["rendersObj"][std::to_string(i).c_str()]);
 		i++;
 	}
@@ -416,7 +598,7 @@ void RenderClass::read(nlohmann::json& data)
 	{
 		if (data["rendersPick"][std::to_string(i).c_str()].is_null())
 			break;
-		m_pickupRenders.emplace_back(new PickupRender());
+		m_pickupRenders.push_back(new PickupRender());
 		m_pickupRenders[i]->read(data["rendersPick"][std::to_string(i).c_str()]);
 		i++;
 	}
@@ -426,11 +608,12 @@ void RenderClass::read(nlohmann::json& data)
 		if (data["renders3DText"][std::to_string(i).c_str()].is_null())
 			break;
 
-		m_text3dRenders.emplace_back(new Text3dRender());
+		m_text3dRenders.push_back(new Text3dRender());
 		m_text3dRenders[i]->read(data["renders3DText"][std::to_string(i).c_str()]);
 		i++;
 	}
 }
+
 void RenderClass::renderPickups(RenderPickup_ObjectData* pRenderPickupData)
 {
 	for (auto&& pRender : m_pickupRenders)
@@ -449,124 +632,34 @@ void RenderClass::render3DTexts(Render3DTextData* p3DTextData)
 		if (pRender->m_bIsEnabled)
 			pRender->render(p3DTextData);
 }
+
 void RenderClass::addObjectRender(ObjectRender* pRender)
 {
-	m_objectsRenders.emplace_back(pRender);
+	m_objectsRenders.push_back(pRender);
 }
 void RenderClass::addPickupRender(PickupRender* pRender)
 {
-	m_pickupRenders.emplace_back(pRender);
+	m_pickupRenders.push_back(pRender);
 }
 void RenderClass::addText3DRender(Text3dRender* pRender)
 {
-	m_text3dRenders.emplace_back(pRender);
+	m_text3dRenders.push_back(pRender);
 }
+
 RenderClass::~RenderClass()
 {
-	/*
-		for (auto&& pRender : m_objectsRenders)
-			delete pRender;
-		for (auto&& pRender : m_pickupRenders)
-			delete pRender;
-		for (auto&& pRender : m_text3dRenders)
-			delete pRender;
-	*/
+	for (auto&& pRender : m_objectsRenders)
+		delete pRender;
+	for (auto&& pRender : m_pickupRenders)
+		delete pRender;
+	for (auto&& pRender : m_text3dRenders)
+		delete pRender;
 }
+
 void CustomRender::release()
 {
-	/*
-		for (auto&& classR : m_classes)
-			classR.~RenderClass();
-		for (auto&& nodeRener : m_nodeRendersPtrs)
-			delete nodeRener;
-	*/
-}
-CustomRender::CustomRender(const char* szName)
-{
-	this->m_sHackName = szName;
-	m_bEnabled = false;
-	this->customRenderData.vec4Color.w = 1.f;
-	this->customRenderData.vec4Color.z = 1.f;
-	this->customRenderData.font.Init();
-}
-RenderClass::RenderClass(const char* szName)
-{
-	m_sName = szName;
-}
-void ObjectRender::render(RenderPickup_ObjectData* pRenderObjectData)
-{
-	if (std::find(m_ids.begin(), m_ids.end(), pRenderObjectData->iModel) != m_ids.end())
-	{
-		UINT32 color = ImGui::ColorConvertFloat4ToU32(CustomRender::customRenderData.vec4Color);
-
-		SF->getRender()->DrawLine(pRenderObjectData->onScreenCoords.fX,
-			pRenderObjectData->onScreenCoords.fY, CustomRender::customRenderData.onScreenPedCoords.fX,
-			CustomRender::customRenderData.onScreenPedCoords.fY, 1, color);
-
-		SF->getRender()->DrawPolygon(pRenderObjectData->onScreenCoords.fX,
-			pRenderObjectData->onScreenCoords.fY, 3, 3, 0.0, 8, color);
-
-		char buf[128];
-		sprintf(buf, "%s {ffffff}[%1.f]", Lippets::Strings::UTF8_to_CP1251(m_sRenderinName).c_str(), pRenderObjectData->fDistance);
-		CustomRender::customRenderData.font.f->Print(buf, color, pRenderObjectData->onScreenCoords.fX + 5, pRenderObjectData->onScreenCoords.fY - 7, false);
-	}
-}
-void Text3dRender::render(Render3DTextData* p3DTextData)
-{
-	for (auto&& toSearch : m_textToSearch)
-		if (!strstr(p3DTextData->szText, (toSearch).c_str()))
-			return;
-
-	UINT32 color = ImGui::ColorConvertFloat4ToU32(CustomRender::customRenderData.vec4Color);
-
-	SF->getRender()->DrawLine(p3DTextData->onScreenCoords.fX,
-		p3DTextData->onScreenCoords.fY, CustomRender::customRenderData.onScreenPedCoords.fX,
-		CustomRender::customRenderData.onScreenPedCoords.fY, 1, color);
-
-	SF->getRender()->DrawPolygon(p3DTextData->onScreenCoords.fX,
-		p3DTextData->onScreenCoords.fY, 3, 3, 0.0, 8, color);
-
-	char buf[128];
-	sprintf(buf, "%s {ffffff}[%1.f]", (m_sName).c_str(), p3DTextData->fDistance);
-	CustomRender::customRenderData.font.f->Print(buf, color, p3DTextData->onScreenCoords.fX + 5, p3DTextData->onScreenCoords.fY - 7, false);
-
-}
-void PickupRender::render(RenderPickup_ObjectData* pRenderPickupData)
-{
-	if (std::find(m_ids.begin(), m_ids.end(), pRenderPickupData->iModel) != m_ids.end())
-	{
-		UINT32 color = ImGui::ColorConvertFloat4ToU32(CustomRender::customRenderData.vec4Color);
-
-		SF->getRender()->DrawLine(pRenderPickupData->onScreenCoords.fX,
-			pRenderPickupData->onScreenCoords.fY, CustomRender::customRenderData.onScreenPedCoords.fX,
-			CustomRender::customRenderData.onScreenPedCoords.fY, 1, color);
-
-		SF->getRender()->DrawPolygon(pRenderPickupData->onScreenCoords.fX,
-			pRenderPickupData->onScreenCoords.fY, 3, 3, 0.0, 8, color);
-
-		char buf[128];
-		sprintf(buf, "%s {ffffff}[%1.f]", (m_sRenderinName).c_str(), pRenderPickupData->fDistance);
-		CustomRender::customRenderData.font.f->Print(buf, color, pRenderPickupData->onScreenCoords.fX + 5, pRenderPickupData->onScreenCoords.fY - 7, false);
-	}
-}
-bool RenderClass::areAnyObjectRendersEnabled()
-{
-	for (auto&& pRender : m_objectsRenders)
-		if (pRender->m_bIsEnabled)
-			return true;
-	return false;
-}
-bool RenderClass::areAnyickupRendersEnabled()
-{
-	for (auto&& pRender : m_pickupRenders)
-		if (pRender->m_bIsEnabled)
-			return true;
-	return false;
-}
-bool RenderClass::areAnyText3DRendersEnabled()
-{
-	for (auto&& pRender : m_text3dRenders)
-		if (pRender->m_bIsEnabled)
-			return true;
-	return false;
+	for (auto&& classR : m_classes)
+		classR.~RenderClass();
+	for (auto&& nodeRener : m_nodeRendersPtrs)
+		delete nodeRener;
 }

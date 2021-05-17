@@ -46,24 +46,24 @@ void PlayersList::read(nlohmann::json &data)
 
 }
 
-void PlayersList::onDrawHack(crTickLocalPlayerInfo* info)
+void PlayersList::onDrawHack()
 {
 
-	if (info->nearestPlayers.empty())
+	if (g::pInfo->nearestPlayers.empty())
 		return;
 
-	GFuncs::resortPlayersByDistance(&info->nearestPlayers, false);
-	if (std::find_if(info->nearestPlayers.begin(), info->nearestPlayers.end(), [&](const std::pair<int, float>& id_dist)
+	GFuncs::resortPlayersByDistance(&g::pInfo->nearestPlayers, false);
+	if (std::find_if(g::pInfo->nearestPlayers.begin(), g::pInfo->nearestPlayers.end(), [&](const std::pair<int, float>& id_dist)
 	{
 		return std::find(friendsList.begin(), friendsList.end(), SF->getSAMP()->getPlayers()->GetPlayerName(id_dist.first)) != friendsList.end();
-	}) != info->nearestPlayers.end())
+	}) != g::pInfo->nearestPlayers.end())
 	{
 		ImGui::SetNextWindowPos(friendsListWindowPos, ImGuiCond_FirstUseEver);
 		ImGui::Begin("Friends", 0, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoTitleBar);
 		{
 			ImGui::TextColored(ImVec4(0.f, 1.f, 0.f, 1.f), "Friends");
 			ImGui::Separator();
-			for (auto&& player : info->nearestPlayers)
+			for (auto&& player : g::pInfo->nearestPlayers)
 			{
 				auto szPlayerName = SF->getSAMP()->getPlayers()->GetPlayerName(player.first);
 				if (std::find(friendsList.begin(), friendsList.end(), std::string(szPlayerName)) == friendsList.end())
@@ -75,17 +75,17 @@ void PlayersList::onDrawHack(crTickLocalPlayerInfo* info)
 		ImGui::End();
 	}
 
-	if (std::find_if(info->nearestPlayers.begin(), info->nearestPlayers.end(), [&](const std::pair<int, float>& id_dist)
+	if (std::find_if(g::pInfo->nearestPlayers.begin(), g::pInfo->nearestPlayers.end(), [&](const std::pair<int, float>& id_dist)
 	{
 		return std::find(enemiesList.begin(), enemiesList.end(), SF->getSAMP()->getPlayers()->GetPlayerName(id_dist.first)) != enemiesList.end();
-	}) != info->nearestPlayers.end())
+	}) != g::pInfo->nearestPlayers.end())
 	{
 		ImGui::SetNextWindowPos(enemiesListWindowPos, ImGuiCond_FirstUseEver);
 		ImGui::Begin("Enemies", 0, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoTitleBar);
 		{
 			ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "Enemies");
 			ImGui::Separator();
-			for (auto&& player : info->nearestPlayers)
+			for (auto&& player : g::pInfo->nearestPlayers)
 			{
 				auto szPlayerName = SF->getSAMP()->getPlayers()->GetPlayerName(player.first);
 				if (std::find(enemiesList.begin(), enemiesList.end(), std::string(szPlayerName)) == enemiesList.end())
@@ -156,7 +156,7 @@ void PlayersList::onDrawSettings()
 	}
 }
 
-bool PlayersList::onPacketOutcoming(stRakNetHookParams* params, crTickLocalPlayerInfo* info)
+bool PlayersList::onPacketOutcoming(stRakNetHookParams* params)
 {
 	if (!noFriendDamage || params->packetId != ID_BULLET_SYNC)
 		return true;
@@ -174,7 +174,7 @@ bool PlayersList::onPacketOutcoming(stRakNetHookParams* params, crTickLocalPlaye
 	return true;
 }
 
-bool PlayersList::onRPCIncoming(stRakNetHookParams* params, crTickLocalPlayerInfo* info)
+bool PlayersList::onRPCIncoming(stRakNetHookParams* params)
 {
 	if (!connectLoger) return true;
 

@@ -6,7 +6,7 @@ ArizonaLEmulator::ArizonaLEmulator(const char* m_sHackName)
 }
 
 
-bool ArizonaLEmulator::onRPCOutcoming(stRakNetHookParams* params, crTickLocalPlayerInfo* info)
+bool ArizonaLEmulator::onRPCOutcoming(stRakNetHookParams* params)
 {
 	if (params->packetId != RPCEnumeration::RPC_ClientJoin)
 		return true;

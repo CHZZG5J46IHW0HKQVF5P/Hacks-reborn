@@ -16,7 +16,6 @@
 #include "AimBot.h"
 #include "WallShot.h"
 #include "ArizonaLEmulator.h"
-#include "CustomRun.h"
 #include "CustomRender.h"
 
 #include "nameof/nameof.hpp"
@@ -53,23 +52,22 @@ void HacksManager::initHacksOnce()
 
 	m_hacks.clear();
 
-	m_hacks.push_back(std::make_tuple(Priority::HIGH, HACK_TYPE::MISC, new PlayersList("Players List")));
-	m_hacks.push_back(std::make_tuple(Priority::HIGH, HACK_TYPE::SHOOTING, new OneBulletKill("One Bullet Kill")));
-	m_hacks.push_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::SHOOTING, new WallShot("Wall Shot")));
-	m_hacks.push_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::SHOOTING, new Aimbot("Aimbot")));
-	m_hacks.push_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::VISUAL, new WallHack("Wall Hack")));
-	m_hacks.push_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::SHOOTING, new AutoShot("Auto Shot")));
-	m_hacks.push_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new  AirBrake("Air Brake")));
-	m_hacks.push_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new InputHelper("Input Helper")));
-	m_hacks.push_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new BMXspeedhack("BMX Speedhack")));
-	m_hacks.push_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new TurboControl("Turbo Control")));
-	m_hacks.push_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new AltClicker("Alt Clicker")));
-	m_hacks.push_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new Binder("Binder")));
-	m_hacks.push_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new Fix("Fix")));
-	m_hacks.push_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new OneLineHacks("OneLineHacks")));
-	m_hacks.push_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new CustomRun("CustomRun")));
-	m_hacks.push_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new ArizonaLEmulator("Arizona Launcher Emulator")));
-	m_hacks.push_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::VISUAL, new CustomRender("Custom Render")));
+	m_hacks.emplace_back(std::make_tuple(Priority::HIGH, HACK_TYPE::MISC, new PlayersList("Players List")));
+	m_hacks.emplace_back(std::make_tuple(Priority::HIGH, HACK_TYPE::SHOOTING, new OneBulletKill("One Bullet Kill")));
+	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::SHOOTING, new WallShot("Wall Shot")));
+	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::SHOOTING, new Aimbot("Aimbot")));
+	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::VISUAL, new WallHack("Wall Hack")));
+	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::SHOOTING, new AutoShot("Auto Shot")));
+	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new  AirBrake("Air Brake")));
+	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new InputHelper("Input Helper")));
+	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new BMXspeedhack("BMX Speedhack")));
+	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new TurboControl("Turbo Control")));
+	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new AltClicker("Alt Clicker")));
+	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new Binder("Binder")));
+	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new Fix("Fix")));
+	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new OneLineHacks("OneLineHacks")));
+	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new ArizonaLEmulator("Arizona Launcher Emulator")));
+	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::VISUAL, new CustomRender("Custom Render")));
 	std::sort(m_hacks.begin(), m_hacks.end(), [](const std::tuple<Priority, HACK_TYPE, IHack*> pair1, const std::tuple<Priority, HACK_TYPE, IHack*>  pair2)
 	{
 		return std::get<Priority>(pair1) < std::get<Priority>(pair2);
@@ -145,7 +143,7 @@ void HacksManager::save()
 		out.close();
 	}
 }
-bool HacksManager::drawHacks(crTickLocalPlayerInfo* info)
+bool HacksManager::drawHacks()
 {
 	bool bImGuiNewFrameWasCalled = false;
 	static auto bnchStart = high_resolution_clock::now();
@@ -163,7 +161,7 @@ bool HacksManager::drawHacks(crTickLocalPlayerInfo* info)
 				ImGui_ImplWin32_NewFrame();
 				ImGui::NewFrame();
 			}
-			pHack->onDrawHack(info);
+			pHack->onDrawHack();
 			//PLOGI << "[DRAW HACK]" << pHack->m_sHackName << " taked " << (bnchStart - high_resolution_clock::now()).count();
 		}
 	}
@@ -193,7 +191,7 @@ void HacksManager::drawSettings()
 		std::get<IHack*>(hack)->onDrawSettings();
 }
 
-bool HacksManager::procKeys(WPARAM wParam, UINT msg, crTickLocalPlayerInfo* info)
+bool HacksManager::procKeys(WPARAM wParam, UINT msg)
 {
 
 	bool bNeedImGuiProcKeys = false;
@@ -205,14 +203,14 @@ bool HacksManager::procKeys(WPARAM wParam, UINT msg, crTickLocalPlayerInfo* info
 			//PLOGI << "[PROC KEYS]" << pHack->m_sHackName;
 			if (pHack->m_bDrawHackNeedImGui)
 				bNeedImGuiProcKeys = true;
-			pHack->onWndProc(wParam, msg, info);
+			pHack->onWndProc(wParam, msg);
 		}
 	}
 
 	return bNeedImGuiProcKeys;
 }
 
-bool HacksManager::procRakNetHook(stRakNetHookParams* params, crTickLocalPlayerInfo* info, RakNetScriptHookType procFunc)
+bool HacksManager::procRakNetHook(stRakNetHookParams* params, RakNetScriptHookType procFunc)
 {
 
 	switch (procFunc)
@@ -225,7 +223,7 @@ bool HacksManager::procRakNetHook(stRakNetHookParams* params, crTickLocalPlayerI
 			if (pHack->m_bEnabled && !pHack->m_bitsDontCall__.test(RPC_INC))
 			{
 				//PLOGI << "[INC RPC]" << pHack->m_sHackName;
-				if (!pHack->onRPCIncoming(params, info))
+				if (!pHack->onRPCIncoming(params))
 					return false;
 			}
 		}
@@ -240,7 +238,7 @@ bool HacksManager::procRakNetHook(stRakNetHookParams* params, crTickLocalPlayerI
 			if (pHack->m_bEnabled && !pHack->m_bitsDontCall__.test(RPC_OUT))
 			{
 				//PLOGI << "[OUT RPC]" << pHack->m_sHackName;
-				if (!pHack->onRPCOutcoming(params, info))
+				if (!pHack->onRPCOutcoming(params))
 					return false;
 			}
 		}
@@ -255,7 +253,7 @@ bool HacksManager::procRakNetHook(stRakNetHookParams* params, crTickLocalPlayerI
 			if (pHack->m_bEnabled && !pHack->m_bitsDontCall__.test(PACKET_INC))
 			{
 				//PLOGI << "[INC PACKET]" << pHack->m_sHackName;
-				if (!pHack->onPacketIncoming(params, info))
+				if (!pHack->onPacketIncoming(params))
 					return false;
 			}
 		}
@@ -270,7 +268,7 @@ bool HacksManager::procRakNetHook(stRakNetHookParams* params, crTickLocalPlayerI
 			if (pHack->m_bEnabled && !pHack->m_bitsDontCall__.test(PACKET_OUT))
 			{
 				//PLOGI << "[OUT PACKET]" << pHack->m_sHackName;
-				if (!pHack->onPacketOutcoming(params, info))
+				if (!pHack->onPacketOutcoming(params))
 					return false;
 			}
 		}
@@ -282,7 +280,7 @@ bool HacksManager::procRakNetHook(stRakNetHookParams* params, crTickLocalPlayerI
 
 	return true;
 }
-void HacksManager::procEveryTickAction(crTickLocalPlayerInfo* info)
+void HacksManager::procEveryTickAction()
 {
 	static auto bnchStart = high_resolution_clock::now();
 	for (auto &&hack : m_hacks)
@@ -292,7 +290,7 @@ void HacksManager::procEveryTickAction(crTickLocalPlayerInfo* info)
 		{
 			bnchStart = high_resolution_clock::now();
 			//PLOGI << "[EVERY TICK ACTION]" << pHack->m_sHackName;
-			pHack->everyTickAction(info);
+			pHack->everyTickAction();
 			//PLOGI << "[EVERY TICK ACTION]" << pHack->m_sHackName << " taked " << (bnchStart - high_resolution_clock::now()).count();
 		}
 	}

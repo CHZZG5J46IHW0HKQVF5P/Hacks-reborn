@@ -7,9 +7,9 @@ public:
 	Aimbot(const char*);
 private:
 	bool bCanAimToSameColored;
-	int getPlayerTarget( crTickLocalPlayerInfo*);
+	int getPlayerTarget( );
 	void aim(int);
-	void everyTickAction( crTickLocalPlayerInfo*) override;
+	void everyTickAction( ) override;
 	void onDrawGUI() override;
 	void onDrawSettings() override;
 	void save(nlohmann::json&) override;

@@ -21,10 +21,10 @@ void TurboControl::onDrawGUI()
 	Lippets::ImGuiSnippets::KeyButton(activationKey, g::keyButtonSplitter);
 
 }
-void TurboControl::onWndProc(WPARAM wParam, UINT msg,  crTickLocalPlayerInfo* info) 
+void TurboControl::onWndProc(WPARAM wParam, UINT msg) 
 {
 	if (activationKey != 0 && wParam == activationKey)
-		if (info->isDriver)
+		if (g::pInfo->isDriver)
 			switch (Stuff::getKeyStateByMsg(msg))
 			{
 			case eKeyState::PRESSED:

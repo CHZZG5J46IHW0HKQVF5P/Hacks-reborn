@@ -12,11 +12,11 @@ private:
 	std::vector<std::string> enemiesList;
 	bool connectLoger;
 	bool noFriendDamage;
-	void onDrawHack(crTickLocalPlayerInfo* info) override;
+	void onDrawHack() override;
 	void onDrawGUI() override;
 	void onDrawSettings() override;
-	bool onPacketOutcoming(stRakNetHookParams* params, crTickLocalPlayerInfo* info) override;
-	bool onRPCIncoming(stRakNetHookParams* params, crTickLocalPlayerInfo* info) override;
+	bool onPacketOutcoming(stRakNetHookParams* params) override;
+	bool onRPCIncoming(stRakNetHookParams* params) override;
 	void save(nlohmann::json&) override;
 	void read(nlohmann::json&) override;
 };
