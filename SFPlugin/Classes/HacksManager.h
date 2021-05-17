@@ -1,5 +1,4 @@
 #pragma once
-#include <deque>
 
 #include "SAMPFUNCS_API.h"
 #include "game_api.h"
@@ -28,13 +27,13 @@ class HacksManager
 {
 private:
 	HacksManager();
-	std::deque<std::tuple<Priority, HACK_TYPE, IHack*>> m_hacks;
+	std::vector<std::tuple<Priority, HACK_TYPE, IHack*>> m_hacks;
 public:
 
 	HacksManager(HacksManager &other) = delete;
 	void operator=(const HacksManager &) = delete;
 	static HacksManager *getInstance();
-	std::deque<std::tuple<Priority, HACK_TYPE, IHack*>>* getHacks();
+	std::vector<std::tuple<Priority, HACK_TYPE, IHack*>>* getHacks();
 	void destroy();
 	bool drawHacks(crTickLocalPlayerInfo* info);
 	void drawGui();

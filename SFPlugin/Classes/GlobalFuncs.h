@@ -6,7 +6,7 @@
 namespace GFuncs
 {
 	bool isHackWorking(const char* szHackName);
-	void resortPlayersByDistance(std::deque<std::pair<int, float>>* arrPtr, bool bInvert);
+	void resortPlayersByDistance(std::vector<std::pair<int, float>>* arrPtr, bool bInvert);
 
 	template<class T>
 	bool isHackWorking()

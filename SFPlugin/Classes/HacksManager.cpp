@@ -26,6 +26,8 @@ using std::chrono::duration_cast;
 using std::chrono::duration;
 using std::chrono::milliseconds;
 
+
+
 namespace g
 {
 	extern std::string settingsPath;
@@ -83,7 +85,7 @@ void HacksManager::initHacksOnce()
 	isInitialized = true;
 }
 
-std::deque<std::tuple<Priority, HACK_TYPE, IHack*>>* HacksManager::getHacks()
+std::vector<std::tuple<Priority, HACK_TYPE, IHack*>>* HacksManager::getHacks()
 {
 	return &m_hacks;
 }
@@ -93,11 +95,11 @@ void HacksManager::destroy()
 	save();
 	for (auto&& hack : m_hacks)
 	{
-		std::get<IHack*>(hack);
-		std::get<IHack*>(hack)->m_bEnabled = false;
-		std::get<IHack*>(hack)->switchHack();
-		std::get<IHack*>(hack)->release();
-		delete std::get<IHack*>(hack);
+		auto&& pHack = std::get<IHack*>(hack);
+		pHack->m_bEnabled = false;
+		pHack->switchHack();
+		pHack->release();
+		delete pHack;
 	}
 	m_hacks.clear();
 }
@@ -153,7 +155,7 @@ bool HacksManager::drawHacks(crTickLocalPlayerInfo* info)
 		if (pHack->m_bEnabled && !pHack->m_bitsDontCall__.test(DRAW_HACK))
 		{
 			bnchStart = high_resolution_clock::now();
-			PLOGI << "[DRAW HACK]" + pHack->m_sHackName;
+			//PLOGI << "[DRAW HACK]" + pHack->m_sHackName;
 			if (!bImGuiNewFrameWasCalled && pHack->m_bDrawHackNeedImGui)
 			{
 				bImGuiNewFrameWasCalled = true;
@@ -162,7 +164,7 @@ bool HacksManager::drawHacks(crTickLocalPlayerInfo* info)
 				ImGui::NewFrame();
 			}
 			pHack->onDrawHack(info);
-			PLOGI << "[DRAW HACK]" << pHack->m_sHackName << " taked " << (bnchStart - high_resolution_clock::now()).count();
+			//PLOGI << "[DRAW HACK]" << pHack->m_sHackName << " taked " << (bnchStart - high_resolution_clock::now()).count();
 		}
 	}
 
@@ -200,7 +202,7 @@ bool HacksManager::procKeys(WPARAM wParam, UINT msg, crTickLocalPlayerInfo* info
 		auto&& pHack = std::get<IHack*>(hack);
 		if (pHack->m_bEnabled && !pHack->m_bitsDontCall__.test(WND_PROC))
 		{
-			PLOGI << "[PROC KEYS]" << pHack->m_sHackName;
+			//PLOGI << "[PROC KEYS]" << pHack->m_sHackName;
 			if (pHack->m_bDrawHackNeedImGui)
 				bNeedImGuiProcKeys = true;
 			pHack->onWndProc(wParam, msg, info);
@@ -222,7 +224,7 @@ bool HacksManager::procRakNetHook(stRakNetHookParams* params, crTickLocalPlayerI
 			auto&& pHack = std::get<IHack*>(hack);
 			if (pHack->m_bEnabled && !pHack->m_bitsDontCall__.test(RPC_INC))
 			{
-				PLOGI << "[INC RPC]" << pHack->m_sHackName;
+				//PLOGI << "[INC RPC]" << pHack->m_sHackName;
 				if (!pHack->onRPCIncoming(params, info))
 					return false;
 			}
@@ -237,7 +239,7 @@ bool HacksManager::procRakNetHook(stRakNetHookParams* params, crTickLocalPlayerI
 			auto&& pHack = std::get<IHack*>(hack);
 			if (pHack->m_bEnabled && !pHack->m_bitsDontCall__.test(RPC_OUT))
 			{
-				PLOGI << "[OUT RPC]" << pHack->m_sHackName;
+				//PLOGI << "[OUT RPC]" << pHack->m_sHackName;
 				if (!pHack->onRPCOutcoming(params, info))
 					return false;
 			}
@@ -252,7 +254,7 @@ bool HacksManager::procRakNetHook(stRakNetHookParams* params, crTickLocalPlayerI
 			auto&& pHack = std::get<IHack*>(hack);
 			if (pHack->m_bEnabled && !pHack->m_bitsDontCall__.test(PACKET_INC))
 			{
-				PLOGI << "[INC PACKET]" << pHack->m_sHackName;
+				//PLOGI << "[INC PACKET]" << pHack->m_sHackName;
 				if (!pHack->onPacketIncoming(params, info))
 					return false;
 			}
@@ -267,7 +269,7 @@ bool HacksManager::procRakNetHook(stRakNetHookParams* params, crTickLocalPlayerI
 			auto&& pHack = std::get<IHack*>(hack);
 			if (pHack->m_bEnabled && !pHack->m_bitsDontCall__.test(PACKET_OUT))
 			{
-				PLOGI << "[OUT PACKET]" << pHack->m_sHackName;
+				//PLOGI << "[OUT PACKET]" << pHack->m_sHackName;
 				if (!pHack->onPacketOutcoming(params, info))
 					return false;
 			}
@@ -289,9 +291,9 @@ void HacksManager::procEveryTickAction(crTickLocalPlayerInfo* info)
 		if (pHack->m_bEnabled && !pHack->m_bitsDontCall__.test(EVERY_TICK))
 		{
 			bnchStart = high_resolution_clock::now();
-			PLOGI << "[EVERY TICK ACTION]" << pHack->m_sHackName;
+			//PLOGI << "[EVERY TICK ACTION]" << pHack->m_sHackName;
 			pHack->everyTickAction(info);
-			PLOGI << "[EVERY TICK ACTION]" << pHack->m_sHackName << " taked " << (bnchStart - high_resolution_clock::now()).count();
+			//PLOGI << "[EVERY TICK ACTION]" << pHack->m_sHackName << " taked " << (bnchStart - high_resolution_clock::now()).count();
 		}
 	}
 }

@@ -3,13 +3,15 @@ SAMPFUNCS *SF = new SAMPFUNCS();
 
 
 
-crTickLocalPlayerInfo* getCurrentTickLocalPlayerInfo()
+crTickLocalPlayerInfo* getCurrentTickLocalPlayerInfo(bool bCanPickLast = false)
 {
-
+	static crTickLocalPlayerInfo info;
+	if (bCanPickLast)
+		return &info;
 	bool isInCar = Players::isLocalPlayerInCar();
 	eVehicleType vehType = eVehicleType::NONE;
 	if (isInCar) vehType = Vehicles::getVehicleType(Vehicles::getVehicleCVehicle(Vehicles::getVehicleInfo(VEHICLE_SELF)));
-	static crTickLocalPlayerInfo info;
+	
 	info.iCurrentVehicleID = Players::getLocalPlayerCarID();
 	info.isDriver = Players::isLocalPlayerDriver();
 	info.isInCar = isInCar;
@@ -86,22 +88,22 @@ bool CALLBACK Present(CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDest
 
 bool CALLBACK incRPCHook(stRakNetHookParams* params)
 {
-	return HacksManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_INCOMING_RPC);
+	return HacksManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(1), RakNetScriptHookType::RAKHOOK_TYPE_INCOMING_RPC);
 }
 
 bool CALLBACK outRPCHook(stRakNetHookParams* params)
 {
-	return HacksManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_RPC);
+	return HacksManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(1), RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_RPC);
 }
 
 bool CALLBACK incPacketHook(stRakNetHookParams* params)
 {
-	return HacksManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_INCOMING_PACKET);
+	return HacksManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(1), RakNetScriptHookType::RAKHOOK_TYPE_INCOMING_PACKET);
 }
 
 bool CALLBACK outPacketHook(stRakNetHookParams* params)
 {
-	return HacksManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(), RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_PACKET);
+	return HacksManager::getInstance()->procRakNetHook(params, getCurrentTickLocalPlayerInfo(1), RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_PACKET);
 }
 
 void CALLBACK mainloop()
@@ -156,7 +158,6 @@ void CALLBACK mainloop()
 	}
 	if (!initialized)
 		return;
-
 	if (g::isWindowOpen)
 	{
 

@@ -48,8 +48,8 @@ struct crTickLocalPlayerInfo
 	bool isDriver;
 	int iCurrentVehicleID;
 	Vehicles::eVehicleType vehType;
-	std::deque<std::pair<int, float>> nearestPlayers;
-	std::deque<std::pair<int, float>> nearestVehicles;
+	std::vector<std::pair<int, float>> nearestPlayers;
+	std::vector<std::pair<int, float>> nearestVehicles;
 	inline crTickLocalPlayerInfo() {}
 };
 

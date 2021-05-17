@@ -26,7 +26,7 @@ public:
 	WallHack(const char* name);
 private:
 	CMFont font = CMFont("WallHack");
-	std::deque<ChatBubble> chatBubbles;
+	std::vector<ChatBubble> chatBubbles;
 	// wallhack
 	bool bNoNameTags = 0;
 	int activationKey = 0;
