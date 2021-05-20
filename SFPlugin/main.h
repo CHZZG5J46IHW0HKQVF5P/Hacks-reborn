@@ -5,6 +5,8 @@
 #include "plog\Initializers\RollingFileInitializer.h"
 extern SAMPFUNCS *SF;
 
+#define CPED_PTR_ADDR 0xB6F5F0
+
 
 namespace g
 {
@@ -17,8 +19,6 @@ namespace g
 
 namespace hacksSettings
 {
-	bool bFakeAfk;
-	bool bFastHelper;
 	SLineOfSightFlags LineOfSightFlags;
 };
 

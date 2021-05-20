@@ -34,6 +34,9 @@
     <Filter Include="Classes\Hacks\Shooting">
       <UniqueIdentifier>{22b953bb-42e8-47b9-bdc6-0796ef2cc630}</UniqueIdentifier>
     </Filter>
+    <Filter Include="memsafe">
+      <UniqueIdentifier>{fa670eb5-5c7e-43ff-8808-c58b82f36fdc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SFAPI\SAMPFUNCS_API.h">
@@ -562,6 +565,9 @@
     <ClInclude Include="Classes\Hacks\NewChat.h">
       <Filter>Classes\Hacks\Visuals</Filter>
     </ClInclude>
+    <ClInclude Include="Classes\Hacks\Collision.h">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -665,6 +671,12 @@
     </ClCompile>
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\Collision.cpp">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="memsafe\memsafe.cpp">
+      <Filter>memsafe</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

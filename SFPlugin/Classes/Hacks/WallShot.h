@@ -1,7 +1,7 @@
 #include "Hack.h"
 
 
-class WallShot : public IHack
+class WallShot final  : public IHack
 {
 public:
 	WallShot(const char* name);

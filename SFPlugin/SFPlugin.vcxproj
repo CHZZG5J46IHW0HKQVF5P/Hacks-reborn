@@ -74,7 +74,7 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FloatingPointModel>Fast</FloatingPointModel>
       <CompileAs>Default</CompileAs>
-      <AdditionalIncludeDirectories>include\plog;Classes\Hacks\Visuals;Classes\CMClasses;ImGui;include;Classes\Hacks;Classes;json;json\json;$(DXSDK_DIR)\Include;SFAPI;game_api;game_api\sdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>memsafe;include\plog;Classes\Hacks\Visuals;Classes\CMClasses;ImGui;include;Classes\Hacks;Classes;json;json\json;$(DXSDK_DIR)\Include;SFAPI;game_api;game_api\sdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zc:threadSafeInit-  /std:c++17 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
@@ -111,6 +111,7 @@
     <ClCompile Include="Classes\Hacks\AutoShot.cpp" />
     <ClCompile Include="Classes\Hacks\Binder.cpp" />
     <ClCompile Include="Classes\Hacks\BMXSpeedHack.cpp" />
+    <ClCompile Include="Classes\Hacks\Collision.cpp" />
     <ClCompile Include="Classes\Hacks\CustomRender.cpp" />
     <ClCompile Include="Classes\Hacks\Fix.cpp" />
     <ClCompile Include="Classes\Hacks\InputHelper.cpp" />
@@ -128,6 +129,7 @@
     <ClCompile Include="ImGui\imgui_stdlib.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="memsafe\memsafe.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Classes\GlobalFuncs.h" />
@@ -141,6 +143,7 @@
     <ClInclude Include="Classes\Hacks\AutoShot.h" />
     <ClInclude Include="Classes\Hacks\Binder.h" />
     <ClInclude Include="Classes\Hacks\BMXSpeedHack.h" />
+    <ClInclude Include="Classes\Hacks\Collision.h" />
     <ClInclude Include="Classes\Hacks\CustomRender.h" />
     <ClInclude Include="Classes\Hacks\Fix.h" />
     <ClInclude Include="Classes\Hacks\InputHelper.h" />

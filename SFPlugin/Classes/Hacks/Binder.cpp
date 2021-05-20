@@ -215,7 +215,7 @@ void Binder::onDrawGUI()
 			binds.push_back(Bind());
 		for (int i = 0; i < binds.size(); i++)
 		{
-			char buffer[64];
+			char buffer[128];
 			sprintf(buffer, "Bind: %s###bind%d", binds[i].activateCheat.c_str(), i);
 			if (IG::CollapsingHeader(buffer))
 			{

@@ -17,6 +17,8 @@
 #include "WallShot.h"
 #include "ArizonaLEmulator.h"
 #include "CustomRender.h"
+#include "Collision.h"
+
 
 #include "nameof/nameof.hpp"
 #include <chrono>
@@ -26,16 +28,15 @@ using std::chrono::duration;
 using std::chrono::milliseconds;
 
 
-
 namespace g
 {
-	extern std::string settingsPath;
+	extern std::string settingsPath;	
+	extern bool isWindowOpen;
 };
 
 
 HacksManager::HacksManager()
 {
-
 }
 
 HacksManager* HacksManager::getInstance()
@@ -68,6 +69,7 @@ void HacksManager::initHacksOnce()
 	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new OneLineHacks("OneLineHacks")));
 	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new ArizonaLEmulator("Arizona Launcher Emulator")));
 	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::VISUAL, new CustomRender("Custom Render")));
+	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new CollisionHack("Collision")));
 	std::sort(m_hacks.begin(), m_hacks.end(), [](const std::tuple<Priority, HACK_TYPE, IHack*> pair1, const std::tuple<Priority, HACK_TYPE, IHack*>  pair2)
 	{
 		return std::get<Priority>(pair1) < std::get<Priority>(pair2);
@@ -146,13 +148,12 @@ void HacksManager::save()
 bool HacksManager::drawHacks()
 {
 	bool bImGuiNewFrameWasCalled = false;
-	static auto bnchStart = high_resolution_clock::now();
+
 	for (auto &&hack : m_hacks)
 	{
 		auto&& pHack = std::get<IHack*>(hack);
 		if (pHack->m_bEnabled && !pHack->m_bitsDontCall__.test(DRAW_HACK))
 		{
-			bnchStart = high_resolution_clock::now();
 			//PLOGI << "[DRAW HACK]" + pHack->m_sHackName;
 			if (!bImGuiNewFrameWasCalled && pHack->m_bDrawHackNeedImGui)
 			{
@@ -169,9 +170,32 @@ bool HacksManager::drawHacks()
 
 	return bImGuiNewFrameWasCalled;
 }
-void HacksManager::drawGui()
+void HacksManager::drawInterface()
 {
+	ImGui::SetNextWindowPos(ImVec2(iScrResX / 2, iScrResY / 2), ImGuiCond_Once, ImVec2(0.5F, 0.5F));
+	ImGui::SetNextWindowSize(ImVec2(550.f, 450.f), ImGuiCond_::ImGuiCond_FirstUseEver);
+	ImGui::Begin("hakcs", &g::isWindowOpen);
+	{
+		g::keyButtonSplitter = 0;
+		static uint8 currentGuiMenu = 0;
+		if (ImGui::Button("Hacks"))
+			currentGuiMenu = 0;
+		ImGui::SameLine();
+		if (ImGui::Button("Settings"))
+			currentGuiMenu = 1;
 
+		ImGui::Separator();
+
+		if (currentGuiMenu == 0)
+			drawMenu();
+		else
+			drawSettings();
+	}
+	ImGui::End();
+}
+
+void HacksManager::drawMenu()
+{
 	static HACK_TYPE choosedHackType = HACK_TYPE::MISC;
 	for (byte i = (byte)HACK_TYPE::VISUAL; i <= (byte)HACK_TYPE::MISC; i++)
 	{
@@ -185,6 +209,7 @@ void HacksManager::drawGui()
 			std::get<IHack*>(hack)->onDrawGUI();
 
 }
+
 void HacksManager::drawSettings()
 {
 	for (auto &&hack : m_hacks)
@@ -193,7 +218,6 @@ void HacksManager::drawSettings()
 
 bool HacksManager::procKeys(WPARAM wParam, UINT msg)
 {
-
 	bool bNeedImGuiProcKeys = false;
 	for (auto &&hack : m_hacks)
 	{
@@ -206,7 +230,6 @@ bool HacksManager::procKeys(WPARAM wParam, UINT msg)
 			pHack->onWndProc(wParam, msg);
 		}
 	}
-
 	return bNeedImGuiProcKeys;
 }
 
@@ -282,13 +305,11 @@ bool HacksManager::procRakNetHook(stRakNetHookParams* params, RakNetScriptHookTy
 }
 void HacksManager::procEveryTickAction()
 {
-	static auto bnchStart = high_resolution_clock::now();
 	for (auto &&hack : m_hacks)
 	{
 		auto&& pHack = std::get<IHack*>(hack);
 		if (pHack->m_bEnabled && !pHack->m_bitsDontCall__.test(EVERY_TICK))
 		{
-			bnchStart = high_resolution_clock::now();
 			//PLOGI << "[EVERY TICK ACTION]" << pHack->m_sHackName;
 			pHack->everyTickAction();
 			//PLOGI << "[EVERY TICK ACTION]" << pHack->m_sHackName << " taked " << (bnchStart - high_resolution_clock::now()).count();

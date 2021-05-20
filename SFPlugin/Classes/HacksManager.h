@@ -36,7 +36,8 @@ public:
 	std::vector<std::tuple<Priority, HACK_TYPE, IHack*>>* getHacks();
 	void destroy();
 	bool drawHacks();
-	void drawGui();
+	void drawInterface();
+	void drawMenu();
 	void drawSettings();
 	void read();
 	void save();

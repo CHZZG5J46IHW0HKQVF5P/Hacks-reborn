@@ -9,11 +9,24 @@ enum class RUN_TYPE
 	SWAT //= 128
 };
 
+enum class FIGHT_STYLE
+{
+	DEFAULT,//= 4,
+	BOXING,//= 5,
+	KUNG_FU,//= 6,
+	KNEE_HEAD,//= 7,
+	GRABKICK,//= 15,
+	ELBOWS//= 16
+};
+
+
 class OneLineHacks : public IHack
 {
 public:
 	OneLineHacks(const char*);
 private:
+	static inline bool bFastHelper = false;
+	static inline bool bFakeAfk = false;
 	bool bNoReload = false;
 	bool bAntiStun = false;
 	bool bDriveWalkUnderWater = false;
@@ -40,6 +53,7 @@ private:
 	bool bMegaBMXJump = false;
 	bool bSuperBunnyHop = false;
 	RUN_TYPE CurrentRunType = RUN_TYPE::DEFAULT;
+	FIGHT_STYLE CurrentFightStyle = FIGHT_STYLE::DEFAULT;
 	void  onDrawGUI() override;
 
 	void onDrawHack() override;

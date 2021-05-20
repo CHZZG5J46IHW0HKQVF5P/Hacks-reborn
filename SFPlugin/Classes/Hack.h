@@ -19,6 +19,14 @@ extern SAMPFUNCS *SF;
 #define iScrResY *(int*)0xC9C044
 #define cshX iScrResX * 0.5299999714f
 #define cshY iScrResY * 0.4f
+
+#define SERIALIZE_FIELD_JSON_(name,value) data[name] = value
+#define SERIALIZE_FIELD_JSON(x) data[#x] = x
+
+#define DESERIALIZE_FIELD_JSON_(name,var,type) var = data[name].get<type>()
+#define DESERIALIZE_FIELD_JSON(var,type) var = data[#var].get<type>()
+
+
 #define cm(x) SF->getSAMP()->getChat()->AddChatMessage(-1,(x));
 #define cm_ SF->getSAMP()->getChat()->AddChatMessage
 #define MYID SF->getSAMP()->getPlayers()->sLocalPlayerID
@@ -27,14 +35,8 @@ extern SAMPFUNCS *SF;
 
 namespace hacksSettings
 {
-	extern bool bFakeAfk;
-	extern bool bFastHelper;
 	extern SLineOfSightFlags LineOfSightFlags;
 };
-
-
-
-
 
 struct crTickLocalPlayerInfo
 {
@@ -59,7 +61,7 @@ namespace g
 
 inline void notify(const std::string& text, bool e)
 {
-	Stuff::AddMessageJumpQ(text + (e ? " ~g~On" : " ~r~Off"));
+	Stuff::AddMessageJumpQ(text +(e ? " ~g~On" : " ~r~Off"));
 }
 
 enum HackFunction

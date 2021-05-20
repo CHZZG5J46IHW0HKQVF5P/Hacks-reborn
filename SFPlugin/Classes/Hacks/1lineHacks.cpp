@@ -187,6 +187,32 @@ void setAnimGroupByRunType(RUN_TYPE runType)
 	}
 }
 
+void setFightStyle(FIGHT_STYLE fightStyle)
+{
+
+	switch (fightStyle)
+	{
+	case  FIGHT_STYLE::DEFAULT:
+		RPC_emulating::setPlayerFightStyle(MYID, 4);
+		break;
+	case  FIGHT_STYLE::BOXING:
+		RPC_emulating::setPlayerFightStyle(MYID, 5);
+		break;
+	case  FIGHT_STYLE::KUNG_FU:
+		RPC_emulating::setPlayerFightStyle(MYID, 6);
+		break;
+	case  FIGHT_STYLE::KNEE_HEAD:
+		RPC_emulating::setPlayerFightStyle(MYID, 7);
+		break;
+	case  FIGHT_STYLE::GRABKICK:
+		RPC_emulating::setPlayerFightStyle(MYID, 15);
+		break;
+	case  FIGHT_STYLE::ELBOWS:
+		RPC_emulating::setPlayerFightStyle(MYID, 16);
+		break;
+	}
+}
+
 OneLineHacks::OneLineHacks(const char* name)
 {
 	m_sHackName = name;
@@ -221,13 +247,13 @@ OneLineHacks::OneLineHacks(const char* name)
 	});
 	SF->getSAMP()->registerChatCommand("fafk", [](std::string args)
 	{
-		hacksSettings::bFakeAfk = !hacksSettings::bFakeAfk;// true;
-		notify("Fake AFK", hacksSettings::bFakeAfk);
+		bFakeAfk = !bFakeAfk;// true;
+		notify("Fake AFK",bFakeAfk);
 	});
 	SF->getSAMP()->registerChatCommand("fasth", [](std::string args)
 	{
-		hacksSettings::bFastHelper = !hacksSettings::bFastHelper;// true;
-		notify("Fast Helper", hacksSettings::bFastHelper);
+		bFastHelper = !bFastHelper;// true;
+		notify("Fast Helper", bFastHelper);
 	});
 }
 
@@ -236,12 +262,21 @@ void OneLineHacks::onDrawSettings()
 {
 	if (ImGui::BeginMenu("Custom Run Anim"))
 	{
-		static RUN_TYPE choosedRunType = RUN_TYPE::DEFAULT;
 		for (int i = 0; i <= (int)RUN_TYPE::SWAT; i++)
 			if (ImGui::Button(nameof::nameof_enum((RUN_TYPE)i).data()))
 			{
 				CurrentRunType = (RUN_TYPE)i;
 				setAnimGroupByRunType(CurrentRunType);
+			}
+		ImGui::EndMenu();
+	}
+	if (ImGui::BeginMenu("Custom Fight Style"))
+	{
+		for (int i = 0; i <= (int)FIGHT_STYLE::ELBOWS; i++)
+			if (ImGui::Button(nameof::nameof_enum((FIGHT_STYLE)i).data()))
+			{
+				CurrentFightStyle = (FIGHT_STYLE)i;
+				setFightStyle(CurrentFightStyle);
 			}
 		ImGui::EndMenu();
 	}
@@ -295,7 +330,7 @@ void OneLineHacks::onDrawGUI()
 
 void OneLineHacks::onDrawHack()
 {
-	if (hacksSettings::bFastHelper)
+	if (bFastHelper)
 		SF->getRender()->DrawPolygon(iScrResX - 10, iScrResY - 10, 10, 10, 0, 7, 0xFF0000FF);
 }
 
@@ -317,10 +352,11 @@ void OneLineHacks::switchHack()
 	EnableWaterProofEng(bWaterProofEngine);
 	EnableMegaBMXJump(bMegaBMXJump);
 	setAnimGroupByRunType(CurrentRunType);
+	setFightStyle(CurrentFightStyle);
 }
 void OneLineHacks::everyTickAction()
 {
-	if (hacksSettings::bFastHelper)
+	if (bFastHelper)
 		SF->getGame()->emulateGTAKey(4, 255);
 	if (g::pInfo->isExist)
 	{
@@ -420,9 +456,9 @@ bool OneLineHacks::onRPCIncoming(stRakNetHookParams *params)
 bool OneLineHacks::onPacketOutcoming(stRakNetHookParams *param)
 {
 
-	if ((bNoFall || bSurfOnVehicles || hacksSettings::bFakeAfk) && (param->packetId == ID_PLAYER_SYNC))
+	if ((bNoFall || bSurfOnVehicles || bFakeAfk) && (param->packetId == ID_PLAYER_SYNC))
 	{
-		if (hacksSettings::bFakeAfk)
+		if (bFakeAfk)
 			return false;
 		stOnFootData data;
 		memset(&data, 0, sizeof(stOnFootData));
@@ -446,6 +482,7 @@ bool OneLineHacks::onPacketOutcoming(stRakNetHookParams *param)
 }
 void OneLineHacks::save(nlohmann::json& data)
 {
+	data["FightStyle"] = (int)CurrentFightStyle;
 	data["RunType"] = (int)CurrentRunType;
 	data["superBunnyHop"] = bSuperBunnyHop;
 	data["megaBMXjump"] = bMegaBMXJump;
@@ -475,6 +512,7 @@ void OneLineHacks::save(nlohmann::json& data)
 }
 void OneLineHacks::read(nlohmann::json& data)
 {
+	CurrentFightStyle = (FIGHT_STYLE)data["FightStyle"].get<int>();
 	CurrentRunType = (RUN_TYPE)data["RunType"].get<int>();
 	bSuperBunnyHop = data["superBunnyHop"].get<bool>();
 	bMegaBMXJump = data["megaBMXjump"].get<bool>();

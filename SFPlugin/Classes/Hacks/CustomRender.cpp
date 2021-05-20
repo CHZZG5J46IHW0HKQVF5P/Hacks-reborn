@@ -8,13 +8,13 @@ void RenderClass::drawEditor(size_t spl)
 	if (ImGui::CollapsingHeader("Pickups"))
 	{
 		if (ImGui::Button("Create New Pickup Render"))
-			m_pickupRenders.emplace_back(new PickupRender());
+			m_pickupRenders.emplace_back(PickupRender());
 		for (size_t i = 0; i < m_pickupRenders.size(); i++)
 		{
 			auto&& pickupRender = m_pickupRenders[i];
 			char buff[128];
 
-			sprintf(buff, "%s###pickupEditor%d%d", pickupRender->m_sName.c_str(), spl, i);
+			sprintf(buff, "%s###pickupEditor%d%d", pickupRender.m_sName.c_str(), spl, i);
 			ImGui::Bullet();
 			if (ImGui::TreeNode(buff))
 			{
@@ -25,23 +25,23 @@ void RenderClass::drawEditor(size_t spl)
 					i--;
 				}
 				sprintf(buff, "Name###pickupname%d%d", spl, i);
-				ImGui::InputText(buff, &pickupRender->m_sName);
+				ImGui::InputText(buff, &pickupRender.m_sName);
 				sprintf(buff, "Rendering Name###pickuprenderingname%d%d", spl, i);
-				ImGui::InputText(buff, &pickupRender->m_sRenderinName);
+				ImGui::InputText(buff, &pickupRender.m_sRenderinName);
 
 				if (ImGui::CollapsingHeader("IDs"))
 				{
 					if (ImGui::Button("+"))
-						pickupRender->m_ids.push_back(0);
-					for (size_t id = 0; id < pickupRender->m_ids.size(); id++)
+						pickupRender.m_ids.push_back(0);
+					for (size_t id = 0; id < pickupRender.m_ids.size(); id++)
 					{
 						char buff[128];
 						sprintf(buff, "ID###idInputInt%d%d%d", spl, i, id);
-						ImGui::InputInt(buff, &pickupRender->m_ids[id]);
+						ImGui::InputInt(buff, &pickupRender.m_ids[id]);
 						ImGui::SameLine();
 						sprintf(buff, "-###picksremovebtn%d%d%d", spl, i, id);
 						if (ImGui::Button(buff))
-							pickupRender->m_ids.erase(pickupRender->m_ids.begin() + i);
+							pickupRender.m_ids.erase(pickupRender.m_ids.begin() + i);
 					}
 				}
 				ImGui::TreePop();
@@ -52,13 +52,13 @@ void RenderClass::drawEditor(size_t spl)
 	if (ImGui::CollapsingHeader("Objects"))
 	{
 		if (ImGui::Button("Create New Object Render"))
-			m_objectsRenders.emplace_back(new ObjectRender());
+			m_objectsRenders.emplace_back(ObjectRender());
 		for (size_t i = 0; i < m_objectsRenders.size(); i++)
 		{
 			auto&& objectRender = m_objectsRenders[i];
 			char buff[128];
 
-			sprintf(buff, "%s###objectEditor%d%d", objectRender->m_sName.c_str(), spl, i);
+			sprintf(buff, "%s###objectEditor%d%d", objectRender.m_sName.c_str(), spl, i);
 			ImGui::Bullet();
 			if (ImGui::TreeNode(buff))
 			{
@@ -70,24 +70,24 @@ void RenderClass::drawEditor(size_t spl)
 					i--;
 				}
 				sprintf(buff, "Name###obhectname%d%d", spl, i);
-				ImGui::InputText(buff, &objectRender->m_sName);
+				ImGui::InputText(buff, &objectRender.m_sName);
 				sprintf(buff, "Rendering Name###objectrenderingname%d%d", spl, i);
-				ImGui::InputText(buff, &objectRender->m_sRenderinName);
+				ImGui::InputText(buff, &objectRender.m_sRenderinName);
 
 
 				if (ImGui::CollapsingHeader("IDs"))
 				{
 					if (ImGui::Button("+"))
-						objectRender->m_ids.push_back(0);
-					for (size_t id = 0; id < objectRender->m_ids.size(); id++)
+						objectRender.m_ids.push_back(0);
+					for (size_t id = 0; id < objectRender.m_ids.size(); id++)
 					{
 						char buff[128];
 						sprintf(buff, "ID###idInputInt%d%d%d", spl, i, id);
-						ImGui::InputInt(buff, &objectRender->m_ids[id]);
+						ImGui::InputInt(buff, &objectRender.m_ids[id]);
 						ImGui::SameLine();
 						sprintf(buff, "-###objsremovebtn%d%d", i, id);
 						if (ImGui::Button(buff))
-							objectRender->m_ids.erase(objectRender->m_ids.begin() + i);
+							objectRender.m_ids.erase(objectRender.m_ids.begin() + i);
 					}
 				}
 				ImGui::TreePop();
@@ -98,13 +98,13 @@ void RenderClass::drawEditor(size_t spl)
 	if (ImGui::CollapsingHeader("3dTexts"))
 	{
 		if (ImGui::Button("Create New 3DText Render"))
-			m_text3dRenders.emplace_back(new Text3dRender());
+			m_text3dRenders.emplace_back(Text3dRender());
 		for (size_t i = 0; i < m_text3dRenders.size(); i++)
 		{
 			auto&& text3dRender = m_text3dRenders[i];
 			char buff[128];
 
-			sprintf(buff, "%s###3dtextEditor%d%d", text3dRender->m_sName.c_str(), spl, i);
+			sprintf(buff, "%s###3dtextEditor%d%d", text3dRender.m_sName.c_str(), spl, i);
 			ImGui::Bullet();
 			if (ImGui::TreeNode(buff))
 			{
@@ -115,24 +115,24 @@ void RenderClass::drawEditor(size_t spl)
 					i--;
 				}
 				sprintf(buff, "Name###3dtextname%d%d", spl, i);
-				ImGui::InputText(buff, &text3dRender->m_sName);
+				ImGui::InputText(buff, &text3dRender.m_sName);
 				sprintf(buff, "Rendering Name###3dtextRenderinsname%d%d", spl, i);
-				ImGui::InputText(buff, &text3dRender->m_sRenderinName);
+				ImGui::InputText(buff, &text3dRender.m_sRenderinName);
 
 				if (ImGui::CollapsingHeader("Texts"))
 				{
 					sprintf(buff, "+###plusText%d%d", spl, i);
 					if (ImGui::Button(buff))
-						text3dRender->m_textToSearch.push_back("");
-					for (size_t id = 0; id < text3dRender->m_textToSearch.size(); id++)
+						text3dRender.m_textToSearch.emplace_back("");
+					for (size_t id = 0; id < text3dRender.m_textToSearch.size(); id++)
 					{
 						char buff[128];
 						sprintf(buff, "Text###%d%d%d", spl, i, id);
-						ImGui::InputText(buff, &text3dRender->m_textToSearch[id]);
+						ImGui::InputText(buff, &text3dRender.m_textToSearch[id]);
 						ImGui::SameLine();
 						sprintf(buff, "-###3DTEXTremovebtn%d%d%d", spl, i, id);
 						if (ImGui::Button(buff))
-							text3dRender->m_textToSearch.erase(text3dRender->m_textToSearch.begin() + i);
+							text3dRender.m_textToSearch.erase(text3dRender.m_textToSearch.begin() + i);
 					}
 				}
 				ImGui::TreePop();
@@ -157,18 +157,18 @@ void RenderClass::drawMenu(size_t i)
 		char buff2[128];
 		for (size_t j = 0; j < m_objectsRenders.size(); j++)
 		{
-			sprintf(buff2, "%s###object%dInClass%d", m_objectsRenders[j]->m_sName.c_str(), j, i);
-			ImGui::Checkbox(buff2, &m_objectsRenders[j]->m_bIsEnabled);
+			sprintf(buff2, "%s###object%dInClass%d", m_objectsRenders[j].m_sName.c_str(), j, i);
+			ImGui::Checkbox(buff2, &m_objectsRenders[j].m_bIsEnabled);
 		}
 		for (size_t j = 0; j < m_pickupRenders.size(); j++)
 		{
-			sprintf(buff2, "%s###pickup%dInClass%d", m_pickupRenders[j]->m_sName.c_str(), j, i);
-			ImGui::Checkbox(buff2, &m_pickupRenders[j]->m_bIsEnabled);
+			sprintf(buff2, "%s###pickup%dInClass%d", m_pickupRenders[j].m_sName.c_str(), j, i);
+			ImGui::Checkbox(buff2, &m_pickupRenders[j].m_bIsEnabled);
 		}
 		for (size_t j = 0; j < m_text3dRenders.size(); j++)
 		{
-			sprintf(buff2, "%s###text3d%dInClass%d", m_text3dRenders[j]->m_sName.c_str(), j, i);
-			ImGui::Checkbox(buff2, &m_text3dRenders[j]->m_bIsEnabled);
+			sprintf(buff2, "%s###text3d%dInClass%d", m_text3dRenders[j].m_sName.c_str(), j, i);
+			ImGui::Checkbox(buff2, &m_text3dRenders[j].m_bIsEnabled);
 		}
 
 		ImGui::EndPopup();
@@ -192,8 +192,11 @@ void CustomRender::onDrawGUI()
 	if (ImGui::IsItemClicked())
 		m_bIsMenuOpened = true;
 	ImGui::SameLine();
-	ImGui::Checkbox("Editor###customRender", &m_bIsEditorWindowOpened);
-	drawMenu();
+	ImGui::Checkbox("Editor###customRenderEditorCb", &m_bIsEditorWindowOpened);
+	ImGui::SameLine();
+	ImGui::Checkbox("Menu###customRenderEditorMenu", &m_bDrawMenu);
+	if (m_bDrawMenu)
+		drawMenu();
 	if (m_bIsEditorWindowOpened)
 	{
 		ImGui::Begin("EDITOR");
@@ -211,7 +214,7 @@ void CustomRender::onDrawGUI()
 			}
 		}
 
-		char buff[64];
+		char buff[128];
 		static int iChoosenClassToEdit = -1;
 
 		for (size_t i = 0; i < m_classes.size(); i++)
@@ -332,7 +335,7 @@ void CustomRender::read(nlohmann::json& data)
 	{
 		if (data["class"][std::to_string(i).c_str()].is_null())
 			break;
-		m_classes.push_back(RenderClass("dummy"));
+		m_classes.emplace_back(RenderClass("dummy"));
 		m_classes[i].read(data["class"][std::to_string(i).c_str()]);
 		i++;
 	}
@@ -392,11 +395,11 @@ void RenderClass::save(nlohmann::json& data)
 	data["name"] = m_sName;
 	data["enabled"] = m_bIsEnabled;
 	for (size_t i = 0; i < m_objectsRenders.size(); i++)
-		m_objectsRenders[i]->save(data["rendersObj"][std::to_string(i).c_str()]);
+		m_objectsRenders[i].save(data["rendersObj"][std::to_string(i).c_str()]);
 	for (size_t i = 0; i < m_pickupRenders.size(); i++)
-		m_pickupRenders[i]->save(data["rendersPick"][std::to_string(i).c_str()]);
+		m_pickupRenders[i].save(data["rendersPick"][std::to_string(i).c_str()]);
 	for (size_t i = 0; i < m_text3dRenders.size(); i++)
-		m_text3dRenders[i]->save(data["renders3DText"][std::to_string(i).c_str()]);
+		m_text3dRenders[i].save(data["renders3DText"][std::to_string(i).c_str()]);
 }
 void RenderClass::read(nlohmann::json& data)
 {
@@ -407,8 +410,8 @@ void RenderClass::read(nlohmann::json& data)
 	{
 		if (data["rendersObj"][std::to_string(i).c_str()].is_null())
 			break;
-		m_objectsRenders.emplace_back(new ObjectRender());
-		m_objectsRenders[i]->read(data["rendersObj"][std::to_string(i).c_str()]);
+		m_objectsRenders.emplace_back(ObjectRender());
+		m_objectsRenders[i].read(data["rendersObj"][std::to_string(i).c_str()]);
 		i++;
 	}
 	i = 0;
@@ -416,8 +419,8 @@ void RenderClass::read(nlohmann::json& data)
 	{
 		if (data["rendersPick"][std::to_string(i).c_str()].is_null())
 			break;
-		m_pickupRenders.emplace_back(new PickupRender());
-		m_pickupRenders[i]->read(data["rendersPick"][std::to_string(i).c_str()]);
+		m_pickupRenders.emplace_back(PickupRender());
+		m_pickupRenders[i].read(data["rendersPick"][std::to_string(i).c_str()]);
 		i++;
 	}
 	i = 0;
@@ -426,40 +429,28 @@ void RenderClass::read(nlohmann::json& data)
 		if (data["renders3DText"][std::to_string(i).c_str()].is_null())
 			break;
 
-		m_text3dRenders.emplace_back(new Text3dRender());
-		m_text3dRenders[i]->read(data["renders3DText"][std::to_string(i).c_str()]);
+		m_text3dRenders.emplace_back(Text3dRender());
+		m_text3dRenders[i].read(data["renders3DText"][std::to_string(i).c_str()]);
 		i++;
 	}
 }
 void RenderClass::renderPickups(RenderPickup_ObjectData* pRenderPickupData)
 {
 	for (auto&& pRender : m_pickupRenders)
-		if (pRender->m_bIsEnabled)
-			pRender->render(pRenderPickupData);
+		if (pRender.m_bIsEnabled)
+			pRender.render(pRenderPickupData);
 }
 void RenderClass::renderObjects(RenderPickup_ObjectData* pRenderObjectData)
 {
 	for (auto&& pRender : m_objectsRenders)
-		if (pRender->m_bIsEnabled)
-			pRender->render(pRenderObjectData);
+		if (pRender.m_bIsEnabled)
+			pRender.render(pRenderObjectData);
 }
 void RenderClass::render3DTexts(Render3DTextData* p3DTextData)
 {
 	for (auto&& pRender : m_text3dRenders)
-		if (pRender->m_bIsEnabled)
-			pRender->render(p3DTextData);
-}
-void RenderClass::addObjectRender(ObjectRender* pRender)
-{
-	m_objectsRenders.emplace_back(pRender);
-}
-void RenderClass::addPickupRender(PickupRender* pRender)
-{
-	m_pickupRenders.emplace_back(pRender);
-}
-void RenderClass::addText3DRender(Text3dRender* pRender)
-{
-	m_text3dRenders.emplace_back(pRender);
+		if (pRender.m_bIsEnabled)
+			pRender.render(p3DTextData);
 }
 RenderClass::~RenderClass()
 {
@@ -552,21 +543,21 @@ void PickupRender::render(RenderPickup_ObjectData* pRenderPickupData)
 bool RenderClass::areAnyObjectRendersEnabled()
 {
 	for (auto&& pRender : m_objectsRenders)
-		if (pRender->m_bIsEnabled)
+		if (pRender.m_bIsEnabled)
 			return true;
 	return false;
 }
 bool RenderClass::areAnyickupRendersEnabled()
 {
 	for (auto&& pRender : m_pickupRenders)
-		if (pRender->m_bIsEnabled)
+		if (pRender.m_bIsEnabled)
 			return true;
 	return false;
 }
 bool RenderClass::areAnyText3DRendersEnabled()
 {
 	for (auto&& pRender : m_text3dRenders)
-		if (pRender->m_bIsEnabled)
+		if (pRender.m_bIsEnabled)
 			return true;
 	return false;
 }

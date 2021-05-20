@@ -80,10 +80,14 @@ public:
 class RenderClass
 {
 private:
-	std::vector<std::shared_ptr<ObjectRender>> m_objectsRenders;
-	std::vector< std::shared_ptr<Text3dRender>> m_text3dRenders;
-	std::vector<std::shared_ptr<PickupRender>> m_pickupRenders;
+	std::vector<ObjectRender> m_objectsRenders;
+	std::vector<Text3dRender> m_text3dRenders;
+	std::vector<PickupRender> m_pickupRenders;
 public:
+	bool m_bIsEnabled = false;
+
+	std::string m_sName;
+
 	~RenderClass();
 	RenderClass(const char*);
 
@@ -93,12 +97,8 @@ public:
 	bool areAnyObjectRendersEnabled();
 	bool areAnyickupRendersEnabled();
 	bool areAnyText3DRendersEnabled();
-	void addObjectRender(ObjectRender*);
-	void addPickupRender(PickupRender*);
-	void addText3DRender(Text3dRender*);
 
-	bool m_bIsEnabled = false;
-	std::string m_sName;
+
 
 	void drawEditor(size_t i);
 	void drawMenu(size_t i);
@@ -121,6 +121,7 @@ public:
 private:
 	bool m_bIsEditorWindowOpened = false;
 	bool m_bIsMenuOpened = false;
+	bool m_bDrawMenu = false;
 	std::vector<RenderClass> m_classes;
 	bool areAnyClassesEnabled();
 	void drawMenu();

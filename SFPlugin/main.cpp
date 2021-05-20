@@ -1,7 +1,7 @@
 #include "main.h"
 SAMPFUNCS *SF = new SAMPFUNCS();
 
-
+#include "GlobalFuncs.h"
 
 void initcrTickLocalPlayerInfo()
 {
@@ -37,28 +37,9 @@ bool CALLBACK Present(CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDest
 					ImGui::NewFrame();
 				}
 				{
-					ImGui::ShowDemoWindow();
+					// ImGui::ShowDemoWindow();
 
-					ImGui::SetNextWindowPos(ImVec2(iScrResX / 2, iScrResY / 2), ImGuiCond_Once, ImVec2(0.5F, 0.5F));
-					ImGui::SetNextWindowSize(ImVec2(550.f, 450.f), ImGuiCond_::ImGuiCond_FirstUseEver);
-					ImGui::Begin("hakcs", &g::isWindowOpen);
-					{
-						g::keyButtonSplitter = 0;
-						static uint8 currentGuiMenu = 0;
-						if (ImGui::Button("Hacks"))
-							currentGuiMenu = 0;
-						ImGui::SameLine();
-						if (ImGui::Button("Settings"))
-							currentGuiMenu = 1;
-
-						ImGui::Separator();
-
-						if (currentGuiMenu == 0)
-							HacksManager::getInstance()->drawGui();
-						else
-							HacksManager::getInstance()->drawSettings();
-					}
-					ImGui::End();
+					HacksManager::getInstance()->drawInterface();
 					if (!g::isWindowOpen)
 					{
 						SF->getSAMP()->getMisc()->ToggleCursor(0, 0);
@@ -176,6 +157,7 @@ bool CALLBACK WndProcHandler(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 	switch (wParam)
 	{
 	case 16:
+		//cm_(-1,Lippets::Strings::utf8_to_ansi((std::string("GOO") + (Lippets::Numbers::Random::rBool() ? "off" : "on")).c_str()).c_str());
 		g::isShiftPressed = (keyState == eKeyState::PRESSED ? true : false);
 		break;
 	case 17:

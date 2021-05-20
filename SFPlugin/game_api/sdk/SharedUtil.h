@@ -90,9 +90,11 @@ typedef float               FLOAT;      //  32
 #endif
 
 // Vendor
+/*
 #ifndef _
 #define _ //Use a dummy localisation define for modules that don't need it
 #endif
+*/
 
 
 #include <assert.h>
