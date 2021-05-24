@@ -1,10 +1,12 @@
 #include "Collision.h"
 #include "GlobalFuncs.h"
-#include "memsafe.h"
+#include "SampSnipps/cheat_funcs.h"
 
 #define HOOKPOS_PlayerCollision 0x0054BCEE
 
 CollisionHack* pCollisionHack;
+
+DEFAULT_HACK_CONSTRUCTOR(CollisionHack)
 
 bool CollisionCheck(object_base *obj1, object_base *obj2)
 {
@@ -70,7 +72,7 @@ hk_PlCol_processCol:
 void CollisionHack::onDrawGUI()
 {
 
-	ImGui::Checkbox(m_sHackName.c_str(), &m_bEnabled);
+	ImGui::Checkbox("Collision", &m_bEnabled);
 
 	if (ImGui::BeginPopupContextItem("Collision Menu"))
 	{
@@ -84,7 +86,7 @@ void CollisionHack::onDrawGUI()
 
 		ImGui::EndPopup();
 	}
-	
+
 
 }
 
@@ -101,21 +103,17 @@ void CollisionHack::release()
 	memcpy_safe((void *)HOOKPOS_PlayerCollision, patch, 6);
 }
 
-CollisionHack::CollisionHack(const char* szHackName)
-{
-	m_sHackName = szHackName;
-	m_bEnabled = true;
-}
-
 
 
 void CollisionHack::save(nlohmann::json& data)
 {
+
 	SERIALIZE_FIELD_JSON_(m_sHackName, m_bEnabled);
 	SERIALIZE_FIELD_JSON(m_bIsBuildingsCollisionEnabled);
 	SERIALIZE_FIELD_JSON(m_bIsObjectsCollisionEnabled);
 	SERIALIZE_FIELD_JSON(m_bIsPedsCollisionEnabled);
 	SERIALIZE_FIELD_JSON(m_bIsVehicleCollisionEnabled);
+
 }
 
 
@@ -123,10 +121,10 @@ void CollisionHack::save(nlohmann::json& data)
 
 void CollisionHack::read(nlohmann::json& data)
 {
-	DESERIALIZE_FIELD_JSON_(m_sHackName, m_bEnabled, bool);
-	DESERIALIZE_FIELD_JSON(m_bIsBuildingsCollisionEnabled, bool);
-	DESERIALIZE_FIELD_JSON(m_bIsObjectsCollisionEnabled, bool);
-	DESERIALIZE_FIELD_JSON(m_bIsObjectsCollisionEnabled, bool);
-	DESERIALIZE_FIELD_JSON(m_bIsPedsCollisionEnabled, bool);
-	DESERIALIZE_FIELD_JSON(m_bIsVehicleCollisionEnabled, bool);
+	DESERIALIZE_FIELD_JSON_(m_sHackName, m_bEnabled);
+	DESERIALIZE_FIELD_JSON(m_bIsBuildingsCollisionEnabled);
+	DESERIALIZE_FIELD_JSON(m_bIsObjectsCollisionEnabled);
+	DESERIALIZE_FIELD_JSON(m_bIsObjectsCollisionEnabled);
+	DESERIALIZE_FIELD_JSON(m_bIsPedsCollisionEnabled);
+	DESERIALIZE_FIELD_JSON(m_bIsVehicleCollisionEnabled);
 }

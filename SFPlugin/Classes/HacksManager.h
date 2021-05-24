@@ -38,7 +38,6 @@ public:
 	bool drawHacks();
 	void drawInterface();
 	void drawMenu();
-	void drawSettings();
 	void read();
 	void save();
 	bool procRakNetHook(stRakNetHookParams* params,  RakNetScriptHookType procFunc);

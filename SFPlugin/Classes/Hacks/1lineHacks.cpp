@@ -248,7 +248,7 @@ OneLineHacks::OneLineHacks(const char* name)
 	SF->getSAMP()->registerChatCommand("fafk", [](std::string args)
 	{
 		bFakeAfk = !bFakeAfk;// true;
-		notify("Fake AFK",bFakeAfk);
+		notify("Fake AFK", bFakeAfk);
 	});
 	SF->getSAMP()->registerChatCommand("fasth", [](std::string args)
 	{
@@ -257,30 +257,6 @@ OneLineHacks::OneLineHacks(const char* name)
 	});
 }
 
-
-void OneLineHacks::onDrawSettings()
-{
-	if (ImGui::BeginMenu("Custom Run Anim"))
-	{
-		for (int i = 0; i <= (int)RUN_TYPE::SWAT; i++)
-			if (ImGui::Button(nameof::nameof_enum((RUN_TYPE)i).data()))
-			{
-				CurrentRunType = (RUN_TYPE)i;
-				setAnimGroupByRunType(CurrentRunType);
-			}
-		ImGui::EndMenu();
-	}
-	if (ImGui::BeginMenu("Custom Fight Style"))
-	{
-		for (int i = 0; i <= (int)FIGHT_STYLE::ELBOWS; i++)
-			if (ImGui::Button(nameof::nameof_enum((FIGHT_STYLE)i).data()))
-			{
-				CurrentFightStyle = (FIGHT_STYLE)i;
-				setFightStyle(CurrentFightStyle);
-			}
-		ImGui::EndMenu();
-	}
-}
 
 void OneLineHacks::onDrawGUI()
 {
@@ -325,7 +301,37 @@ void OneLineHacks::onDrawGUI()
 	ImGui::Checkbox("Dont Give Me Bat", &bDontGiveMeBat);
 	ImGui::Checkbox("Fast Heli", &bFastHeli);
 	ImGui::Checkbox("Mega BMX Jump", &bMegaBMXJump);
-	ImGui::Checkbox("Super Bunny Hop", &bSuperBunnyHop);
+
+	ImGui::Text("Custom Run Anim");
+	if (ImGui::IsItemClicked())
+		ImGui::OpenPopup("Choose Run Anim");
+	if (ImGui::BeginPopup("Choose Run Anim"))
+	{
+
+		for (int i = 0; i <= (int)RUN_TYPE::SWAT; i++)
+			if (ImGui::Button(nameof::nameof_enum((RUN_TYPE)i).data()))
+			{
+				CurrentRunType = (RUN_TYPE)i;
+				setAnimGroupByRunType(CurrentRunType);
+			}
+
+		ImGui::EndPopup();
+	}
+	ImGui::Text("Custom Fight Style");
+	if (ImGui::IsItemClicked())
+		ImGui::OpenPopup("Choose Fight Style");
+	if (ImGui::BeginPopup("Choose Fight Style"))
+	{
+		for (int i = 0; i <= (int)FIGHT_STYLE::ELBOWS; i++)
+			if (ImGui::Button(nameof::nameof_enum((FIGHT_STYLE)i).data()))
+			{
+				CurrentFightStyle = (FIGHT_STYLE)i;
+				setFightStyle(CurrentFightStyle);
+			}
+
+
+		ImGui::EndPopup();
+	}
 }
 
 void OneLineHacks::onDrawHack()
@@ -358,14 +364,6 @@ void OneLineHacks::everyTickAction()
 {
 	if (bFastHelper)
 		SF->getGame()->emulateGTAKey(4, 255);
-	if (g::pInfo->isExist)
-	{
-		if (bSuperBunnyHop)
-		{
-			if (*PEDSELF->GetMemoryValue(0x46D) == 8388644)
-				GAME->SetTimeScale(9999.f);
-		}
-	}
 	if (g::pInfo->isDriver)
 	{
 		if (bFastHeli)
@@ -394,7 +392,7 @@ void OneLineHacks::everyTickAction()
 		{
 			static uint8 eBikeState = 1;
 			static CMTimer timer;
-			if (PEDSELF->GetVehicle()->GetGasPedal() == 1.f && !SF->getSAMP()->getInput()->iInputEnabled && !Vehicles::isVehicleInAir(2.5f, VEHICLE_SELF)) //GetAsyncKeyState(87)
+			if (PEDSELF->GetVehicle()->GetGasPedal() == 1.f && !SF->getSAMP()->getInput()->iInputEnabled && !Vehicles::isVehicleInAir(2.5f, vehicleInfoGet_(-1, 0))) //GetAsyncKeyState(87)
 			{
 				if (timer.isEnded())
 				{
@@ -427,7 +425,7 @@ void OneLineHacks::everyTickAction()
 
 
 }
-void OneLineHacks::onWndProc(WPARAM wParam, UINT msg)
+bool OneLineHacks::onWndProc(WPARAM wParam, UINT msg)
 {
 	if (bPressNitro && g::pInfo->isDriver)
 		if (wParam == 0 || wParam == 1)
@@ -440,6 +438,7 @@ void OneLineHacks::onWndProc(WPARAM wParam, UINT msg)
 				*reinterpret_cast<byte*>(0x969165) = 0;
 				PEDSELF->GetVehicle()->RemoveVehicleUpgrade(1010);
 			}
+	return true;
 }
 
 bool OneLineHacks::onRPCIncoming(stRakNetHookParams *params)
@@ -484,7 +483,6 @@ void OneLineHacks::save(nlohmann::json& data)
 {
 	data["FightStyle"] = (int)CurrentFightStyle;
 	data["RunType"] = (int)CurrentRunType;
-	data["superBunnyHop"] = bSuperBunnyHop;
 	data["megaBMXjump"] = bMegaBMXJump;
 	data["fastHeli"] = bFastHeli;
 	data["dontGiveMeBat"] = bDontGiveMeBat;
@@ -514,7 +512,6 @@ void OneLineHacks::read(nlohmann::json& data)
 {
 	CurrentFightStyle = (FIGHT_STYLE)data["FightStyle"].get<int>();
 	CurrentRunType = (RUN_TYPE)data["RunType"].get<int>();
-	bSuperBunnyHop = data["superBunnyHop"].get<bool>();
 	bMegaBMXJump = data["megaBMXjump"].get<bool>();
 	bFastHeli = data["fastHeli"].get<bool>();
 	bDontGiveMeBat = data["dontGiveMeBat"].get<bool>();

@@ -1,13 +1,13 @@
-#include "Fix.h"
+#include "mainHack.h"
 
 
-Fix::Fix(const char* name)
+MainHack::MainHack(const char* szHackName)
 {
-	m_sHackName = name;
+	m_sHackName = szHackName;
 	m_bEnabled = true;
 }
 
-bool Fix::onRPCOutcoming(stRakNetHookParams* params)
+bool MainHack::onRPCOutcoming(stRakNetHookParams* params)
 {
 	switch (params->packetId)
 	{
@@ -17,7 +17,7 @@ bool Fix::onRPCOutcoming(stRakNetHookParams* params)
 	return true;
 }
 
-bool Fix::onRPCIncoming(stRakNetHookParams* params)
+bool MainHack::onRPCIncoming(stRakNetHookParams* params)
 {
 	switch (params->packetId)
 	{
@@ -81,4 +81,36 @@ bool Fix::onRPCIncoming(stRakNetHookParams* params)
 	default:break;
 	}
 	return true;
+}
+
+bool MainHack::onWndProc(WPARAM wParam, UINT msg)
+{
+	auto keyState = Stuff::getKeyStateByMsg(msg);
+	switch (wParam)
+	{
+	case 16:
+		g::isShiftPressed = (keyState == eKeyState::PRESSED ? true : false);
+		break;
+	case 17:
+		g::isCtrlPressed = (keyState == eKeyState::PRESSED ? true : false);
+		break;
+	case 18:
+		g::isAltPressed = (keyState == eKeyState::PRESSED ? true : false);
+		break;
+	}
+	return true;
+}
+
+void MainHack::everyTickAction()
+{
+	if (g::isWindowOpen)
+	{
+
+		SF->getSAMP()->getMisc()->ToggleCursor(2, 0);
+
+		if (SF->getSAMP()->getInput()->iInputEnabled)
+		{
+			SF->getSAMP()->getInput()->DisableInput();
+		}
+	}
 }

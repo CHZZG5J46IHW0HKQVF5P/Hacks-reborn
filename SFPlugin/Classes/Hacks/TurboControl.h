@@ -3,14 +3,14 @@
 
 
 
-class TurboControl : public IHack
+HACK_CLASS(TurboControl)
 {
 public:
 	TurboControl(const char* name);
 private:
 	int activationKey = 0;
 	void onDrawGUI() override;
-	void onWndProc(WPARAM wParam, UINT msg) override;
+	bool onWndProc(WPARAM wParam, UINT msg) override;
 	void save(nlohmann::json& data) override;
 	void read(nlohmann::json& data) override;
 };

@@ -9,34 +9,98 @@ PlayersList::PlayersList(const char* name)
 
 void PlayersList::onDrawGUI()
 {
+	ImGui::Text("Friends List");
+	if (ImGui::IsItemClicked())
+		ImGui::OpenPopup("Manage Friends List");
+
+	if (ImGui::BeginPopup("Manage Friends List"))
+	{
+		static int playerID = 0;
+		Lippets::ImGuiSnippets::BorderedInputInt("ID", &playerID, 0, 999, 1, 1);
+		if (playerID != MYID && SF->getSAMP()->getPlayers()->IsPlayerDefined(playerID))
+		{
+			const char* playerName = SF->getSAMP()->getPlayers()->GetPlayerName(playerID);
+			if ((std::find(friendsList.begin(), friendsList.end(), playerName) == friendsList.end()) &&
+				(std::find(enemiesList.begin(), enemiesList.end(), playerName) == enemiesList.end()))
+			{
+				char buffer[128];
+				sprintf_s(buffer, "Add %s To Friends", playerName);
+				if (ImGui::Button(buffer))
+					friendsList.push_back(std::string(playerName));
+			}
+		}
+		for (size_t i = 0; i < friendsList.size(); i++)
+		{
+			ImGui::TextColored(ImVec4(0.f, 1.f, 0.f, 1.f), friendsList[i].c_str());
+			if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0))
+				friendsList.erase(friendsList.begin() + i);
+
+		}
+		ImGui::EndPopup();
+	}
+
+	ImGui::Text("Enemies List");
+	if (ImGui::IsItemClicked())
+		ImGui::OpenPopup("Manage Enemies List");
+
+	if (ImGui::BeginPopup("Manage Enemies List"))
+	{
+		static int playerID = 0;
+		Lippets::ImGuiSnippets::BorderedInputInt("ID", &playerID, 0, 999, 1, 1);
+		if (playerID != MYID && SF->getSAMP()->getPlayers()->IsPlayerDefined(playerID))
+		{
+			const char* playerName = SF->getSAMP()->getPlayers()->GetPlayerName(playerID);
+			if ((std::find(friendsList.begin(), friendsList.end(), playerName) == friendsList.end()) &&
+				(std::find(enemiesList.begin(), enemiesList.end(), playerName) == enemiesList.end()))
+			{
+				char buffer[128];
+				sprintf_s(buffer, "Add %s To Enemies", playerName);
+				if (ImGui::Button(buffer))
+					enemiesList.push_back(std::string(playerName));
+			}
+		}
+		for (size_t i = 0; i < enemiesList.size(); i++)
+		{
+			ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), enemiesList[i].c_str());
+			if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0))
+				enemiesList.erase(enemiesList.begin() + i);
+
+		}
+		ImGui::EndPopup();
+	}
+
 	ImGui::Checkbox("Connect Logger", &connectLoger);
+
 	ImGui::Checkbox("No Friends Damage", &noFriendDamage);
+
+
 }
 
 void PlayersList::save(nlohmann::json &data)
 {
+
 	data["noFriendDamage"] = noFriendDamage;
 	data["Connect_logger"] = connectLoger;
 
-	data["FriendsList"] = friendsList;
+	SERIALIZE_FIELD_JSON(friendsList);
 
-	data["EnemiesList"] = enemiesList;
+	SERIALIZE_FIELD_JSON(enemiesList);
 
 	data["FriendsListWindowPos"]["x"] = friendsListWindowPos.x;
 	data["FriendsListWindowPos"]["y"] = friendsListWindowPos.y;
 
 	data["EnemiesListWindowPos"]["x"] = enemiesListWindowPos.x;
 	data["EnemiesListWindowPos"]["y"] = enemiesListWindowPos.y;
+
 }
 
 void PlayersList::read(nlohmann::json &data)
 {
 	noFriendDamage = data["noFriendDamage"].get<bool>();
 	connectLoger = data["Connect_logger"].get<bool>();
-	friendsList = data["FriendsList"].get<std::vector<std::string>>();
 
-	enemiesList = data["EnemiesList"].get<std::vector<std::string>>();
-
+	DESERIALIZE_FIELD_JSON(friendsList);
+	DESERIALIZE_FIELD_JSON(enemiesList);
 
 	friendsListWindowPos.x = data["FriendsListWindowPos"]["x"].get<float>();
 	friendsListWindowPos.y = data["FriendsListWindowPos"]["y"].get<float>();
@@ -53,9 +117,9 @@ void PlayersList::onDrawHack()
 		return;
 
 	GFuncs::resortPlayersByDistance(&g::pInfo->nearestPlayers, false);
-	if (std::find_if(g::pInfo->nearestPlayers.begin(), g::pInfo->nearestPlayers.end(), [&](const std::pair<int, float>& id_dist)
+	if (std::find_if(g::pInfo->nearestPlayers.begin(), g::pInfo->nearestPlayers.end(), [&](const NearPlayer& id_dist)
 	{
-		return std::find(friendsList.begin(), friendsList.end(), SF->getSAMP()->getPlayers()->GetPlayerName(id_dist.first)) != friendsList.end();
+		return std::find(friendsList.begin(), friendsList.end(), SF->getSAMP()->getPlayers()->GetPlayerName(id_dist.id)) != friendsList.end();
 	}) != g::pInfo->nearestPlayers.end())
 	{
 		ImGui::SetNextWindowPos(friendsListWindowPos, ImGuiCond_FirstUseEver);
@@ -65,19 +129,19 @@ void PlayersList::onDrawHack()
 			ImGui::Separator();
 			for (auto&& player : g::pInfo->nearestPlayers)
 			{
-				auto szPlayerName = SF->getSAMP()->getPlayers()->GetPlayerName(player.first);
+				auto szPlayerName = SF->getSAMP()->getPlayers()->GetPlayerName(player.id);
 				if (std::find(friendsList.begin(), friendsList.end(), std::string(szPlayerName)) == friendsList.end())
 					continue;
-				ImGui::TextColored(ImGui::ColorConvertU32ToFloat4(SF->getSAMP()->getPlayers()->GetPlayerColor(player.first)), "%s[%d] %.1f", szPlayerName, player.first, player.second);
+				ImGui::TextColored(ImGui::ColorConvertU32ToFloat4(SF->getSAMP()->getPlayers()->GetPlayerColor(player.id)), "%s[%d] %f", szPlayerName, player.id, player.fDistance);
 			}
 			friendsListWindowPos = ImGui::GetWindowPos();
 		}
 		ImGui::End();
 	}
 
-	if (std::find_if(g::pInfo->nearestPlayers.begin(), g::pInfo->nearestPlayers.end(), [&](const std::pair<int, float>& id_dist)
+	if (std::find_if(g::pInfo->nearestPlayers.begin(), g::pInfo->nearestPlayers.end(), [&](const NearPlayer& id_dist)
 	{
-		return std::find(enemiesList.begin(), enemiesList.end(), SF->getSAMP()->getPlayers()->GetPlayerName(id_dist.first)) != enemiesList.end();
+		return std::find(enemiesList.begin(), enemiesList.end(), SF->getSAMP()->getPlayers()->GetPlayerName(id_dist.id)) != enemiesList.end();
 	}) != g::pInfo->nearestPlayers.end())
 	{
 		ImGui::SetNextWindowPos(enemiesListWindowPos, ImGuiCond_FirstUseEver);
@@ -87,72 +151,14 @@ void PlayersList::onDrawHack()
 			ImGui::Separator();
 			for (auto&& player : g::pInfo->nearestPlayers)
 			{
-				auto szPlayerName = SF->getSAMP()->getPlayers()->GetPlayerName(player.first);
+				auto szPlayerName = SF->getSAMP()->getPlayers()->GetPlayerName(player.id);
 				if (std::find(enemiesList.begin(), enemiesList.end(), std::string(szPlayerName)) == enemiesList.end())
 					continue;
-				ImGui::TextColored(ImGui::ColorConvertU32ToFloat4(SF->getSAMP()->getPlayers()->GetPlayerColor(player.first)), "%s[%d] %.1f", szPlayerName, player.first, player.second);
+				ImGui::TextColored(ImGui::ColorConvertU32ToFloat4(SF->getSAMP()->getPlayers()->GetPlayerColor(player.id)), "%s[%d] %.1f", szPlayerName, player.id, player.fDistance);
 			}
 			enemiesListWindowPos = ImGui::GetWindowPos();
 		}
 		ImGui::End();
-	}
-}
-
-void PlayersList::onDrawSettings()
-{
-	if (ImGui::BeginMenu("Players List"))
-	{
-		ImGui::BeginChild("Friends", ImVec2(330.f, 260.f), true);
-		{
-			static int playerID = 0;
-			Lippets::ImGuiSnippets::BorderedInputInt("ID", &playerID, 0, 999, 1, 1);
-			if (playerID != MYID && SF->getSAMP()->getPlayers()->IsPlayerDefined(playerID))
-			{
-				const char* playerName = SF->getSAMP()->getPlayers()->GetPlayerName(playerID);
-				if ((std::find(friendsList.begin(), friendsList.end(), playerName) == friendsList.end()) &&
-					(std::find(enemiesList.begin(), enemiesList.end(), playerName) == enemiesList.end()))
-				{
-					char buffer[128];
-					sprintf_s(buffer, "Add %s To Friends", playerName);
-					if (ImGui::Button(buffer))
-						friendsList.push_back(std::string(playerName));
-				}
-			}
-			for (int i = 0; i < friendsList.size(); i++)
-			{
-				ImGui::TextColored(ImVec4(0.f, 1.f, 0.f, 1.f), friendsList[i].c_str());
-				if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0))
-					friendsList.erase(friendsList.begin() + i);
-
-			}
-			ImGui::EndChild();
-		}
-		ImGui::BeginChild("Enemies", ImVec2(330.f, 260.f), true);
-		{
-			static int playerID = 0;
-			Lippets::ImGuiSnippets::BorderedInputInt("ID", &playerID, 0, 999, 1, 1);
-			if (playerID != MYID && SF->getSAMP()->getPlayers()->IsPlayerDefined(playerID))
-			{
-				const char* playerName = SF->getSAMP()->getPlayers()->GetPlayerName(playerID);
-				if ((std::find(friendsList.begin(), friendsList.end(), playerName) == friendsList.end()) &&
-					(std::find(enemiesList.begin(), enemiesList.end(), playerName) == enemiesList.end()))
-				{
-					char buffer[128];
-					sprintf_s(buffer, "Add %s To Enemies", playerName);
-					if (ImGui::Button(buffer))
-						enemiesList.push_back(std::string(playerName));
-				}
-			}
-			for (int i = 0; i < enemiesList.size(); i++)
-			{
-				ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), enemiesList[i].c_str());
-				if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0))
-					enemiesList.erase(enemiesList.begin() + i);
-
-			}
-			ImGui::EndChild();
-		}
-		ImGui::EndMenu();
 	}
 }
 

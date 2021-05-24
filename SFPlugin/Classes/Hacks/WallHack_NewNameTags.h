@@ -20,13 +20,13 @@ public:
 
 
 
-class WallHack : public IHack
+HACK_CLASS(WallHack)
 {
 public:
 	WallHack(const char* name);
 private:
 	CMFont font = CMFont("WallHack");
-	std::vector<ChatBubble> chatBubbles;
+	std::list<ChatBubble> chatBubbles;
 	// wallhack
 	bool bNoNameTags = 0;
 	int activationKey = 0;
@@ -50,8 +50,8 @@ private:
 	void everyTickAction() override;
 	void onDrawGUI() override;
 	void switchHack() override;
-	void onWndProc(WPARAM wParam, UINT msg) override;
+	bool onWndProc(WPARAM wParam, UINT msg) override;
 	bool onRPCIncoming(stRakNetHookParams* params) override;
 	void onDrawHack() override;
-	void onDrawSettings() override;
+	
 };

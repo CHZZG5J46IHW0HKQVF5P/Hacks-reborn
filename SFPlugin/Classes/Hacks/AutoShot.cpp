@@ -1,28 +1,26 @@
 #include "AutoShot.h"
 
 
-AutoShot::AutoShot(const char* name)
-{
-	m_sHackName = name;
-}
+DEFAULT_HACK_CONSTRUCTOR(AutoShot)
 
 void AutoShot::onDrawGUI()
 {
-	ImGui::Checkbox(m_sHackName.c_str(), &m_bEnabled);
+	ImGui::Checkbox("Auto Shot", &m_bEnabled);
 	ImGui::SameLine();
 	Lippets::ImGuiSnippets::KeyButton(activationKey, g::keyButtonSplitter);
 }
-void AutoShot::onWndProc(WPARAM wParam, UINT msg)
+bool AutoShot::onWndProc(WPARAM wParam, UINT msg)
 {
 	if (msg != WM_KEYDOWN && msg != WM_LBUTTONDOWN && msg != WM_SYSKEYDOWN)
-		return;
+		return true;
 	if (activationKey != 0 && wParam == activationKey)
 	{
 		autoShot = !autoShot;
 		notify("Auto Shot", autoShot);
 	}
+	return true;
 }
-void AutoShot::everyTickAction( )
+void AutoShot::everyTickAction()
 {
 	if (!g::pInfo->isExist || !autoShot || g::pInfo->isInCar)
 		return;

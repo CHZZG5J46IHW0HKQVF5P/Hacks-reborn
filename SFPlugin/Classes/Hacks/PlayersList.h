@@ -1,7 +1,7 @@
 #pragma once
 #include "Hack.h"
 
-class PlayersList : public IHack
+HACK_CLASS(PlayersList)
 {
 public:
 	PlayersList(const char*);
@@ -14,7 +14,7 @@ private:
 	bool noFriendDamage;
 	void onDrawHack() override;
 	void onDrawGUI() override;
-	void onDrawSettings() override;
+	
 	bool onPacketOutcoming(stRakNetHookParams* params) override;
 	bool onRPCIncoming(stRakNetHookParams* params) override;
 	void save(nlohmann::json&) override;

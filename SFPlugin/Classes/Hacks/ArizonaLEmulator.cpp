@@ -1,9 +1,6 @@
 #include "ArizonaLEmulator.h"
 
-ArizonaLEmulator::ArizonaLEmulator(const char* m_sHackName)
-{
-	this->m_sHackName = m_sHackName;
-}
+DEFAULT_HACK_CONSTRUCTOR(ArizonaLEmulator)
 
 
 bool ArizonaLEmulator::onRPCOutcoming(stRakNetHookParams* params)

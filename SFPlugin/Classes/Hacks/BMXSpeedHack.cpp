@@ -1,26 +1,21 @@
 #include "BMXSpeedHack.h"
 
 
-BMXspeedhack::BMXspeedhack(const char* name)
-{
-	m_sHackName = name;
-}
+DEFAULT_HACK_CONSTRUCTOR(BMXspeedhack)
 
 void BMXspeedhack::onDrawGUI()
 {
 	ImGui::Checkbox(m_sHackName.c_str(), &m_bEnabled);
+	if (ImGui::BeginPopupContextItem())
+	{
+		ImGui::SliderInt("Delay", &iDelay, 1, 300);
+		ImGui::EndPopup();
+	}
 	ImGui::SameLine();
 	Lippets::ImGuiSnippets::KeyButton(activationKey, g::keyButtonSplitter);
 }
-void BMXspeedhack::onDrawSettings()
-{
-	if (ImGui::BeginMenu("BMX Speed Hack"))
-	{
-		ImGui::SliderInt("Delay", &iDelay, 1, 300);
-		ImGui::EndMenu();
-	}
-}
-void BMXspeedhack::onWndProc(WPARAM wParam, UINT msg)
+
+bool BMXspeedhack::onWndProc(WPARAM wParam, UINT msg)
 {
 	if (activationKey != 0 && wParam == activationKey)
 		if (msg == WM_KEYDOWN || msg == WM_LBUTTONDOWN || msg == WM_SYSKEYDOWN)
@@ -31,7 +26,7 @@ void BMXspeedhack::onWndProc(WPARAM wParam, UINT msg)
 		{
 			bmxspeedHack = false;
 		}
-
+	return true;
 }
 void BMXspeedhack::everyTickAction( )
 {

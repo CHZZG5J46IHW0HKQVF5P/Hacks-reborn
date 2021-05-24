@@ -9,19 +9,16 @@ void DisableTwinTurbo(bool bDisable)
 		WriteMem<char16_t>((SF->getSAMP()->getSAMPAddr() + 0x15030), 2, temp1); // +
 }
 
+DEFAULT_HACK_CONSTRUCTOR(TurboControl)
 
-TurboControl::TurboControl(const char* name)
+void TurboControl::onDrawGUI()
 {
-	m_sHackName = name;
-}
-void TurboControl::onDrawGUI() 
-{
-	ImGui::Checkbox(m_sHackName.c_str(), &m_bEnabled);
+	ImGui::Checkbox("TurboControl", &m_bEnabled);
 	ImGui::SameLine();
 	Lippets::ImGuiSnippets::KeyButton(activationKey, g::keyButtonSplitter);
 
 }
-void TurboControl::onWndProc(WPARAM wParam, UINT msg) 
+bool TurboControl::onWndProc(WPARAM wParam, UINT msg)
 {
 	if (activationKey != 0 && wParam == activationKey)
 		if (g::pInfo->isDriver)
@@ -41,15 +38,15 @@ void TurboControl::onWndProc(WPARAM wParam, UINT msg)
 				break;
 			}
 			}
-
+	return true;
 }
-void TurboControl::save(nlohmann::json& data) 
+void TurboControl::save(nlohmann::json& data)
 {
 	data[m_sHackName] = m_bEnabled;
 	data["ActivationKey"] = activationKey;
 
 }
-void TurboControl::read(nlohmann::json& data) 
+void TurboControl::read(nlohmann::json& data)
 {
 	m_bEnabled = data[m_sHackName].get<bool>();
 	activationKey = data["ActivationKey"].get<int>();

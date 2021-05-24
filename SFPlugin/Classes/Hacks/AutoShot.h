@@ -1,15 +1,15 @@
 #pragma once
 #include "Hack.h"
 
-class AutoShot : public IHack
+HACK_CLASS(AutoShot)
 {
 public:
-	AutoShot(const char* name);
+	AutoShot(const char*);
 private:
 	bool autoShot = false;
 	int activationKey = 0;
 	void onDrawGUI() override;
-	void onWndProc(WPARAM wParam, UINT msg  ) override;
+	bool onWndProc(WPARAM wParam, UINT msg  ) override;
 	void everyTickAction( ) override;
 	void save(nlohmann::json& data) override;
 	void read(nlohmann::json& data) override;

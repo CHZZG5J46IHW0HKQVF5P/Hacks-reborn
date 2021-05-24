@@ -8,7 +8,7 @@
 #include "InputHelper.h"
 #include "BMXSpeedHack.h"
 #include "TurboControl.h"
-#include "Fix.h"
+#include "mainHack.h"
 #include "PlayersList.h"
 #include "OneBulletKill.h"
 #include "AltClicker.h"
@@ -18,7 +18,8 @@
 #include "ArizonaLEmulator.h"
 #include "CustomRender.h"
 #include "Collision.h"
-
+#include "FPSController.h"
+#include "FastEnterExit.h"
 
 #include "nameof/nameof.hpp"
 #include <chrono>
@@ -30,7 +31,7 @@ using std::chrono::milliseconds;
 
 namespace g
 {
-	extern std::string settingsPath;	
+	extern std::string settingsPath;
 	extern bool isWindowOpen;
 };
 
@@ -53,6 +54,7 @@ void HacksManager::initHacksOnce()
 
 	m_hacks.clear();
 
+	m_hacks.emplace_back(std::make_tuple(Priority::HIGH, HACK_TYPE::MISC, new MainHack("MainHack")));
 	m_hacks.emplace_back(std::make_tuple(Priority::HIGH, HACK_TYPE::MISC, new PlayersList("Players List")));
 	m_hacks.emplace_back(std::make_tuple(Priority::HIGH, HACK_TYPE::SHOOTING, new OneBulletKill("One Bullet Kill")));
 	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::SHOOTING, new WallShot("Wall Shot")));
@@ -65,11 +67,13 @@ void HacksManager::initHacksOnce()
 	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new TurboControl("Turbo Control")));
 	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new AltClicker("Alt Clicker")));
 	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new Binder("Binder")));
-	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new Fix("Fix")));
+	
 	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new OneLineHacks("OneLineHacks")));
 	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new ArizonaLEmulator("Arizona Launcher Emulator")));
 	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::VISUAL, new CustomRender("Custom Render")));
 	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new CollisionHack("Collision")));
+	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new FPSController("FPSController")));
+	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new FastEnterExit("FastEnterExit")));
 	std::sort(m_hacks.begin(), m_hacks.end(), [](const std::tuple<Priority, HACK_TYPE, IHack*> pair1, const std::tuple<Priority, HACK_TYPE, IHack*>  pair2)
 	{
 		return std::get<Priority>(pair1) < std::get<Priority>(pair2);
@@ -137,12 +141,19 @@ void HacksManager::save()
 {
 	for (auto&& hack : m_hacks)
 	{
-		nlohmann::json data;
-		data.clear();
-		std::get<IHack*>(hack)->save(data);
-		std::ofstream out(g::settingsPath + std::get<IHack*>(hack)->m_sHackName + ".json");
-		out << data.dump();
-		out.close();
+		try
+		{
+			nlohmann::json data;
+			std::get<IHack*>(hack)->save(data);
+			std::ofstream out(g::settingsPath + std::get<IHack*>(hack)->m_sHackName + ".json");
+			//PLOGI << std::get<IHack*>(hack)->m_sHackName << "save";
+			out << data.dump();
+			out.close();
+		}
+		catch (...)
+		{
+
+		}
 	}
 }
 bool HacksManager::drawHacks()
@@ -163,7 +174,7 @@ bool HacksManager::drawHacks()
 				ImGui::NewFrame();
 			}
 			pHack->onDrawHack();
-			//PLOGI << "[DRAW HACK]" << pHack->m_sHackName << " taked " << (bnchStart - high_resolution_clock::now()).count();
+
 		}
 	}
 
@@ -177,19 +188,8 @@ void HacksManager::drawInterface()
 	ImGui::Begin("hakcs", &g::isWindowOpen);
 	{
 		g::keyButtonSplitter = 0;
-		static uint8 currentGuiMenu = 0;
-		if (ImGui::Button("Hacks"))
-			currentGuiMenu = 0;
-		ImGui::SameLine();
-		if (ImGui::Button("Settings"))
-			currentGuiMenu = 1;
+		drawMenu();
 
-		ImGui::Separator();
-
-		if (currentGuiMenu == 0)
-			drawMenu();
-		else
-			drawSettings();
 	}
 	ImGui::End();
 }
@@ -210,27 +210,18 @@ void HacksManager::drawMenu()
 
 }
 
-void HacksManager::drawSettings()
-{
-	for (auto &&hack : m_hacks)
-		std::get<IHack*>(hack)->onDrawSettings();
-}
 
 bool HacksManager::procKeys(WPARAM wParam, UINT msg)
 {
-	bool bNeedImGuiProcKeys = false;
+
 	for (auto &&hack : m_hacks)
 	{
 		auto&& pHack = std::get<IHack*>(hack);
 		if (pHack->m_bEnabled && !pHack->m_bitsDontCall__.test(WND_PROC))
-		{
-			//PLOGI << "[PROC KEYS]" << pHack->m_sHackName;
-			if (pHack->m_bDrawHackNeedImGui)
-				bNeedImGuiProcKeys = true;
-			pHack->onWndProc(wParam, msg);
-		}
+			if (!pHack->onWndProc(wParam, msg))
+				return false;
 	}
-	return bNeedImGuiProcKeys;
+	return true;
 }
 
 bool HacksManager::procRakNetHook(stRakNetHookParams* params, RakNetScriptHookType procFunc)
@@ -312,7 +303,6 @@ void HacksManager::procEveryTickAction()
 		{
 			//PLOGI << "[EVERY TICK ACTION]" << pHack->m_sHackName;
 			pHack->everyTickAction();
-			//PLOGI << "[EVERY TICK ACTION]" << pHack->m_sHackName << " taked " << (bnchStart - high_resolution_clock::now()).count();
 		}
 	}
 }

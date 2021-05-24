@@ -31,10 +31,7 @@ void EnableWallShot(bool bEnable)
 	}
 }
 
-WallShot::WallShot(const char* m_sHackName)
-{
-	this->m_sHackName = m_sHackName;
-}
+DEFAULT_HACK_CONSTRUCTOR(WallShot)
 
 void WallShot::switchHack()
 {

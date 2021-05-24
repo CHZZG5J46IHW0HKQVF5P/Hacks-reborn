@@ -12,23 +12,20 @@ DamageInfo::DamageInfo(UINT16 wPlayerID,
 	this->wPlayerID = wPlayerID;
 }
 
-OneBulletKill::OneBulletKill(const char* name)
-{
-	m_sHackName = name;
-}
+DEFAULT_HACK_CONSTRUCTOR(OneBulletKill)
 
 void OneBulletKill::save(nlohmann::json& data)
 {
-	data[m_sHackName] = m_bEnabled;
-	data["delay"] = iDelay;
+	SERIALIZE_FIELD_JSON(m_bEnabled);
+	SERIALIZE_FIELD_JSON(iDelay);
 }
 
 void OneBulletKill::read(nlohmann::json& data)
 {
-	m_bEnabled = data[m_sHackName].get<bool>();
-	iDelay = data["delay"].get<int>();
-	if (iDelay <= 70 || iDelay >= 1000)
-		iDelay = 100;
+	DESERIALIZE_FIELD_JSON(m_bEnabled);
+	DESERIALIZE_FIELD_JSON(iDelay);
+
+	ASSIGN_VAR_VALUE_IF_NOT_IN_BOUNDS(iDelay, 70, 1000, 100);
 }
 
 bool OneBulletKill::onRPCOutcoming(stRakNetHookParams* params)
@@ -83,13 +80,9 @@ void OneBulletKill::everyTickAction( )
 void OneBulletKill::onDrawGUI()
 {
 	ImGui::Checkbox("One Bullet Kill", &m_bEnabled);
-}
-
-void OneBulletKill::onDrawSettings()
-{
-	if (ImGui::BeginMenu("One Bullet Kill"))
+	if (ImGui::BeginPopupContextItem())
 	{
-		ImGui::SliderInt("Delay Between Sending Damage",&iDelay,70,1000);
-		ImGui::EndMenu();
+		ImGui::SliderInt("Delay Between Sending Damage", &iDelay, 70, 1000);
+		ImGui::EndPopup();
 	}
 }

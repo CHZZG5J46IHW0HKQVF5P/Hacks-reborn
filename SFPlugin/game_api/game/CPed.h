@@ -258,6 +258,8 @@ public:
     virtual void            AddWeaponAudioEvent     ( EPedWeaponAudioEventType audioEventType ) = 0;
 
     virtual int             GetCustomMoveAnim       ( void ) = 0;
+
+	virtual void				GetGravity(CVector* pvecGravity) = 0;
 };
 
 #endif

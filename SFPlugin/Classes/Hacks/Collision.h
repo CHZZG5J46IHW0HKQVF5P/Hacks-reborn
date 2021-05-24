@@ -1,6 +1,6 @@
 #include "Hack.h"
 
-class CollisionHack : public IHack
+HACK_CLASS(CollisionHack)
 {
 public:
 	CollisionHack(const char*);

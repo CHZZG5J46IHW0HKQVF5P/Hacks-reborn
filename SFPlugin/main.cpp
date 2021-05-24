@@ -1,19 +1,20 @@
 #include "main.h"
 SAMPFUNCS *SF = new SAMPFUNCS();
 
-#include "GlobalFuncs.h"
 
 void initcrTickLocalPlayerInfo()
 {
+
 	bool isInCar = Players::isLocalPlayerInCar();
 	eVehicleType vehType = eVehicleType::NONE;
-	if (isInCar) vehType = Vehicles::getVehicleType(Vehicles::getVehicleCVehicle(Vehicles::getVehicleInfo(VEHICLE_SELF)));
+	if (isInCar) vehType = Vehicles::getVehicleType(Vehicles::getVehicleCVehicle(vehicleInfoGet_(-1, 0)));
 
 	g::pInfo->iCurrentVehicleID = Players::getLocalPlayerCarID();
 	g::pInfo->isDriver = Players::isLocalPlayerDriver();
 	g::pInfo->isInCar = isInCar;
 	g::pInfo->isExist = Players::isLocalPlayerExist();
 	g::pInfo->vehType = vehType;
+
 	g::pInfo->nearestPlayers = Players::getNearestPlayers();
 	g::pInfo->nearestVehicles = Vehicles::getNearestVehicles();
 }
@@ -26,6 +27,7 @@ bool CALLBACK Present(CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDest
 		if (SUCCEEDED(SF->getRender()->BeginRender()))
 		{
 			initcrTickLocalPlayerInfo();
+
 			bool bImGuiNewFrameWasCalled = HacksManager::getInstance()->drawHacks();
 
 			if (g::isWindowOpen)
@@ -71,16 +73,20 @@ bool CALLBACK incRPCHook(stRakNetHookParams* params)
 
 bool CALLBACK outRPCHook(stRakNetHookParams* params)
 {
+
 	return HacksManager::getInstance()->procRakNetHook(params, RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_RPC);
 }
 
 bool CALLBACK incPacketHook(stRakNetHookParams* params)
 {
+
 	return HacksManager::getInstance()->procRakNetHook(params, RakNetScriptHookType::RAKHOOK_TYPE_INCOMING_PACKET);
 }
 
 bool CALLBACK outPacketHook(stRakNetHookParams* params)
 {
+	if (!g::pInfo->isExist)
+		return true;
 	return HacksManager::getInstance()->procRakNetHook(params, RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_PACKET);
 }
 
@@ -90,10 +96,9 @@ void CALLBACK mainloop()
 	if (!initialized)
 		if (GAME && GAME->GetSystemState() == eSystemState::GS_PLAYING_GAME && SF->getSAMP()->IsInitialized())
 		{
-			plog::init(plog::Severity::info, "E:\\!Logs\\hacksreborn.log", 100000, 1);
 			initialized = true;
 			// imgui
-			HacksManager hackManager();
+			//plog::init(plog::info, "E:\\!Logs\\hacksreborn.log");
 			ImGui::CreateContext();
 			ImGuiIO& io = ImGui::GetIO(); (void)io;
 			ImGui_ImplWin32_Init(GetActiveWindow());
@@ -101,7 +106,6 @@ void CALLBACK mainloop()
 			io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Arial.TTF", 16.0F, NULL, io.Fonts->GetGlyphRangesCyrillic());
 			// init path var
 			g::settingsPath = "C:\\HacksReborn\\Settings\\";//
-			//std::experimental::filesystem::current_path().string() + "\\SAMPFUNCS\\Hacks\\";
 			Lippets::Computer::createDirs(g::settingsPath);
 
 			SF->getSAMP()->registerChatCommand("hacks", [](std::string text)
@@ -122,28 +126,19 @@ void CALLBACK mainloop()
 			SF->getRakNet()->registerRakNetCallback(RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_RPC, outRPCHook);
 
 
-			hacksSettings::LineOfSightFlags.bCheckBuildings = true;
-			hacksSettings::LineOfSightFlags.bCheckObjects = true;
-			hacksSettings::LineOfSightFlags.bCheckPeds = false;
-			hacksSettings::LineOfSightFlags.bCheckVehicles = true;
-			hacksSettings::LineOfSightFlags.bCheckCarTires = true;
+			g::LineOfSightFlags.bCheckBuildings = true;
+			g::LineOfSightFlags.bCheckObjects = true;
+			g::LineOfSightFlags.bCheckPeds = false;
+			g::LineOfSightFlags.bCheckVehicles = true;
+			g::LineOfSightFlags.bCheckCarTires = true;
 			//*(byte*)(0x96916D) = 1;
-
 			HacksManager::getInstance()->initHacksOnce();
+			SampSnipps::setup();
 		}
 
 	if (!initialized)
 		return;
-	if (g::isWindowOpen)
-	{
 
-		SF->getSAMP()->getMisc()->ToggleCursor(2, 0);
-
-		if (SF->getSAMP()->getInput()->iInputEnabled)
-		{
-			SF->getSAMP()->getInput()->DisableInput();
-		}
-	}
 
 	initcrTickLocalPlayerInfo();
 	HacksManager::getInstance()->procEveryTickAction();
@@ -153,25 +148,8 @@ void CALLBACK mainloop()
 
 bool CALLBACK WndProcHandler(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	auto keyState = Stuff::getKeyStateByMsg(msg);
-	switch (wParam)
-	{
-	case 16:
-		//cm_(-1,Lippets::Strings::utf8_to_ansi((std::string("GOO") + (Lippets::Numbers::Random::rBool() ? "off" : "on")).c_str()).c_str());
-		g::isShiftPressed = (keyState == eKeyState::PRESSED ? true : false);
-		break;
-	case 17:
-		g::isCtrlPressed = (keyState == eKeyState::PRESSED ? true : false);
-		break;
-	case 18:
-		g::isAltPressed = (keyState == eKeyState::PRESSED ? true : false);
-		break;
-	}
-
-	//initcrTickLocalPlayerInfo();
-	if (HacksManager::getInstance()->procKeys(wParam, msg) || g::isWindowOpen)
-		ImGui_ImplWin32_WndProcHandler(hwd, msg, wParam, lParam);
-	return true;
+	ImGui_ImplWin32_WndProcHandler(hwd, msg, wParam, lParam);
+	return HacksManager::getInstance()->procKeys(wParam, msg);
 }
 
 

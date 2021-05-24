@@ -12,7 +12,7 @@ struct DamageInfo
 	DamageInfo(UINT16, float, UINT32, UINT32);
 };
 
-class OneBulletKill : public IHack
+HACK_CLASS(OneBulletKill)
 {
 public:
 	OneBulletKill(const char*);
@@ -23,7 +23,7 @@ private:
 	void everyTickAction() override;
 	bool onRPCOutcoming(stRakNetHookParams*) override;
 	void onDrawGUI() override;
-	void onDrawSettings() override;
+	
 	void save(nlohmann::json&) override;
 	void read(nlohmann::json&) override;
 };

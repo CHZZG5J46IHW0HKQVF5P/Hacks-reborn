@@ -1,7 +1,7 @@
 #include "Hack.h"
 
 
-class ArizonaLEmulator : public IHack
+HACK_CLASS(ArizonaLEmulator)
 {
 public:
 	ArizonaLEmulator(const char* name);

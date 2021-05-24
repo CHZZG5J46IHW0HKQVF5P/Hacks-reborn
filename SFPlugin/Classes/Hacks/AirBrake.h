@@ -3,7 +3,7 @@
 
 
 
-class AirBrake : public IHack
+HACK_CLASS(AirBrake)
 {
 public:
 	AirBrake(const char* name);
@@ -12,8 +12,8 @@ private:
 	int activationKey = 0;
 	float fAirBrakeForce = 0.f;
 	void onDrawGUI() override;
-	void onWndProc(WPARAM wParam, UINT msg  ) override;
-	void onDrawSettings() override;
+	bool onWndProc(WPARAM wParam, UINT msg  ) override;
+	
 	void save(nlohmann::json& data) override;
 	void read(nlohmann::json& data) override;
 

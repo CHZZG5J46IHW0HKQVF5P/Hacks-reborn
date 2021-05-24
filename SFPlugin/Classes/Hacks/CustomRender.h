@@ -88,7 +88,6 @@ public:
 
 	std::string m_sName;
 
-	~RenderClass();
 	RenderClass(const char*);
 
 	void read(nlohmann::json&);
@@ -113,7 +112,7 @@ public:
 
 
 
-class CustomRender : public IHack
+HACK_CLASS(CustomRender)
 {
 public:
 	CustomRender(const char*);
@@ -125,7 +124,6 @@ private:
 	std::vector<RenderClass> m_classes;
 	bool areAnyClassesEnabled();
 	void drawMenu();
-	void release() override;
 
 	void save(nlohmann::json&) override;
 	void read(nlohmann::json&) override;

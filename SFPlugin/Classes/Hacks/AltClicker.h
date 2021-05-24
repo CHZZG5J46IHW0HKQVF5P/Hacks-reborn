@@ -2,7 +2,7 @@
 #include "Hack.h"
 
 
-class AltClicker : public IHack
+HACK_CLASS(AltClicker)
 {
 public:
 	AltClicker(const char*);
@@ -12,8 +12,8 @@ private:
 	int activationKey;
 	void everyTickAction( ) override;
 	void onDrawGUI() override;
-	void onDrawSettings() override;
-	void onWndProc(WPARAM, UINT ) override;
+	
+	bool onWndProc(WPARAM, UINT ) override;
 	void save(nlohmann::json&) override;
 	void read(nlohmann::json&) override;
 

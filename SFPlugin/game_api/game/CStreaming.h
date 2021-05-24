@@ -15,6 +15,11 @@
 class CStreaming
 {
 public:
+	void RequestAnimations(int iAnimationLibraryBlock, DWORD dwFlags)
+	{
+		iAnimationLibraryBlock += 25575;
+		RequestModel(iAnimationLibraryBlock, dwFlags);
+	}
     virtual void            RequestModel                    ( DWORD dwModelID, DWORD dwFlags ) = 0;
     virtual void            LoadAllRequestedModels          ( BOOL bOnlyPriorityModels = 0, const char* szTag = NULL ) = 0;
     virtual BOOL            HasModelLoaded                  ( DWORD dwModelID ) = 0;

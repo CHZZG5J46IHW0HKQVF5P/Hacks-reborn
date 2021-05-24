@@ -22,9 +22,6 @@
     <Filter Include="Classes\Hacks">
       <UniqueIdentifier>{a3eccab4-dad4-416d-846a-e72ab510faea}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Classes\CMClassesCPPs">
-      <UniqueIdentifier>{2ed3f94d-5376-4da5-beef-0b792e1a9535}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Classes\Hacks\Visuals">
       <UniqueIdentifier>{9af29795-7a60-43ec-8dc2-1e80c9b95706}</UniqueIdentifier>
     </Filter>
@@ -34,8 +31,8 @@
     <Filter Include="Classes\Hacks\Shooting">
       <UniqueIdentifier>{22b953bb-42e8-47b9-bdc6-0796ef2cc630}</UniqueIdentifier>
     </Filter>
-    <Filter Include="memsafe">
-      <UniqueIdentifier>{fa670eb5-5c7e-43ff-8808-c58b82f36fdc}</UniqueIdentifier>
+    <Filter Include="Cpps">
+      <UniqueIdentifier>{4bf7e31e-64d7-46b4-ab25-d019ed7ae4ce}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -547,9 +544,6 @@
     <ClInclude Include="Classes\Hacks\BMXSpeedHack.h">
       <Filter>Classes\Hacks\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\Hacks\Fix.h">
-      <Filter>Classes\Hacks\Misc</Filter>
-    </ClInclude>
     <ClInclude Include="Classes\Hacks\InputHelper.h">
       <Filter>Classes\Hacks\Misc</Filter>
     </ClInclude>
@@ -562,24 +556,21 @@
     <ClInclude Include="Classes\Hacks\CustomRender.h">
       <Filter>Classes\Hacks\Visuals</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\Hacks\NewChat.h">
-      <Filter>Classes\Hacks\Visuals</Filter>
-    </ClInclude>
     <ClInclude Include="Classes\Hacks\Collision.h">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\FPSController.h">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\FastEnterExit.h">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\mainHack.h">
       <Filter>Classes\Hacks\Misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="C:\Lippets\CMClasses\CMFont.cpp">
-      <Filter>Classes\CMClassesCPPs</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Lippets\CMClasses\CMReplacer.cpp">
-      <Filter>Classes\CMClassesCPPs</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Lippets\CMClasses\CMTimer.cpp">
-      <Filter>Classes\CMClassesCPPs</Filter>
-    </ClCompile>
     <ClCompile Include="Classes\Hacks\ArizonaLEmulator.cpp">
       <Filter>Classes\Hacks\Misc</Filter>
     </ClCompile>
@@ -601,26 +592,6 @@
     <ClCompile Include="Classes\Hacks\WallHack_NewNameTags.cpp">
       <Filter>Classes\Hacks\Visuals</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\GlobalFuncs.cpp" />
-    <ClCompile Include="Classes\HacksManager.cpp" />
-    <ClCompile Include="C:\Lippets\SampSnipps\SampSnipps.cpp">
-      <Filter>Classes\CMClassesCPPs</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Lippets\FIles\Computer.cpp">
-      <Filter>Classes\CMClassesCPPs</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Lippets\FIles\Conditions.cpp">
-      <Filter>Classes\CMClassesCPPs</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Lippets\FIles\KeyboardMouse.cpp">
-      <Filter>Classes\CMClassesCPPs</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Lippets\FIles\Numbers.cpp">
-      <Filter>Classes\CMClassesCPPs</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Lippets\FIles\Strings.cpp">
-      <Filter>Classes\CMClassesCPPs</Filter>
-    </ClCompile>
     <ClCompile Include="Classes\Hacks\1lineHacks.cpp">
       <Filter>Classes\Hacks\Misc</Filter>
     </ClCompile>
@@ -633,9 +604,6 @@
     <ClCompile Include="Classes\Hacks\BMXSpeedHack.cpp">
       <Filter>Classes\Hacks\Misc</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\Hacks\Fix.cpp">
-      <Filter>Classes\Hacks\Misc</Filter>
-    </ClCompile>
     <ClCompile Include="Classes\Hacks\InputHelper.cpp">
       <Filter>Classes\Hacks\Misc</Filter>
     </ClCompile>
@@ -646,9 +614,6 @@
       <Filter>Classes\Hacks\Misc</Filter>
     </ClCompile>
     <ClCompile Include="Classes\Hacks\CustomRender.cpp">
-      <Filter>Classes\Hacks\Visuals</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\Hacks\NewChat.cpp">
       <Filter>Classes\Hacks\Visuals</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\imgui.cpp">
@@ -675,8 +640,57 @@
     <ClCompile Include="Classes\Hacks\Collision.cpp">
       <Filter>Classes\Hacks\Misc</Filter>
     </ClCompile>
-    <ClCompile Include="memsafe\memsafe.cpp">
-      <Filter>memsafe</Filter>
+    <ClCompile Include="C:\Lippets\SampSnipps\GTAfuncs.cpp">
+      <Filter>Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\GlobalFuncs.cpp">
+      <Filter>Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Lippets\CMClasses\CMFont.cpp">
+      <Filter>Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Lippets\FIles\Strings.cpp">
+      <Filter>Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Lippets\SampSnipps\SampSnipps.cpp">
+      <Filter>Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Lippets\FIles\KeyboardMouse.cpp">
+      <Filter>Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Lippets\FIles\Numbers.cpp">
+      <Filter>Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Lippets\CMClasses\CMReplacer.cpp">
+      <Filter>Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Lippets\CMClasses\CMTimer.cpp">
+      <Filter>Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Lippets\FIles\Computer.cpp">
+      <Filter>Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Lippets\FIles\Conditions.cpp">
+      <Filter>Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\FPSController.cpp">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Lippets\SampSnipps\math_stuff.cpp">
+      <Filter>Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Lippets\SampSnipps\cheat_funcs.cpp">
+      <Filter>Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Lippets\SampSnipps\samp.cpp">
+      <Filter>Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\FastEnterExit.cpp">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\HacksManager.cpp" />
+    <ClCompile Include="Classes\Hacks\mainHack.cpp">
+      <Filter>Classes\Hacks\Misc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

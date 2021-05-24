@@ -188,7 +188,7 @@ void CustomRender::drawMenu()
 
 void CustomRender::onDrawGUI()
 {
-	ImGui::Checkbox(m_sHackName.c_str(), &m_bEnabled);
+	ImGui::Checkbox("CustomRender", &m_bEnabled);
 	if (ImGui::IsItemClicked())
 		m_bIsMenuOpened = true;
 	ImGui::SameLine();
@@ -329,7 +329,7 @@ void CustomRender::onDrawHack()
 
 void CustomRender::read(nlohmann::json& data)
 {
-	m_bEnabled = data[m_sHackName].get<bool>();
+	m_bEnabled = data["CustomRender"].get<bool>();
 	size_t i = 0;
 	while (true)
 	{
@@ -342,7 +342,7 @@ void CustomRender::read(nlohmann::json& data)
 }
 void CustomRender::save(nlohmann::json& data)
 {
-	data[m_sHackName] = m_bEnabled;
+	data["CustomRender"] = m_bEnabled;
 	for (size_t i = 0; i < m_classes.size(); i++)
 		m_classes[i].save(data["class"][std::to_string(i).c_str()]);
 
@@ -452,26 +452,7 @@ void RenderClass::render3DTexts(Render3DTextData* p3DTextData)
 		if (pRender.m_bIsEnabled)
 			pRender.render(p3DTextData);
 }
-RenderClass::~RenderClass()
-{
-	/*
-		for (auto&& pRender : m_objectsRenders)
-			delete pRender;
-		for (auto&& pRender : m_pickupRenders)
-			delete pRender;
-		for (auto&& pRender : m_text3dRenders)
-			delete pRender;
-	*/
-}
-void CustomRender::release()
-{
-	/*
-		for (auto&& classR : m_classes)
-			classR.~RenderClass();
-		for (auto&& nodeRener : m_nodeRendersPtrs)
-			delete nodeRener;
-	*/
-}
+
 CustomRender::CustomRender(const char* szName)
 {
 	this->m_sHackName = szName;

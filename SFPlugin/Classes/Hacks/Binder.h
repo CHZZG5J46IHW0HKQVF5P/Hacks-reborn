@@ -28,7 +28,7 @@ public:
 
 
 
-class Binder : public IHack
+HACK_CLASS(Binder)
 {
 public:
 	Binder(const char*name);

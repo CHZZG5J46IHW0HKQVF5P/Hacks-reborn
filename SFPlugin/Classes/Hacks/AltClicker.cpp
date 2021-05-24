@@ -1,13 +1,15 @@
 #include "AltClicker.h"
 
-AltClicker::AltClicker(const char* name)
-{
-	m_sHackName = name;
-}
+DEFAULT_HACK_CONSTRUCTOR(AltClicker)
 
 void AltClicker::onDrawGUI()
 {
 	ImGui::Checkbox(m_sHackName.c_str(), &m_bEnabled);
+	if (ImGui::BeginPopupContextVoid())
+	{
+		ImGui::SliderInt("Click Delay", &iDelay, 1, 300);
+		ImGui::EndPopup();
+	}
 	ImGui::SameLine();
 	Lippets::ImGuiSnippets::KeyButton(activationKey, g::keyButtonSplitter);
 }
@@ -17,8 +19,7 @@ void AltClicker::read(nlohmann::json& data)
 	m_bEnabled = data[m_sHackName].get<bool>();
 	iDelay = data["iDelay"].get<int>();
 	activationKey = data["activationKey"].get<int>();
-	if (iDelay == 0)
-		iDelay = 25;
+	ASSIGN_VAR_VALUE_IF_EQUALS_ZERO(iDelay,25);
 }
 
 void AltClicker::save(nlohmann::json& data)
@@ -28,26 +29,20 @@ void AltClicker::save(nlohmann::json& data)
 	data["iDelay"] = iDelay;
 }
 
-void AltClicker::onDrawSettings()
-{
-	if (ImGui::BeginMenu("Alt Clicker"))
-	{
-		ImGui::SliderInt("Click Delay", &iDelay, 1, 300);
-		ImGui::EndMenu();
-	}
-}
 
 
-void AltClicker::onWndProc(WPARAM wParam, UINT msg)
+
+bool AltClicker::onWndProc(WPARAM wParam, UINT msg)
 {
 	if (msg != WM_KEYDOWN && msg != WM_LBUTTONDOWN && msg != WM_SYSKEYDOWN)
-		return;
+		return true;
 
 	if (activationKey != 0 && wParam == activationKey)
 	{
 		bWorking = !bWorking;
 		notify("ALT Clicker", bWorking);
 	}
+	return true;
 }
 
 void AltClicker::everyTickAction( )

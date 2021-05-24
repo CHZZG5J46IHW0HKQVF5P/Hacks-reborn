@@ -2,7 +2,7 @@
 #include "Hack.h"
 
 
-class InputHelper : public IHack
+HACK_CLASS(InputHelper)
 {
 public:
 	InputHelper(const char* name);
@@ -13,7 +13,7 @@ private:
 	void init() override;
 	void onDrawGUI() override;
 	void onDrawHack( ) override;
-	void onDrawSettings() override;
+	
 	void save(nlohmann::json& data) override;
 	void read(nlohmann::json& data) override;
 

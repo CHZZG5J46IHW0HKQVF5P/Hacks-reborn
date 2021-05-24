@@ -1,6 +1,8 @@
 #include "AirBrake.h"
 
 
+DEFAULT_HACK_CONSTRUCTOR(AirBrake)
+
 void AirBrakeForward(float force, bool isExist, bool isDriver)
 {
 	if (isExist)
@@ -58,21 +60,23 @@ void TPupdown(float force, bool isExist, bool isDriver, bool bUp)
 	}
 }
 
-AirBrake::AirBrake(const char* name)
-{
-	m_sHackName = name;
-}
+
 
 void AirBrake::onDrawGUI()
 {
 	ImGui::Checkbox(m_sHackName.c_str(), &m_bEnabled);
+	if (ImGui::BeginPopupContextItem())
+	{
+		ImGui::SliderFloat("Force", &fAirBrakeForce, 0.0f, 3.0f);
+		ImGui::EndPopup();
+	}
 	ImGui::SameLine();
 	Lippets::ImGuiSnippets::KeyButton(activationKey, g::keyButtonSplitter);
 }
-void AirBrake::onWndProc(WPARAM wParam, UINT msg)
+bool AirBrake::onWndProc(WPARAM wParam, UINT msg)
 {
 	if (msg != WM_KEYDOWN && msg != WM_LBUTTONDOWN && msg != WM_SYSKEYDOWN)
-		return;
+		return true;
 	if (activationKey != 0 && wParam == activationKey)
 	{
 
@@ -90,18 +94,10 @@ void AirBrake::onWndProc(WPARAM wParam, UINT msg)
 			break;
 		}
 	}
-
+	return true;
 
 }
-void AirBrake::onDrawSettings()
-{
-	if (ImGui::BeginMenu("Air Brake"))
-	{
-		ImGui::SliderFloat("Force", &fAirBrakeForce, 0.0f, 3.0f);
 
-		ImGui::EndMenu();
-	}
-}
 void AirBrake::save(nlohmann::json& data)
 {
 	data[m_sHackName] = m_bEnabled;
@@ -113,6 +109,6 @@ void AirBrake::read(nlohmann::json& data)
 	m_bEnabled = data[m_sHackName].get<bool>();
 	activationKey = data["activationKey"].get<int>();
 	fAirBrakeForce = data["fAirBrakeForce"].get<float>();
-	if (fAirBrakeForce == 0.f)
-		fAirBrakeForce = 1.f;
+
+	ASSIGN_VAR_VALUE_IF_EQUALS_ZEROF(fAirBrakeForce, 3.f);
 }

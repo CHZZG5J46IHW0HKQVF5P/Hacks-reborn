@@ -5,10 +5,8 @@ FORCEINLINE void DrawLine(D3DCOLOR playerColor, CVector2D* start, CVector2D* end
 	SF->getRender()->DrawPolygon(start->fX, start->fY, 3, 3, 0.f, 10, playerColor);
 	SF->getRender()->DrawLine(start->fX, start->fY, end->fX, end->fY, 1, playerColor);
 }
-WallHack::WallHack(const char* name)
-{
-	m_sHackName = name;
-}
+DEFAULT_HACK_CONSTRUCTOR(WallHack)
+
 ChatBubble::ChatBubble(UINT16 PlayerID,
 	UINT32 color,
 	UINT32 expiretime,
@@ -63,12 +61,9 @@ void WallHack::read(nlohmann::json &data)
 	fNameTagYOffset = data["NameTags"]["fNameTagYOffset"].get<float>();
 	font.read(data);
 
-	if (fNameTagYOffset == 0.f)
-		fNameTagYOffset = 0.3059999942779541f;
-	if (iBoxHight == 0)
-		iBoxHight = 7;
-	if (iYBoxOffset == 0)
-		iYBoxOffset = 4;
+	ASSIGN_VAR_VALUE_IF_EQUALS_ZEROF(fNameTagYOffset, 0.3059999942779541f);
+	ASSIGN_VAR_VALUE_IF_EQUALS_ZERO(iBoxHight, 7);
+	ASSIGN_VAR_VALUE_IF_EQUALS_ZERO(iYBoxOffset, 4);
 }
 void WallHack::everyTickAction()
 {
@@ -84,8 +79,40 @@ void WallHack::everyTickAction()
 void WallHack::onDrawGUI()
 {
 
-	if (ImGui::Checkbox(m_sHackName.c_str(), &wallHack))
+	if (ImGui::Checkbox("WallHack", &wallHack))
 		this->switchHack();
+	if (ImGui::BeginPopupContextItem())
+	{
+
+		if (ImGui::BeginMenu("Font"))
+		{
+			if (ImGui::InputText("Font###tagsFont", font.FontName, 64))
+			{
+				font.Release();
+				font.Init();
+			}
+			if (ImGui::SliderInt("Font Size###tagsSize", &font.FontSize, 0, 24))
+			{
+				font.Release();
+				font.Init();
+			}
+			ImGui::EndMenu();
+		}
+
+		ImGui::SliderFloat("Y Offset", &fNameTagYOffset, 0.0f, 1.0f);
+		ImGui::SliderInt("Box Hight", &iBoxHight, 0, 15);
+		ImGui::SliderFloat("Y ChatBuble Offset", &fYChatBubleOffset, 0.f, 50.f);
+		ImGui::SliderInt("Y Box Offset", &iYBoxOffset, 0, 10);
+		if (ImGui::BeginMenu("Wall Hack"))
+		{
+			ImGui::Checkbox("Draw Bones", &bDrawBones);
+			ImGui::Checkbox("Show Gun", &bShowGun);
+			ImGui::Checkbox("Show Vehicle", &bShowVeh);
+			ImGui::Checkbox("Show Score", &bShowScore);
+			ImGui::EndMenu();
+		}
+		ImGui::EndPopup();
+	}
 	ImGui::SameLine();
 	Lippets::ImGuiSnippets::KeyButton(activationKey, g::keyButtonSplitter);
 	ImGui::Checkbox("Dont Draw NameTags", &bNoNameTags);
@@ -103,10 +130,10 @@ void WallHack::switchHack()
 		SF->getSAMP()->getInfo()->pSettings->fNameTagsDistance = fOrigDrawDistance;
 	}
 }
-void WallHack::onWndProc(WPARAM wParam, UINT msg)
+bool WallHack::onWndProc(WPARAM wParam, UINT msg)
 {
 	if (msg != WM_KEYDOWN && msg != WM_LBUTTONDOWN && msg != WM_SYSKEYDOWN)
-		return;
+		return true;
 
 	if (activationKey != 0 && wParam == activationKey)
 	{
@@ -114,6 +141,7 @@ void WallHack::onWndProc(WPARAM wParam, UINT msg)
 		switchHack();
 		notify("Wall Hack", drawWallHack);
 	}
+	return true;
 }
 bool WallHack::onRPCIncoming(stRakNetHookParams* params)
 {
@@ -130,9 +158,9 @@ bool WallHack::onRPCIncoming(stRakNetHookParams* params)
 	params->bitStream->Read(text, textLength);
 	text[textLength] = '\0';
 	params->bitStream->ResetReadPointer();
-	for (size_t i = 0; i < chatBubbles.size(); i++)
-		if (chatBubbles[i].PlayerID == playerid)
-			chatBubbles.erase(chatBubbles.begin() + i);
+	for (auto&& iterator = chatBubbles.begin(); iterator != chatBubbles.end(); iterator++)
+		if (iterator->PlayerID == playerid)
+			chatBubbles.erase(iterator);
 	chatBubbles.emplace_back(ChatBubble(playerid, color, GetTickCount() + expiretime, drawDistance, text));
 
 	delete[] text;
@@ -146,7 +174,7 @@ void WallHack::onDrawHack()
 	GFuncs::resortPlayersByDistance(&g::pInfo->nearestPlayers, true);
 	for (auto&& player : g::pInfo->nearestPlayers)//(int i = 0; i < 1000; i++)
 	{
-		int i = player.first;
+		int i = player.id;
 		CVector PedPos;
 		GAME->GetPools()->GetPed((DWORD*)SF->getSAMP()->getPlayers()->pRemotePlayer[i]->pPlayerData->pSAMP_Actor->pGTA_Ped)->GetTransformedBonePosition(eBone::BONE_HEAD, &PedPos);
 
@@ -166,7 +194,7 @@ void WallHack::onDrawHack()
 			continue;
 
 		if (!drawWallHack)
-			if (!GAME->GetWorld()->IsLineOfSightClear(&matrix.vPos, &PedPos, hacksSettings::LineOfSightFlags))
+			if (!GAME->GetWorld()->IsLineOfSightClear(&matrix.vPos, &PedPos, g::LineOfSightFlags))
 				continue;
 
 		uint8 Cr, Cg, Cb, Ca;
@@ -219,7 +247,7 @@ void WallHack::onDrawHack()
 			}
 			if (bShowVeh)
 			{
-				if (Players::isPlayerInCar(i))
+				if (Players::isPlayerInCar(player.pActorInfo))
 					strcat_s(whbuffer, Stuff::VehiclesNames[SF->getSAMP()->getPlayers()->pRemotePlayer[i]->pPlayerData->pSAMP_Vehicle->pGTA_Vehicle->base.model_alt_id - 400]);
 				else
 					strcat_s(whbuffer, "Onfoot");
@@ -302,71 +330,33 @@ void WallHack::onDrawHack()
 		}
 
 	}
-	for (size_t i = 0; i < chatBubbles.size(); i++)
+	for (auto&& iterator = chatBubbles.begin(); iterator != chatBubbles.end(); iterator++)
 	{
-		if (chatBubbles[i].timer < GetTickCount())
-		{
-			chatBubbles.erase(chatBubbles.begin() + i);
-			i--;
-		}
+		if (iterator->timer < GetTickCount())
+			chatBubbles.erase(iterator);
 		else
 		{
-			if (!Players::isPlayerExist(chatBubbles[i].PlayerID))
+			if (!Players::isPlayerExist(iterator->PlayerID))
 				continue;
 			CVector PedPos;
-			GAME->GetPools()->GetPed((DWORD*)SF->getSAMP()->getPlayers()->pRemotePlayer[chatBubbles[i].PlayerID]->pPlayerData->pSAMP_Actor->pGTA_Ped)->GetTransformedBonePosition(eBone::BONE_HEAD, &PedPos);
+			GAME->GetPools()->GetPed((DWORD*)SF->getSAMP()->getPlayers()->pRemotePlayer[iterator->PlayerID]->pPlayerData->pSAMP_Actor->pGTA_Ped)->GetTransformedBonePosition(eBone::BONE_HEAD, &PedPos);
 			CMatrix matrix;
 			GAME->GetCamera()->GetMatrix(&matrix);
 			float fDistance = Lippets::Numbers::getDistanceBetween(PedPos.fX, PedPos.fY, PedPos.fZ, matrix.vPos.fX, matrix.vPos.fY, matrix.vPos.fZ);
-			if (fDistance > chatBubbles[i].drawDistance)
+			if (fDistance > iterator->drawDistance)
 				continue;
 			PedPos.fZ += fNameTagYOffset + (fDistance * 0.05f);
 			CVector onScreenPos;
 			D3D::CalcScreenCoords(&PedPos, &onScreenPos);
 			if (onScreenPos.fZ < 1.f)
 				continue;
-			if (!GAME->GetWorld()->IsLineOfSightClear(&matrix.vPos, &PedPos, hacksSettings::LineOfSightFlags))
+			if (!GAME->GetWorld()->IsLineOfSightClear(&matrix.vPos, &PedPos, g::LineOfSightFlags))
 				continue;
 			uint8 Cr, Cg, Cb, Ca;
-			SF->getRender()->ARGB_To_A_R_G_B(chatBubbles[i].color, Cr, Cg, Cb, Ca);
+			SF->getRender()->ARGB_To_A_R_G_B(iterator->color, Cr, Cg, Cb, Ca);
 			D3DCOLOR playerColor = D3DCOLOR_ARGB(255, Cr, Cg, Cb);
-			font.f->Print(chatBubbles[i].message, playerColor, (onScreenPos.fX - font.f->DrawLength(chatBubbles[i].message) / 2.0f), (onScreenPos.fY - font.f->DrawHeight()) - fYChatBubleOffset);
+			font.f->Print(iterator->message, playerColor, (onScreenPos.fX - font.f->DrawLength(iterator->message) / 2.0f), (onScreenPos.fY - font.f->DrawHeight()) - fYChatBubleOffset);
 		}
 
 	}
-}
-void WallHack::onDrawSettings()
-{
-	if (ImGui::BeginMenu("New Name Tags"))
-	{
-		if (ImGui::BeginMenu("Font"))
-		{
-			if (ImGui::InputText("Font###tagsFont", font.FontName, 64))
-			{
-				font.Release();
-				font.Init();
-			}
-			if (ImGui::SliderInt("Font Size###tagsSize", &font.FontSize, 0, 24))
-			{
-				font.Release();
-				font.Init();
-			}
-			ImGui::EndMenu();
-		}
-
-		ImGui::SliderFloat("Y Offset", &fNameTagYOffset, 0.0f, 1.0f);
-		ImGui::SliderInt("Box Hight", &iBoxHight, 0, 15);
-		ImGui::SliderFloat("Y ChatBuble Offset", &fYChatBubleOffset, 0.f, 50.f);
-		ImGui::SliderInt("Y Box Offset", &iYBoxOffset, 0, 10);
-		if (ImGui::BeginMenu("Wall Hack"))
-		{
-			ImGui::Checkbox("Draw Bones", &bDrawBones);
-			ImGui::Checkbox("Show Gun", &bShowGun);
-			ImGui::Checkbox("Show Vehicle", &bShowVeh);
-			ImGui::Checkbox("Show Score", &bShowScore);
-			ImGui::EndMenu();
-		}
-		ImGui::EndMenu();
-	}
-
 }

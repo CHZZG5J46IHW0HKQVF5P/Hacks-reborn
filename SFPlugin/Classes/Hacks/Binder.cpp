@@ -37,9 +37,9 @@ Binder::Binder(const char* name)
 		{
 			if (vehicles.size() < 2)
 				return std::string("-1");
-			return std::to_string(vehicles[1].first);
+			return std::to_string(vehicles[1].id);
 		}
-		return std::to_string(vehicles[0].first);
+		return std::to_string(vehicles[0].id);
 	})
 		->addReplacement("nvehname", [&]()
 	{
@@ -49,9 +49,9 @@ Binder::Binder(const char* name)
 		{
 			if (vehicles.size() < 2)
 				return std::string("");
-			return Vehicles::getVehicleNameByModel(SF->getSAMP()->getVehicles()->pSAMP_Vehicle[vehicles[1].first]->pGTA_Vehicle->base.model_alt_id);
+			return Vehicles::getVehicleNameByModel(vehicles[1].pVehInfo->base.model_alt_id);
 		}
-		return Vehicles::getVehicleNameByModel(SF->getSAMP()->getVehicles()->pSAMP_Vehicle[vehicles[0].first]->pGTA_Vehicle->base.model_alt_id);
+		return Vehicles::getVehicleNameByModel(vehicles[0].pVehInfo->base.model_alt_id);
 	})
 		->addReplacement("tid", [&]()
 	{
@@ -73,15 +73,15 @@ Binder::Binder(const char* name)
 	{
 		auto players = Players::getNearestPlayers();
 		if (players.empty()) return std::string("-1");
-		return std::to_string(players[0].first);
+		return std::to_string(players[0].id);
 	})
 		->addReplacement("nplayername", [&]()
 	{
 		auto players = Players::getNearestPlayers();
 		if (players.empty()) return std::string("");
-		if (!SF->getSAMP()->getPlayers()->IsPlayerDefined(players[0].first))
+		if (!SF->getSAMP()->getPlayers()->IsPlayerDefined(players[0].id))
 			return std::string("");
-		return std::string(SF->getSAMP()->getPlayers()->GetPlayerName(players[0].first));
+		return std::string(SF->getSAMP()->getPlayers()->GetPlayerName(players[0].id));
 	});
 }
 
@@ -153,12 +153,12 @@ void Binder::save(nlohmann::json& data)
 	data["isCommandsEnabled"] = isCommandsEnabled;
 
 	nlohmann::json bindsJson;
-	for (int i = 0; i < binds.size(); i++)
+	for (size_t i = 0; i < binds.size(); i++)
 		binds[i].save(bindsJson[std::to_string(i)]);
 	data["BindsJson"] = bindsJson;
 
 	nlohmann::json commandsJson;
-	for (int i = 0; i < commands.size(); i++)
+	for (size_t i = 0; i < commands.size(); i++)
 		commands[i].save(commandsJson[std::to_string(i)]);
 	data["CommandsJson"] = commandsJson;
 }
@@ -213,7 +213,7 @@ void Binder::onDrawGUI()
 		Lippets::ImGuiSnippets::BorderedInputInt("Delay", &iBinderDelay, 10, 20000, 1, 1);
 		if (IG::Button("Create Bind"))
 			binds.push_back(Bind());
-		for (int i = 0; i < binds.size(); i++)
+		for (size_t i = 0; i < binds.size(); i++)
 		{
 			char buffer[128];
 			sprintf(buffer, "Bind: %s###bind%d", binds[i].activateCheat.c_str(), i);
@@ -243,7 +243,7 @@ void Binder::onDrawGUI()
 				sprintf(buffer, "Add Sub###Textaddbtn%d", i);
 				if (IG::Button(buffer))
 					binds[i].bindTexts.push_back("");
-				for (int j = 0; j < binds[i].bindTexts.size(); j++)
+				for (size_t j = 0; j < binds[i].bindTexts.size(); j++)
 				{
 					sprintf(buffer, "Text###Text%d%d", i, j);
 
@@ -264,7 +264,7 @@ void Binder::onDrawGUI()
 		Lippets::ImGuiSnippets::BorderedInputInt("Delay", &iCommandsDelay, 10, 20000, 1, 1);
 		if (IG::Button("Create command"))
 			commands.push_back(Command());
-		for (int i = 0; i < commands.size(); i++)
+		for (size_t i = 0; i < commands.size(); i++)
 		{
 			char buffer[64];
 			sprintf(buffer, "Cmd: %s###cmd%d", commands[i].shortCmd.c_str(), i);
@@ -286,7 +286,7 @@ void Binder::onDrawGUI()
 				sprintf(buffer, "Add Sub###Textaddbtn%d", i);
 				if (IG::Button(buffer))
 					commands[i].commandsTexts.push_back(std::make_pair("", false));
-				for (int j = 0; j < commands[i].commandsTexts.size(); j++)
+				for (size_t j = 0; j < commands[i].commandsTexts.size(); j++)
 				{
 					sprintf(buffer, "Text###Text%d%d", i, j);
 					IG::InputText(buffer, &commands[i].commandsTexts[j].first);
@@ -324,7 +324,7 @@ bool Binder::onRPCOutcoming(stRakNetHookParams* params)
 	if (cmdText.find(" ") != std::string::npos)
 		sLastCmdArgs = cmdText.substr(cmdText.find(" "));
 
-	for (int i = 0; i < commands.size(); i++)
+	for (size_t i = 0; i < commands.size(); i++)
 	{
 		if (commands[i].shortCmd == cmdText.substr(0, cmdText.find(" ")))
 		{
@@ -363,8 +363,8 @@ void Binder::everyTickAction()
 	{
 		static CMTimer bindTimer;
 		static int choosenBindID = -1;
-		static int choosenTextID = 0;
-		static int bindID = 0;
+		static size_t choosenTextID = 0;
+		static size_t bindID = 0;
 
 		if (SF->getSAMP()->getDialog()->pDialog != nullptr && SF->getSAMP()->getDialog()->iIsActive != 1 && !binds.empty())
 		{

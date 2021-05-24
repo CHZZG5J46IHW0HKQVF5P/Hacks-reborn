@@ -1,17 +1,17 @@
 #pragma once
 #include "Hack.h"
 
-class Aimbot : public IHack
+HACK_CLASS(Aimbot)
 {
 public:
 	Aimbot(const char*);
 private:
 	bool bCanAimToSameColored;
-	int getPlayerTarget( );
-	void aim(int);
+	actor_info* getPlayerTarget( );
+	void aim(actor_info*);
 	void everyTickAction( ) override;
 	void onDrawGUI() override;
-	void onDrawSettings() override;
+	
 	void save(nlohmann::json&) override;
 	void read(nlohmann::json&) override;
 };

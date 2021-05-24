@@ -51,7 +51,7 @@ public:
     virtual float       GetLighting                 ( void ) = 0;
     virtual void        SetLighting                 ( float fLighting ) = 0;
 
-/*  virtual VOID        SetMass(FLOAT fMass)=0;
+  /*virtual VOID        SetMass(FLOAT fMass)=0;
     virtual FLOAT       GetMass()=0;
     virtual VOID        SetTurnMass(FLOAT fTurnMass)=0;
     virtual FLOAT       GetTurnMass()=0;
@@ -73,7 +73,7 @@ public:
     virtual VOID        SetInfiniteMass(BOOL bInfiniteMass)=0;
     virtual BOOL        GetPositionFrozen()=0;
     virtual VOID        SetPositionFrozen(BOOL bPositionFrozen)=0;
-    virtual BYTE        GetLastMaterialToHaveBeenStandingOn()=0;*/
+    virtual BYTE        GetLastMaterialToHaveBeenStandingOn()=0;  */
 
 };
 

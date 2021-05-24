@@ -20,7 +20,7 @@ enum class FIGHT_STYLE
 };
 
 
-class OneLineHacks : public IHack
+HACK_CLASS(OneLineHacks)
 {
 public:
 	OneLineHacks(const char*);
@@ -51,7 +51,6 @@ private:
 	bool bFastHeli = false;
 	bool bDontGiveMeBat = false;
 	bool bMegaBMXJump = false;
-	bool bSuperBunnyHop = false;
 	RUN_TYPE CurrentRunType = RUN_TYPE::DEFAULT;
 	FIGHT_STYLE CurrentFightStyle = FIGHT_STYLE::DEFAULT;
 	void  onDrawGUI() override;
@@ -62,9 +61,9 @@ private:
 
 	void everyTickAction() override;
 
-	void onDrawSettings() override;
+	
 
-	void onWndProc(WPARAM wParam, UINT msg) override;
+	bool onWndProc(WPARAM wParam, UINT msg) override;
 
 	bool onRPCIncoming(stRakNetHookParams *param) override;
 

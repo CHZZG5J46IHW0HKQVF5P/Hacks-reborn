@@ -5,8 +5,6 @@
 #include "plog\Initializers\RollingFileInitializer.h"
 extern SAMPFUNCS *SF;
 
-#define CPED_PTR_ADDR 0xB6F5F0
-
 
 namespace g
 {
@@ -14,19 +12,16 @@ namespace g
 	int keyButtonSplitter;
 	bool isWindowOpen;
 	bool isCtrlPressed, isAltPressed, isShiftPressed;
-};
 
-
-namespace hacksSettings
-{
 	SLineOfSightFlags LineOfSightFlags;
 };
+
 
 #include "HacksManager.h"
    
 namespace g
 {
-	crTickLocalPlayerInfo* pInfo = new crTickLocalPlayerInfo();
+	crTickLocalPlayerInfo* const pInfo = new crTickLocalPlayerInfo();
 }
 
 bool CALLBACK WndProcHandler(HWND, UINT, WPARAM, LPARAM);
