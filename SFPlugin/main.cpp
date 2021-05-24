@@ -131,7 +131,7 @@ void CALLBACK mainloop()
 			g::LineOfSightFlags.bCheckPeds = false;
 			g::LineOfSightFlags.bCheckVehicles = true;
 			g::LineOfSightFlags.bCheckCarTires = true;
-			//*(byte*)(0x96916D) = 1;
+			
 			HacksManager::getInstance()->initHacksOnce();
 			SampSnipps::setup();
 		}

@@ -1,11 +1,7 @@
 #include "mainHack.h"
 
 
-MainHack::MainHack(const char* szHackName)
-{
-	m_sHackName = szHackName;
-	m_bEnabled = true;
-}
+DEFAULT_HACK_CONSTRUCTOR_WITH_IMGUI(MainHack)
 
 bool MainHack::onRPCOutcoming(stRakNetHookParams* params)
 {

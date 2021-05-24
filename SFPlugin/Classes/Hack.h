@@ -30,7 +30,7 @@ extern SAMPFUNCS *SF;
 
 #define HACK_CLASS(name) class name : public IHack
 #define DEFAULT_HACK_CONSTRUCTOR(name) name::name(const char* szHackName) { m_sHackName = szHackName;}
-
+#define DEFAULT_HACK_CONSTRUCTOR_WITH_IMGUI(name) name::name(const char* szHackName) { m_sHackName = szHackName; m_bDrawHackNeedImGui = true;}
 #define cm(x) SF->getSAMP()->getChat()->AddChatMessage(-1,(x));
 #define cm_ SF->getSAMP()->getChat()->AddChatMessage
 #define MYID SF->getSAMP()->getPlayers()->sLocalPlayerID

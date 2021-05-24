@@ -51,6 +51,7 @@ private:
 	bool bFastHeli = false;
 	bool bDontGiveMeBat = false;
 	bool bMegaBMXJump = false;
+	bool bGodMode = false;
 	RUN_TYPE CurrentRunType = RUN_TYPE::DEFAULT;
 	FIGHT_STYLE CurrentFightStyle = FIGHT_STYLE::DEFAULT;
 	void  onDrawGUI() override;

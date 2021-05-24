@@ -1,0 +1,35 @@
+#include "Sbiv.h"
+
+DEFAULT_HACK_CONSTRUCTOR(Sbiv)
+
+void Sbiv::onDrawGUI()
+{
+	ImGui::Checkbox(u8"—бив", &m_bEnabled);
+	ImGui::SameLine();
+	Lippets::ImGuiSnippets::KeyButton(m_nActivationKey, g::keyButtonSplitter);
+}
+
+bool Sbiv::onWndProc(WPARAM wParam, UINT msg)
+{
+	if (m_nActivationKey != 0 && wParam == m_nActivationKey)
+		if (!g::pInfo->isDriver)
+			if (msg == WM_KEYDOWN || msg == WM_LBUTTONDOWN || msg == WM_SYSKEYDOWN)
+			{
+				PEDSELF->SetMoveSpeed(&CVector());
+				GTAfunc_PerformAnimation("PED", "HANDSUP", 200, 0, 0, 1, 0, 0, 0, 0);
+			}
+	return true;
+}
+
+
+void Sbiv::read(nlohmann::json& data)
+{
+	DESERIALIZE_FIELD_JSON(m_bEnabled);
+	DESERIALIZE_FIELD_JSON(m_nActivationKey);
+}
+
+void Sbiv::save(nlohmann::json& data)
+{
+	SERIALIZE_FIELD_JSON(m_bEnabled);
+	SERIALIZE_FIELD_JSON(m_nActivationKey);
+}

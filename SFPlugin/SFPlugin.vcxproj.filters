@@ -568,6 +568,9 @@
     <ClInclude Include="Classes\Hacks\mainHack.h">
       <Filter>Classes\Hacks\Misc</Filter>
     </ClInclude>
+    <ClInclude Include="Classes\Hacks\Sbiv.h">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -690,6 +693,9 @@
     </ClCompile>
     <ClCompile Include="Classes\HacksManager.cpp" />
     <ClCompile Include="Classes\Hacks\mainHack.cpp">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\Sbiv.cpp">
       <Filter>Classes\Hacks\Misc</Filter>
     </ClCompile>
   </ItemGroup>

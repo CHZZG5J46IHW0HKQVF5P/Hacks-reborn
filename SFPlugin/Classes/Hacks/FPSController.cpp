@@ -1,10 +1,6 @@
 #include "FPSController.h"
 
-FPSController::FPSController(const char* szName)
-{
-	m_sHackName = szName;
-	m_bDrawHackNeedImGui = true;
-}
+DEFAULT_HACK_CONSTRUCTOR_WITH_IMGUI(FPSController)
 
 void FPSController::everyTickAction()
 {

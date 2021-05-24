@@ -5,7 +5,11 @@ FORCEINLINE void DrawLine(D3DCOLOR playerColor, CVector2D* start, CVector2D* end
 	SF->getRender()->DrawPolygon(start->fX, start->fY, 3, 3, 0.f, 10, playerColor);
 	SF->getRender()->DrawLine(start->fX, start->fY, end->fX, end->fY, 1, playerColor);
 }
-DEFAULT_HACK_CONSTRUCTOR(WallHack)
+WallHack::WallHack(const char* szHackName)
+{
+	m_sHackName = szHackName;
+	m_bEnabled = true;
+}
 
 ChatBubble::ChatBubble(UINT16 PlayerID,
 	UINT32 color,
@@ -27,8 +31,6 @@ void WallHack::release()
 }
 void WallHack::init()
 {
-	this->m_bEnabled = true;
-
 	font.Init();
 }
 void WallHack::save(nlohmann::json &data)

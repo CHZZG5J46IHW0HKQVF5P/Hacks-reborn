@@ -1,21 +1,5 @@
 #include "GlobalFuncs.h"
 
-
-bool GFuncs::isHackWorking(const char* szHackName)
-{
-	auto&& hacks = HacksManager::getInstance()->getHacks();
-	for (auto&& hack : *hacks)
-	{
-		auto&& pHack = std::get<IHack*>(hack);
-		if (pHack->m_sHackName == szHackName)
-			return pHack->isHackWorking();
-	}
-
-
-
-	return false;
-}
-
 void GFuncs::resortPlayersByDistance(std::vector<NearPlayer>* toSort, bool bInvert)
 {
 	if (bInvert)

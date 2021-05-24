@@ -123,6 +123,7 @@
     <ClCompile Include="Classes\Hacks\FPSController.cpp" />
     <ClCompile Include="Classes\Hacks\OneBulletKill.cpp" />
     <ClCompile Include="Classes\Hacks\PlayersList.cpp" />
+    <ClCompile Include="Classes\Hacks\Sbiv.cpp" />
     <ClCompile Include="Classes\Hacks\TurboControl.cpp" />
     <ClCompile Include="Classes\Hacks\WallHack_NewNameTags.cpp" />
     <ClCompile Include="Classes\Hacks\WallShot.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Classes\Hacks\FPSController.h" />
     <ClInclude Include="Classes\Hacks\OneBulletKill.h" />
     <ClInclude Include="Classes\Hacks\PlayersList.h" />
+    <ClInclude Include="Classes\Hacks\Sbiv.h" />
     <ClInclude Include="Classes\Hacks\TurboControl.h" />
     <ClInclude Include="Classes\Hacks\WallHack_NewNameTags.h" />
     <ClInclude Include="Classes\Hacks\WallShot.h" />

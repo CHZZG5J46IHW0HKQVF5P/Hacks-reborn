@@ -151,6 +151,10 @@ void EnableMegaBMXJump(bool bEnable)
 	//*(byte*)0x969161 = bEnable;
 }
 
+void EnableGodMode(bool bEnable)
+{
+	*(byte*)(0x96916D) = bEnable;
+}
 
 
 void setAnimGroupByRunType(RUN_TYPE runType)
@@ -260,7 +264,6 @@ OneLineHacks::OneLineHacks(const char* name)
 
 void OneLineHacks::onDrawGUI()
 {
-
 	if (ImGui::Checkbox("Anti Stun", &bAntiStun))
 		EnableAntiStun(bAntiStun);
 	if (ImGui::Checkbox("Drive Walk UnderWater", &bDriveWalkUnderWater))
@@ -328,10 +331,11 @@ void OneLineHacks::onDrawGUI()
 				CurrentFightStyle = (FIGHT_STYLE)i;
 				setFightStyle(CurrentFightStyle);
 			}
-
-
 		ImGui::EndPopup();
 	}
+	if (ImGui::Checkbox("GodMode", &bGodMode))
+		EnableGodMode(bGodMode);
+
 }
 
 void OneLineHacks::onDrawHack()
@@ -357,6 +361,7 @@ void OneLineHacks::switchHack()
 	EnableNewDL(bNewDl);
 	EnableWaterProofEng(bWaterProofEngine);
 	EnableMegaBMXJump(bMegaBMXJump);
+	EnableGodMode(bGodMode);
 	setAnimGroupByRunType(CurrentRunType);
 	setFightStyle(CurrentFightStyle);
 }
@@ -507,6 +512,7 @@ void OneLineHacks::save(nlohmann::json& data)
 	data["NewDL"] = bNewDl;
 	data["WaterProofEng"] = bWaterProofEngine;
 	data["160hpbar"] = bBar160hp;
+	SERIALIZE_FIELD_JSON(bGodMode);
 }
 void OneLineHacks::read(nlohmann::json& data)
 {
@@ -536,4 +542,5 @@ void OneLineHacks::read(nlohmann::json& data)
 	bNewDl = data["NewDL"].get<bool>();
 	bWaterProofEngine = data["WaterProofEng"].get<bool>();
 	bBar160hp = data["160hpbar"].get<bool>();
+	DESERIALIZE_FIELD_JSON(bGodMode);
 }

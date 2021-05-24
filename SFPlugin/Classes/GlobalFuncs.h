@@ -5,7 +5,6 @@
 
 namespace GFuncs
 {
-	bool isHackWorking(const char* szHackName);
 	void resortPlayersByDistance(std::vector < NearPlayer > * arrPtr, bool bInvert);
 	void resortVehiclesByDistance(std::vector<NearVehicle>* arrPtr, bool bInvert);
 	template<class T>
