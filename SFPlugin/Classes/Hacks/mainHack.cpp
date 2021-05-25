@@ -1,7 +1,11 @@
 #include "mainHack.h"
 
 
-DEFAULT_HACK_CONSTRUCTOR_WITH_IMGUI(MainHack)
+MainHack::MainHack(const char* szHackName)
+{
+	m_sHackName = szHackName;
+	m_bEnabled = true;
+}
 
 bool MainHack::onRPCOutcoming(stRakNetHookParams* params)
 {
@@ -15,6 +19,7 @@ bool MainHack::onRPCOutcoming(stRakNetHookParams* params)
 
 bool MainHack::onRPCIncoming(stRakNetHookParams* params)
 {
+
 	switch (params->packetId)
 	{
 	case ScriptRPCEnumeration::RPC_ScrSetPlayerDrunkLevel: /*SetPlayerDrunkLevel*/
@@ -79,19 +84,18 @@ bool MainHack::onRPCIncoming(stRakNetHookParams* params)
 	return true;
 }
 
-bool MainHack::onWndProc(WPARAM wParam, UINT msg)
+bool MainHack::onWndProc()
 {
-	auto keyState = Stuff::getKeyStateByMsg(msg);
-	switch (wParam)
+	switch (g::pKeyEventInfo->iKeyID)
 	{
 	case 16:
-		g::isShiftPressed = (keyState == eKeyState::PRESSED ? true : false);
+		g::isShiftPressed = g::pKeyEventInfo->bDown;
 		break;
 	case 17:
-		g::isCtrlPressed = (keyState == eKeyState::PRESSED ? true : false);
+		g::isCtrlPressed = g::pKeyEventInfo->bDown;
 		break;
 	case 18:
-		g::isAltPressed = (keyState == eKeyState::PRESSED ? true : false);
+		g::isAltPressed = g::pKeyEventInfo->bDown;
 		break;
 	}
 	return true;

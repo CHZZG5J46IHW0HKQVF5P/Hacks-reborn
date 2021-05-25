@@ -15,14 +15,14 @@ void BMXspeedhack::onDrawGUI()
 	Lippets::ImGuiSnippets::KeyButton(activationKey, g::keyButtonSplitter);
 }
 
-bool BMXspeedhack::onWndProc(WPARAM wParam, UINT msg)
+bool BMXspeedhack::onWndProc()
 {
-	if (activationKey != 0 && wParam == activationKey)
-		if (msg == WM_KEYDOWN || msg == WM_LBUTTONDOWN || msg == WM_SYSKEYDOWN)
+	if (activationKey != 0 && g::pKeyEventInfo->iKeyID == activationKey)
+		if (g::pKeyEventInfo->bDown)
 		{
 			bmxspeedHack = true;
 		}
-		else if (msg == WM_KEYUP || msg == WM_LBUTTONUP || msg == WM_SYSKEYUP)
+		else 
 		{
 			bmxspeedHack = false;
 		}
@@ -53,12 +53,13 @@ void BMXspeedhack::everyTickAction( )
 }
 void BMXspeedhack::save(nlohmann::json& data)
 {
-	data["ActivationKey"] = activationKey;
-	data[m_sHackName] = m_bEnabled;
+	SERIALIZE_FIELD_JSON(activationKey);
+	SERIALIZE_FIELD_JSON(m_bEnabled);
 
 }
 void BMXspeedhack::read(nlohmann::json& data)
 {
-	m_bEnabled = data[m_sHackName].get<bool>();
-	activationKey = data["ActivationKey"].get<int>();
+	
+	DESERIALIZE_FIELD_JSON(m_bEnabled); 
+	DESERIALIZE_FIELD_JSON(activationKey);
 }

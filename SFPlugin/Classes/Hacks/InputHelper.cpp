@@ -45,17 +45,17 @@ void InputHelper::onDrawHack()
 
 void InputHelper::save(nlohmann::json& data)
 {
-	data[m_sHackName] = m_bEnabled;
-	data["offsetY"] = offsetY;
-	data["offsetX"] = offsetX;
+	SERIALIZE_FIELD_JSON(m_bEnabled);
+	SERIALIZE_FIELD_JSON(offsetY);
+	SERIALIZE_FIELD_JSON(offsetX);
 	font.save(data);
 }
 void InputHelper::read(nlohmann::json& data)
 {
-	m_bEnabled = data[m_sHackName].get<bool>();
-	offsetY = data["offsetY"].get<int>();
-	offsetX = data["offsetX"].get<int>();
+	DESERIALIZE_FIELD_JSON(m_bEnabled);
+
+	DESERIALIZE_FIELD_JSON(offsetY);
+	DESERIALIZE_FIELD_JSON(offsetX);
 	font.read(data);
-	if (offsetY == 0)
-		offsetY = 45;
+	ASSIGN_VAR_VALUE_IF_EQUALS_ZERO(offsetY, 45);
 }

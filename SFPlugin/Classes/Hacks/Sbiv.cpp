@@ -9,11 +9,11 @@ void Sbiv::onDrawGUI()
 	Lippets::ImGuiSnippets::KeyButton(m_nActivationKey, g::keyButtonSplitter);
 }
 
-bool Sbiv::onWndProc(WPARAM wParam, UINT msg)
+bool Sbiv:: onWndProc()
 {
-	if (m_nActivationKey != 0 && wParam == m_nActivationKey)
+	if (m_nActivationKey != 0 && g::pKeyEventInfo->iKeyID == m_nActivationKey)
 		if (!g::pInfo->isDriver)
-			if (msg == WM_KEYDOWN || msg == WM_LBUTTONDOWN || msg == WM_SYSKEYDOWN)
+			if (g::pKeyEventInfo->bDown)
 			{
 				PEDSELF->SetMoveSpeed(&CVector());
 				GTAfunc_PerformAnimation("PED", "HANDSUP", 200, 0, 0, 1, 0, 0, 0, 0);

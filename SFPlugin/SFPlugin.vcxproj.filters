@@ -571,6 +571,12 @@
     <ClInclude Include="Classes\Hacks\Sbiv.h">
       <Filter>Classes\Hacks\Misc</Filter>
     </ClInclude>
+    <ClInclude Include="Classes\Hacks\VehicleGodMode.h">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\PlayersDescription.h">
+      <Filter>Classes\Hacks\Visuals</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -697,6 +703,12 @@
     </ClCompile>
     <ClCompile Include="Classes\Hacks\Sbiv.cpp">
       <Filter>Classes\Hacks\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\VehicleGodMode.cpp">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\PlayersDescription.cpp">
+      <Filter>Classes\Hacks\Visuals</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

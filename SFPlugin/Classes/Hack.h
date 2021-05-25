@@ -58,6 +58,7 @@ namespace g
 	extern bool isShiftPressed;
 	extern int keyButtonSplitter;
 	extern crTickLocalPlayerInfo* const pInfo;
+	extern Lippets::KeyEvenByWndProc * const pKeyEventInfo;
 	extern SLineOfSightFlags LineOfSightFlags;
 };
 
@@ -94,7 +95,7 @@ public:
 	virtual bool onRPCOutcoming(stRakNetHookParams*) { m_bitsDontCall__.set(RPC_OUT); return true; };
 	virtual bool onPacketIncoming(stRakNetHookParams*) { m_bitsDontCall__.set(PACKET_INC);  return true; };
 	virtual bool onPacketOutcoming(stRakNetHookParams*) { m_bitsDontCall__.set(PACKET_OUT);  return true; };
-	virtual bool onWndProc(WPARAM, UINT) { m_bitsDontCall__.set(WND_PROC); return true; };
+	virtual bool onWndProc() { m_bitsDontCall__.set(WND_PROC); return true; };
 	virtual void everyTickAction() { m_bitsDontCall__.set(EVERY_TICK); };
 	virtual void onDrawGUI() {};
 	virtual void onDrawHack() { m_bitsDontCall__.set(DRAW_HACK); };
@@ -102,7 +103,28 @@ public:
 	virtual void init() {};
 };
 
+#define OVERRIDE_DRAWGUI void onDrawGUI() override;
 
+#define OVERRIDE_SAVE_READ void save(nlohmann::json&) override; \
+							void read(nlohmann::json&) override;
+
+#define OVERRIDE_SWITCH_HACK void switchHack() override;
+
+#define OVERRIDE_RPC_INC  bool onRPCIncoming(stRakNetHookParams*) override;
+#define OVERRIDE_RPC_OUT  bool onRPCOutcoming(stRakNetHookParams*) override;
+#define OVERRIDE_PACKET_INC  bool onPacketIncoming(stRakNetHookParams*) override;
+#define OVERRIDE_PACKET_OUT  bool onPacketOutcoming(stRakNetHookParams*) override;
+
+#define OVERRIDE_WNDPROC bool onWndProc() override; 
+
+#define OVERRIDE_EVERY_TICK void everyTickAction() override;
+
+#define OVERRIDE_DRAW_HACK void onDrawHack() override;
+
+#define OVERRIDE_RELEASE void release() override;
+#define OVERRIDE_INIT void init() override;
+
+#define OVERRIDE_IS_HACK_WORKING bool isHackWorking() override;
 
 
 

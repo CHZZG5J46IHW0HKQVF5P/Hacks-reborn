@@ -12,11 +12,10 @@ private:
 	std::vector<std::string> enemiesList;
 	bool connectLoger;
 	bool noFriendDamage;
-	void onDrawHack() override;
+	OVERRIDE_DRAW_HACK;
 	void onDrawGUI() override;
 	
 	bool onPacketOutcoming(stRakNetHookParams* params) override;
 	bool onRPCIncoming(stRakNetHookParams* params) override;
-	void save(nlohmann::json&) override;
-	void read(nlohmann::json&) override;
+	OVERRIDE_SAVE_READ;
 };

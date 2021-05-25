@@ -10,8 +10,7 @@ public:
 private:
 	int activationKey = 0;
 	void onDrawGUI() override;
-	bool onWndProc(WPARAM wParam, UINT msg) override;
-	void save(nlohmann::json& data) override;
-	void read(nlohmann::json& data) override;
+	bool  onWndProc() override;
+	OVERRIDE_SAVE_READ;
 };
 

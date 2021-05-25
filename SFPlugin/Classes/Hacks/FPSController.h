@@ -12,8 +12,7 @@ private:
 	int  m_iIDLE_FPSLimit = 0;
 	int  m_iInVehicle_FPSLimit = 0;
 	int  m_iSwimming_FPSLimit = 0;
-	void everyTickAction() override;
+	OVERRIDE_EVERY_TICK;
 	void onDrawGUI() override;
-	void save(nlohmann::json&) override;
-	void read(nlohmann::json&) override;
+	OVERRIDE_SAVE_READ;
 };

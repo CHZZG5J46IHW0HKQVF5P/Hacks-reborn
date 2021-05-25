@@ -98,7 +98,7 @@ void CALLBACK mainloop()
 		{
 			initialized = true;
 			// imgui
-			//plog::init(plog::info, "E:\\!Logs\\hacksreborn.log");
+			plog::init(plog::info, "E:\\!Logs\\hacksreborn.log",100000,1);
 			ImGui::CreateContext();
 			ImGuiIO& io = ImGui::GetIO(); (void)io;
 			ImGui_ImplWin32_Init(GetActiveWindow());
@@ -131,14 +131,13 @@ void CALLBACK mainloop()
 			g::LineOfSightFlags.bCheckPeds = false;
 			g::LineOfSightFlags.bCheckVehicles = true;
 			g::LineOfSightFlags.bCheckCarTires = true;
-			
+
 			HacksManager::getInstance()->initHacksOnce();
 			SampSnipps::setup();
 		}
 
 	if (!initialized)
 		return;
-
 
 	initcrTickLocalPlayerInfo();
 	HacksManager::getInstance()->procEveryTickAction();
@@ -148,8 +147,13 @@ void CALLBACK mainloop()
 
 bool CALLBACK WndProcHandler(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+
 	ImGui_ImplWin32_WndProcHandler(hwd, msg, wParam, lParam);
-	return HacksManager::getInstance()->procKeys(wParam, msg);
+
+	g::pKeyEventInfo->init(msg, wParam);
+	if (g::pKeyEventInfo->iKeyID == 0)
+		return true;
+	return HacksManager::getInstance()->procKeys();
 }
 
 

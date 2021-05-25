@@ -6,8 +6,7 @@ HACK_CLASS(ArizonaLEmulator)
 public:
 	ArizonaLEmulator(const char* name);
 private:
-	void save(nlohmann::json& data) override;
-	void read(nlohmann::json& data) override;
+	OVERRIDE_SAVE_READ;
 	bool onRPCOutcoming(stRakNetHookParams*  ) override;
 	void onDrawGUI() override;
 };

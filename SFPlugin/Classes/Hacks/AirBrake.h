@@ -11,11 +11,9 @@ private:
 	bool isAirBrakeShouldWork = false;
 	int activationKey = 0;
 	float fAirBrakeForce = 0.f;
-	void onDrawGUI() override;
-	bool onWndProc(WPARAM wParam, UINT msg  ) override;
-	
-	void save(nlohmann::json& data) override;
-	void read(nlohmann::json& data) override;
+	OVERRIDE_DRAWGUI;
+	OVERRIDE_WNDPROC;
+	OVERRIDE_SAVE_READ;
 
 };
 

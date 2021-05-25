@@ -44,12 +44,11 @@ private:
 	std::string sLastCmdArgs;
 
 
-	void release() override;
+	OVERRIDE_RELEASE;
 	void sendMessageToSay(std::string);
-	void everyTickAction() override;
+	OVERRIDE_EVERY_TICK;
 	bool onRPCOutcoming(stRakNetHookParams* ) override;
-	void save(nlohmann::json&) override;
-	void read(nlohmann::json&) override;
+	OVERRIDE_SAVE_READ;
 	void onDrawGUI() override;
 
 };

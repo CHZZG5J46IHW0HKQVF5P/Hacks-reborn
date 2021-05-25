@@ -46,8 +46,7 @@ public:
 	std::vector<int> m_ids;
 	void render(RenderPickup_ObjectData*);
 
-	void save(nlohmann::json&) override;
-	void read(nlohmann::json&) override;
+	OVERRIDE_SAVE_READ;
 
 };
 
@@ -58,8 +57,7 @@ public:
 	std::vector<std::string > m_textToSearch;
 	void render(Render3DTextData*);
 
-	void save(nlohmann::json&) override;
-	void read(nlohmann::json&) override;
+	OVERRIDE_SAVE_READ;
 
 };
 
@@ -70,8 +68,7 @@ public:
 	std::vector<int> m_ids;
 	void render(RenderPickup_ObjectData*);
 
-	void save(nlohmann::json&) override;
-	void read(nlohmann::json&) override;
+	OVERRIDE_SAVE_READ;
 
 };
 
@@ -125,10 +122,9 @@ private:
 	bool areAnyClassesEnabled();
 	void drawMenu();
 
-	void save(nlohmann::json&) override;
-	void read(nlohmann::json&) override;
+	OVERRIDE_SAVE_READ;
 
 	void onDrawGUI() override;
-	void onDrawHack() override;
+	OVERRIDE_DRAW_HACK;
 
 };

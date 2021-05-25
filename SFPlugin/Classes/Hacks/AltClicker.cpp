@@ -16,28 +16,28 @@ void AltClicker::onDrawGUI()
 
 void AltClicker::read(nlohmann::json& data)
 {
-	m_bEnabled = data[m_sHackName].get<bool>();
-	iDelay = data["iDelay"].get<int>();
-	activationKey = data["activationKey"].get<int>();
+	DESERIALIZE_FIELD_JSON(m_bEnabled);
+	DESERIALIZE_FIELD_JSON(iDelay);
+	DESERIALIZE_FIELD_JSON(activationKey);
 	ASSIGN_VAR_VALUE_IF_EQUALS_ZERO(iDelay,25);
 }
 
 void AltClicker::save(nlohmann::json& data)
 {
-	data[m_sHackName] = m_bEnabled;
-	data["activationKey"] = activationKey;
-	data["iDelay"] = iDelay;
+	SERIALIZE_FIELD_JSON(m_bEnabled);
+	SERIALIZE_FIELD_JSON(activationKey);
+	SERIALIZE_FIELD_JSON(iDelay);
 }
 
 
 
 
-bool AltClicker::onWndProc(WPARAM wParam, UINT msg)
+bool AltClicker::onWndProc()
 {
-	if (msg != WM_KEYDOWN && msg != WM_LBUTTONDOWN && msg != WM_SYSKEYDOWN)
+	if (!g::pKeyEventInfo->bDown)
 		return true;
 
-	if (activationKey != 0 && wParam == activationKey)
+	if (activationKey != 0 && g::pKeyEventInfo->iKeyID== activationKey)
 	{
 		bWorking = !bWorking;
 		notify("ALT Clicker", bWorking);

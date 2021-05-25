@@ -21,6 +21,7 @@ namespace g
    
 namespace g
 {
+	Lippets::KeyEvenByWndProc * const pKeyEventInfo = new Lippets::KeyEvenByWndProc();
 	crTickLocalPlayerInfo* const pInfo = new crTickLocalPlayerInfo();
 }
 

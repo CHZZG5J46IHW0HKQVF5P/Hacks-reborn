@@ -20,10 +20,9 @@ private:
 	DamageInfo dInfo;
 	int iDelay = 0;
 	int sendDamageDeuqeLength = 0;
-	void everyTickAction() override;
-	bool onRPCOutcoming(stRakNetHookParams*) override;
+	OVERRIDE_EVERY_TICK;
+	OVERRIDE_RPC_OUT;
 	void onDrawGUI() override;
 	
-	void save(nlohmann::json&) override;
-	void read(nlohmann::json&) override;
+	OVERRIDE_SAVE_READ;
 };

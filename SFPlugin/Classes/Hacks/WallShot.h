@@ -6,8 +6,7 @@ HACK_CLASS(WallShot)
 public:
 	WallShot(const char* name);
 private:
-	void save(nlohmann::json& data) override;
-	void read(nlohmann::json& data) override;
+	OVERRIDE_SAVE_READ;
 	void switchHack() override;
 	void onDrawGUI() override;
 };

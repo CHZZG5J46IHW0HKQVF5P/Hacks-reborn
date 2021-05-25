@@ -54,24 +54,12 @@ private:
 	bool bGodMode = false;
 	RUN_TYPE CurrentRunType = RUN_TYPE::DEFAULT;
 	FIGHT_STYLE CurrentFightStyle = FIGHT_STYLE::DEFAULT;
-	void  onDrawGUI() override;
-
-	void onDrawHack() override;
-
-	void switchHack() override;
-
-	void everyTickAction() override;
-
-	
-
-	bool onWndProc(WPARAM wParam, UINT msg) override;
-
-	bool onRPCIncoming(stRakNetHookParams *param) override;
-
-	bool onPacketOutcoming(stRakNetHookParams *param) override;
-
-	void save(nlohmann::json& data) override;
-
-	void read(nlohmann::json& data) override;
-
+	OVERRIDE_DRAWGUI;
+	OVERRIDE_DRAW_HACK;
+	OVERRIDE_SWITCH_HACK;
+	OVERRIDE_EVERY_TICK;
+	OVERRIDE_WNDPROC;
+	OVERRIDE_RPC_INC;
+	OVERRIDE_PACKET_OUT;
+	OVERRIDE_SAVE_READ;
 };

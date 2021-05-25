@@ -46,10 +46,10 @@ void WallShot::onDrawGUI()
 
 void WallShot::save(nlohmann::json& data)
 {
-	data[m_sHackName] = m_bEnabled;
+	SERIALIZE_FIELD_JSON(m_bEnabled);
 }
 
 void WallShot::read(nlohmann::json& data)
 {
-	m_bEnabled = data[m_sHackName].get<bool>();
+	DESERIALIZE_FIELD_JSON(m_bEnabled);
 }

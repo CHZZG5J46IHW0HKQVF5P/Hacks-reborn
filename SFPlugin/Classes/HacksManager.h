@@ -41,7 +41,7 @@ public:
 	void read();
 	void save();
 	bool procRakNetHook(stRakNetHookParams* params,  RakNetScriptHookType procFunc);
-	bool procKeys(WPARAM wParam, UINT msg);
+	bool procKeys();
 	void procEveryTickAction();
 	void initHacksOnce();
 };

@@ -43,15 +43,14 @@ private:
 	float fYChatBubleOffset = 0.f;
 	float fNameTagYOffset = 0.0;
 	//
-	void release() override;
-	void init() override;
-	void save(nlohmann::json &data) override;
-	void read(nlohmann::json &data) override;
-	void everyTickAction() override;
+	OVERRIDE_RELEASE;
+	OVERRIDE_INIT;
+	OVERRIDE_SAVE_READ;
+	OVERRIDE_EVERY_TICK;
 	void onDrawGUI() override;
 	void switchHack() override;
-	bool onWndProc(WPARAM wParam, UINT msg) override;
+	bool  onWndProc() override;
 	bool onRPCIncoming(stRakNetHookParams* params) override;
-	void onDrawHack() override;
-	
+	OVERRIDE_DRAW_HACK;
+
 };

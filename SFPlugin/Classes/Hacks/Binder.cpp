@@ -115,63 +115,65 @@ bool Bind::checkKeys()
 
 void Command::read(nlohmann::json& data)
 {
-	shortCmd = data["shortCmd"].get<std::string>();
-	bSendOrigin = data["sendOrigin"].get<bool>();
-	commandsTexts = data["commandsTexts"].get<std::vector<std::pair<std::string, bool>>>();
+
+	DESERIALIZE_FIELD_JSON(shortCmd);
+	DESERIALIZE_FIELD_JSON(bSendOrigin);
+	DESERIALIZE_FIELD_JSON(commandsTexts);
 }
 
 void Command::save(nlohmann::json& data)
 {
-	data["sendOrigin"] = bSendOrigin;
-	data["commandsTexts"] = commandsTexts;
-	data["shortCmd"] = shortCmd;
+	SERIALIZE_FIELD_JSON(bSendOrigin);
+	SERIALIZE_FIELD_JSON(commandsTexts);
+	SERIALIZE_FIELD_JSON(shortCmd);
 }
 
 void Bind::read(nlohmann::json& data)
 {
-	activateCheat = data["bindCheat"].get<std::string>();
-	bindTexts = data["bindsTexts"].get<std::vector<std::string>>();
-	ctrl = data["ctrl"].get<bool>();
-	alt = data["alt"].get<bool>();
-	shift = data["shift"].get<bool>();
+	DESERIALIZE_FIELD_JSON(activateCheat);
+	DESERIALIZE_FIELD_JSON(bindTexts);
+	DESERIALIZE_FIELD_JSON(ctrl);
+	DESERIALIZE_FIELD_JSON(alt);
+	DESERIALIZE_FIELD_JSON(shift);
 }
 
 void Bind::save(nlohmann::json& data)
 {
-	data["bindsTexts"] = bindTexts;
-	data["bindCheat"] = activateCheat;
-	data["ctrl"] = ctrl;
-	data["alt"] = alt;
-	data["shift"] = shift;
+	SERIALIZE_FIELD_JSON(bindTexts);
+	SERIALIZE_FIELD_JSON(activateCheat);
+	SERIALIZE_FIELD_JSON(ctrl);
+	SERIALIZE_FIELD_JSON(alt);
+	SERIALIZE_FIELD_JSON(shift);
 }
 
 void Binder::save(nlohmann::json& data)
 {
-	data["iBinderDelay"] = iBinderDelay;
-	data["iCommandsDelay"] = iCommandsDelay;
-	data["isBinderEnabled"] = isBinderEnabled;
-	data["isCommandsEnabled"] = isCommandsEnabled;
+	SERIALIZE_FIELD_JSON(iBinderDelay);
+	SERIALIZE_FIELD_JSON(iCommandsDelay);
+	SERIALIZE_FIELD_JSON(isBinderEnabled);
+	SERIALIZE_FIELD_JSON(isCommandsEnabled);
 
 	nlohmann::json bindsJson;
 	for (size_t i = 0; i < binds.size(); i++)
 		binds[i].save(bindsJson[std::to_string(i)]);
-	data["BindsJson"] = bindsJson;
+	SERIALIZE_FIELD_JSON(bindsJson);
 
 	nlohmann::json commandsJson;
 	for (size_t i = 0; i < commands.size(); i++)
 		commands[i].save(commandsJson[std::to_string(i)]);
-	data["CommandsJson"] = commandsJson;
+	SERIALIZE_FIELD_JSON(commandsJson);
 }
 
 void Binder::read(nlohmann::json& data)
 {
-	iBinderDelay = data["iBinderDelay"].get<int>();
-	iCommandsDelay = data["iCommandsDelay"].get<int>();
+	DESERIALIZE_FIELD_JSON(iBinderDelay);
+	DESERIALIZE_FIELD_JSON(iCommandsDelay);
 
-	isBinderEnabled = data["isBinderEnabled"].get<bool>();;
-	isCommandsEnabled = data["isCommandsEnabled"].get<bool>();
+	DESERIALIZE_FIELD_JSON(isBinderEnabled);
+	DESERIALIZE_FIELD_JSON(isCommandsEnabled);
 
-	nlohmann::json bindsJson = data["BindsJson"];
+	nlohmann::json bindsJson;
+	DESERIALIZE_FIELD_JSON(bindsJson);
 	if (!bindsJson.is_null())
 		for (int i = 0;; i++)
 		{
@@ -181,8 +183,9 @@ void Binder::read(nlohmann::json& data)
 			binds.push_back(Bind());
 			binds.back().read(bindsJson[istr]);
 		}
+	nlohmann::json commandsJson;
+	DESERIALIZE_FIELD_JSON(commandsJson);
 
-	nlohmann::json commandsJson = data["CommandsJson"];
 	if (!commandsJson.is_null())
 		for (int i = 0;; i++)
 		{
@@ -355,7 +358,7 @@ void Binder::sendMessageToSay(std::string message)
 
 void Binder::everyTickAction()
 {
-	
+
 	int* iLastTargetPlayerID = (int*)replacer.getAdditionVarible("iLastTargetPlayerID");
 	if (SF->getSAMP()->getPlayers()->pLocalPlayer->sAimingAtPid < 1000)
 		*iLastTargetPlayerID = SF->getSAMP()->getPlayers()->pLocalPlayer->sAimingAtPid;

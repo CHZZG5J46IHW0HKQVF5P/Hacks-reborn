@@ -11,10 +11,9 @@ public:
 private:
 	BYTE patch[6];
 
-	void release() override;
-	void init() override;
+	OVERRIDE_RELEASE;
+	OVERRIDE_INIT;
 	void onDrawGUI() override;
-	void save(nlohmann::json&) override;
-	void read(nlohmann::json&) override;
+	OVERRIDE_SAVE_READ;
 
 };

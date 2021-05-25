@@ -430,15 +430,15 @@ void OneLineHacks::everyTickAction()
 
 
 }
-bool OneLineHacks::onWndProc(WPARAM wParam, UINT msg)
+bool OneLineHacks::onWndProc()
 {
 	if (bPressNitro && g::pInfo->isDriver)
-		if (wParam == 0 || wParam == 1)
-			if (msg == WM_KEYDOWN || msg == WM_LBUTTONDOWN || msg == WM_SYSKEYDOWN)
+		if (g::pKeyEventInfo->iKeyID == 0 || g::pKeyEventInfo->iKeyID == 1)
+			if (g::pKeyEventInfo->bDown)
 			{
 				*reinterpret_cast<byte*>(0x969165) = 1;
 			}
-			else  if (msg == WM_KEYUP || msg == WM_LBUTTONUP || msg == WM_SYSKEYUP)
+			else
 			{
 				*reinterpret_cast<byte*>(0x969165) = 0;
 				PEDSELF->GetVehicle()->RemoveVehicleUpgrade(1010);
@@ -484,63 +484,65 @@ bool OneLineHacks::onPacketOutcoming(stRakNetHookParams *param)
 		PEDSELF->GetWeapon(PEDSELF->GetCurrentWeaponSlot())->SetAmmoInClip(2);
 	return true;
 }
+
 void OneLineHacks::save(nlohmann::json& data)
 {
-	data["FightStyle"] = (int)CurrentFightStyle;
-	data["RunType"] = (int)CurrentRunType;
-	data["megaBMXjump"] = bMegaBMXJump;
-	data["fastHeli"] = bFastHeli;
-	data["dontGiveMeBat"] = bDontGiveMeBat;
-	data["antiStun"] = bAntiStun;
-	data["driveWalkUnderWater"] = bDriveWalkUnderWater;
-	data["fireProtection"] = bFireProtection;
-	data["fastCrosshair"] = bFastCrosshair;
-	data["infOxygenAndStamina"] = bInfOxygenAndStamina;
-	data["megaJump"] = bMegaJump;
-	data["noSpread"] = bNoSpread;
-	data["noFreeze"] = bNoFreeze;
-	data["noAnims"] = bNoAnims;
-	data["noCamrestore"] = bNoCamrestore;
-	data["noFall"] = bNoFall;
-	data["surfOnVehicles"] = bSurfOnVehicles;
-	data["pressNitro"] = bPressNitro;
-	data["noFallDamage"] = bNoFallDamage;
-	data["noBike"] = bNoBike;
-	data["waterDrive"] = bWaterDrive;
-	data["noReload"] = bNoReload;
-	data["autoBike"] = bAutoBike;
-	data["NewDL"] = bNewDl;
-	data["WaterProofEng"] = bWaterProofEngine;
-	data["160hpbar"] = bBar160hp;
+	SERIALIZE_FIELD_JSON(CurrentRunType, int);
+	SERIALIZE_FIELD_JSON(CurrentFightStyle, int);
+	SERIALIZE_FIELD_JSON(bMegaBMXJump);
+	SERIALIZE_FIELD_JSON(bFastHeli);
+	SERIALIZE_FIELD_JSON(bDontGiveMeBat);
+	SERIALIZE_FIELD_JSON(bAntiStun);
+	SERIALIZE_FIELD_JSON(bDriveWalkUnderWater);
+	SERIALIZE_FIELD_JSON(bFireProtection);
+	SERIALIZE_FIELD_JSON(bFastCrosshair);
+	SERIALIZE_FIELD_JSON(bInfOxygenAndStamina);
+	SERIALIZE_FIELD_JSON(bMegaJump);
+	SERIALIZE_FIELD_JSON(bNoSpread);
+	SERIALIZE_FIELD_JSON(bNoFreeze);
+	SERIALIZE_FIELD_JSON(bNoAnims);
+	SERIALIZE_FIELD_JSON(bNoCamrestore);
+	SERIALIZE_FIELD_JSON(bNoFall);
+	SERIALIZE_FIELD_JSON(bSurfOnVehicles);
+	SERIALIZE_FIELD_JSON(bPressNitro);
+	SERIALIZE_FIELD_JSON(bNoFallDamage);
+	SERIALIZE_FIELD_JSON(bNoBike);
+	SERIALIZE_FIELD_JSON(bWaterDrive);
+	SERIALIZE_FIELD_JSON(bNoReload);
+	SERIALIZE_FIELD_JSON(bAutoBike);
+	SERIALIZE_FIELD_JSON(bNewDl);
+	SERIALIZE_FIELD_JSON(bWaterProofEngine);
+	SERIALIZE_FIELD_JSON(bBar160hp);
 	SERIALIZE_FIELD_JSON(bGodMode);
 }
 void OneLineHacks::read(nlohmann::json& data)
 {
-	CurrentFightStyle = (FIGHT_STYLE)data["FightStyle"].get<int>();
-	CurrentRunType = (RUN_TYPE)data["RunType"].get<int>();
-	bMegaBMXJump = data["megaBMXjump"].get<bool>();
-	bFastHeli = data["fastHeli"].get<bool>();
-	bDontGiveMeBat = data["dontGiveMeBat"].get<bool>();
-	bAntiStun = data["antiStun"].get<bool>();
-	bDriveWalkUnderWater = data["driveWalkUnderWater"].get<bool>();
-	bFireProtection = data["fireProtection"].get<bool>();
-	bFastCrosshair = data["fastCrosshair"].get<bool>();
-	bInfOxygenAndStamina = data["infOxygenAndStamina"].get<bool>();
-	bMegaJump = data["megaJump"].get<bool>();
-	bNoSpread = data["noSpread"].get<bool>();
-	bNoFreeze = data["noFreeze"].get<bool>();
-	bNoAnims = data["noAnims"].get<bool>();
-	bNoCamrestore = data["noCamrestore"].get<bool>();
-	bNoFall = data["noFall"].get<bool>();
-	bSurfOnVehicles = data["surfOnVehicles"].get<bool>();
-	bPressNitro = data["pressNitro"].get<bool>();
-	bNoFallDamage = data["noFallDamage"].get<bool>();
-	bNoBike = data["noBike"].get<bool>();
-	bWaterDrive = data["waterDrive"].get<bool>();
-	bNoReload = data["noReload"].get<bool>();
-	bAutoBike = data["autoBike"].get<bool>();
-	bNewDl = data["NewDL"].get<bool>();
-	bWaterProofEngine = data["WaterProofEng"].get<bool>();
-	bBar160hp = data["160hpbar"].get<bool>();
+
+	DESERIALIZE_FIELD_JSON(CurrentFightStyle);// = (FIGHT_STYLE)data["FightStyle"].get<int>();
+	DESERIALIZE_FIELD_JSON(CurrentRunType); //(RUN_TYPE)data["RunType"].get<int>();
+	DESERIALIZE_FIELD_JSON(bMegaBMXJump);
+	DESERIALIZE_FIELD_JSON(bFastHeli);
+	DESERIALIZE_FIELD_JSON(bDontGiveMeBat);
+	DESERIALIZE_FIELD_JSON(bAntiStun);
+	DESERIALIZE_FIELD_JSON(bDriveWalkUnderWater);
+	DESERIALIZE_FIELD_JSON(bFireProtection);
+	DESERIALIZE_FIELD_JSON(bFastCrosshair);
+	DESERIALIZE_FIELD_JSON(bInfOxygenAndStamina);
+	DESERIALIZE_FIELD_JSON(bMegaJump);
+	DESERIALIZE_FIELD_JSON(bNoSpread);
+	DESERIALIZE_FIELD_JSON(bNoFreeze);
+	DESERIALIZE_FIELD_JSON(bNoAnims);
+	DESERIALIZE_FIELD_JSON(bNoCamrestore);
+	DESERIALIZE_FIELD_JSON(bNoFall);
+	DESERIALIZE_FIELD_JSON(bSurfOnVehicles);
+	DESERIALIZE_FIELD_JSON(bPressNitro);
+	DESERIALIZE_FIELD_JSON(bNoFallDamage);
+	DESERIALIZE_FIELD_JSON(bNoBike);
+	DESERIALIZE_FIELD_JSON(bWaterDrive);
+	DESERIALIZE_FIELD_JSON(bNoReload);
+	DESERIALIZE_FIELD_JSON(bAutoBike);
+	DESERIALIZE_FIELD_JSON(bNewDl);
+	DESERIALIZE_FIELD_JSON(bWaterProofEngine);
+	DESERIALIZE_FIELD_JSON(bBar160hp);
 	DESERIALIZE_FIELD_JSON(bGodMode);
 }

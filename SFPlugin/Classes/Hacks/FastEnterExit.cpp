@@ -13,24 +13,23 @@ void FastEnterExit::onDrawGUI()
 	}
 }
 
-
-
-bool FastEnterExit::onWndProc(WPARAM wParam, UINT msg)
+bool FastEnterExit::onWndProc()
 {
-	if (msg == WM_KEYDOWN || msg == WM_LBUTTONDOWN || msg == WM_SYSKEYDOWN)
-		if (wParam == 70 || wParam == 71)
+	if (g::pKeyEventInfo->bDown)
+		if (g::pKeyEventInfo->iKeyID == 70 || g::pKeyEventInfo->iKeyID == 71)
 			if (g::pInfo->isInCar)
 			{
-				if (wParam == 70)
+				if (g::pKeyEventInfo->iKeyID == 70)
 				{
 					float fCoords[3] = { PEDSELF->GetPosition()->fX,PEDSELF->GetPosition()->fY,PEDSELF->GetPosition()->fZ };
 					fCoords[2] += GAME->GetModelInfo(PEDSELF->GetVehicle()->GetModelIndex())->GetBoundingBox()->vecBoundMax.fY;
 					GTAfunc_RemoveActorFromCarAndPutAt(fCoords);
+					return false;
 				}
 			}
 			else
 			{
-				if (wParam == 70)
+				if (g::pKeyEventInfo->iKeyID == 70)
 				{
 					if (!g::pInfo->nearestVehicles.empty())
 						if (g::pInfo->nearestVehicles[0].fDistance <= m_fVehicleDistanceLimit)

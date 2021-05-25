@@ -18,36 +18,32 @@ void TurboControl::onDrawGUI()
 	Lippets::ImGuiSnippets::KeyButton(activationKey, g::keyButtonSplitter);
 
 }
-bool TurboControl::onWndProc(WPARAM wParam, UINT msg)
+bool TurboControl::onWndProc()
 {
-	if (activationKey != 0 && wParam == activationKey)
+	if (activationKey != 0 && g::pKeyEventInfo->iKeyID == activationKey)
 		if (g::pInfo->isDriver)
-			switch (Stuff::getKeyStateByMsg(msg))
-			{
-			case eKeyState::PRESSED:
-			{
-				DisableTwinTurbo(false);
-				Stuff::AddMessageJumpQ("~r~Turbo", 500, 0, 0);
-				break;
-			}
-			case eKeyState::RELEASED:
+			if (g::pKeyEventInfo->bDown)
 			{
 
+				DisableTwinTurbo(false);
+				Stuff::AddMessageJumpQ("~r~Turbo", 500, 0, 0);
+
+			}
+			else
+			{
 				DisableTwinTurbo(true);
 				Stuff::AddMessageJumpQ("~r~Comfort", 500, 0, 0);
-				break;
-			}
 			}
 	return true;
 }
 void TurboControl::save(nlohmann::json& data)
 {
-	data[m_sHackName] = m_bEnabled;
-	data["ActivationKey"] = activationKey;
+	SERIALIZE_FIELD_JSON(m_bEnabled);
+	SERIALIZE_FIELD_JSON(activationKey);
 
 }
 void TurboControl::read(nlohmann::json& data)
 {
-	m_bEnabled = data[m_sHackName].get<bool>();
-	activationKey = data["ActivationKey"].get<int>();
+	DESERIALIZE_FIELD_JSON(m_bEnabled);
+	DESERIALIZE_FIELD_JSON(activationKey);
 }

@@ -10,11 +10,10 @@ private:
 	bool bWorking;
 	int iDelay;
 	int activationKey;
-	void everyTickAction( ) override;
-	void onDrawGUI() override;
-	
-	bool onWndProc(WPARAM, UINT ) override;
-	void save(nlohmann::json&) override;
-	void read(nlohmann::json&) override;
+	OVERRIDE_EVERY_TICK;
+	OVERRIDE_DRAWGUI;
+
+	OVERRIDE_WNDPROC;
+	OVERRIDE_SAVE_READ;
 
 };

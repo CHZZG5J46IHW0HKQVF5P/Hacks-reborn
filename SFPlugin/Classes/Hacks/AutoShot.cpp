@@ -9,11 +9,11 @@ void AutoShot::onDrawGUI()
 	ImGui::SameLine();
 	Lippets::ImGuiSnippets::KeyButton(activationKey, g::keyButtonSplitter);
 }
-bool AutoShot::onWndProc(WPARAM wParam, UINT msg)
+bool AutoShot::onWndProc()
 {
-	if (msg != WM_KEYDOWN && msg != WM_LBUTTONDOWN && msg != WM_SYSKEYDOWN)
+	if (!g::pKeyEventInfo->bDown)
 		return true;
-	if (activationKey != 0 && wParam == activationKey)
+	if (activationKey != 0 && g::pKeyEventInfo->iKeyID == activationKey)
 	{
 		autoShot = !autoShot;
 		notify("Auto Shot", autoShot);
@@ -29,12 +29,12 @@ void AutoShot::everyTickAction()
 }
 void AutoShot::save(nlohmann::json& data)
 {
-	data["ActivationKey"] = activationKey;
-	data[m_sHackName] = m_bEnabled;
+	SERIALIZE_FIELD_JSON(activationKey);
+	SERIALIZE_FIELD_JSON(m_bEnabled);
 
 }
 void AutoShot::read(nlohmann::json& data)
 {
-	m_bEnabled = data[m_sHackName].get<bool>();
-	activationKey = data["ActivationKey"].get<int>();
+	DESERIALIZE_FIELD_JSON(activationKey);
+	DESERIALIZE_FIELD_JSON(m_bEnabled);
 }

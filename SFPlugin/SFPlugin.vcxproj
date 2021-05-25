@@ -122,9 +122,11 @@
     <ClCompile Include="Classes\Hacks\InputHelper.cpp" />
     <ClCompile Include="Classes\Hacks\FPSController.cpp" />
     <ClCompile Include="Classes\Hacks\OneBulletKill.cpp" />
+    <ClCompile Include="Classes\Hacks\PlayersDescription.cpp" />
     <ClCompile Include="Classes\Hacks\PlayersList.cpp" />
     <ClCompile Include="Classes\Hacks\Sbiv.cpp" />
     <ClCompile Include="Classes\Hacks\TurboControl.cpp" />
+    <ClCompile Include="Classes\Hacks\VehicleGodMode.cpp" />
     <ClCompile Include="Classes\Hacks\WallHack_NewNameTags.cpp" />
     <ClCompile Include="Classes\Hacks\WallShot.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
@@ -155,9 +157,11 @@
     <ClInclude Include="Classes\Hacks\InputHelper.h" />
     <ClInclude Include="Classes\Hacks\FPSController.h" />
     <ClInclude Include="Classes\Hacks\OneBulletKill.h" />
+    <ClInclude Include="Classes\Hacks\PlayersDescription.h" />
     <ClInclude Include="Classes\Hacks\PlayersList.h" />
     <ClInclude Include="Classes\Hacks\Sbiv.h" />
     <ClInclude Include="Classes\Hacks\TurboControl.h" />
+    <ClInclude Include="Classes\Hacks\VehicleGodMode.h" />
     <ClInclude Include="Classes\Hacks\WallHack_NewNameTags.h" />
     <ClInclude Include="Classes\Hacks\WallShot.h" />
     <ClInclude Include="game_api\game\C3DMarker.h" />

@@ -329,7 +329,8 @@ void CustomRender::onDrawHack()
 
 void CustomRender::read(nlohmann::json& data)
 {
-	m_bEnabled = data["CustomRender"].get<bool>();
+	
+	DESERIALIZE_FIELD_JSON(m_bEnabled);
 	size_t i = 0;
 	while (true)
 	{
@@ -342,58 +343,58 @@ void CustomRender::read(nlohmann::json& data)
 }
 void CustomRender::save(nlohmann::json& data)
 {
-	data["CustomRender"] = m_bEnabled;
+	SERIALIZE_FIELD_JSON(m_bEnabled);
 	for (size_t i = 0; i < m_classes.size(); i++)
 		m_classes[i].save(data["class"][std::to_string(i).c_str()]);
 
 }
 void ObjectRender::save(nlohmann::json& data)
 {
-	data["IDS"] = m_ids;
-	data["name"] = m_sName;
-	data["renderingName"] = m_sRenderinName;
-	data["enabled"] = m_bIsEnabled;
+	SERIALIZE_FIELD_JSON(m_ids);
+	SERIALIZE_FIELD_JSON(m_sName);
+	SERIALIZE_FIELD_JSON(m_sRenderinName);
+	SERIALIZE_FIELD_JSON(m_bIsEnabled);
 }
 void ObjectRender::read(nlohmann::json& data)
 {
-	m_ids = data["IDS"].get<std::vector<int>>();
-	m_sName = data["name"].get<std::string>();
-	m_sRenderinName = data["renderingName"].get<std::string>();
-	m_bIsEnabled = data["enabled"].get<bool>();
+	DESERIALIZE_FIELD_JSON(m_ids);
+	DESERIALIZE_FIELD_JSON(m_sName);
+	DESERIALIZE_FIELD_JSON(m_sRenderinName);
+	DESERIALIZE_FIELD_JSON(m_bIsEnabled);
 
 }
 void PickupRender::save(nlohmann::json& data)
 {
-	data["IDS"] = m_ids;
-	data["name"] = m_sName;
-	data["renderingName"] = m_sRenderinName;
-	data["enabled"] = m_bIsEnabled;
+	SERIALIZE_FIELD_JSON(m_ids);
+	SERIALIZE_FIELD_JSON(m_sName);
+	SERIALIZE_FIELD_JSON(m_sRenderinName);
+	SERIALIZE_FIELD_JSON(m_bIsEnabled);
 }
 void PickupRender::read(nlohmann::json& data)
 {
-	m_ids = data["IDS"].get<std::vector<int>>();
-	m_sName = data["name"].get<std::string>();
-	m_sRenderinName = data["renderingName"].get<std::string>();
-	m_bIsEnabled = data["enabled"].get<bool>();
+	DESERIALIZE_FIELD_JSON(m_ids);
+	DESERIALIZE_FIELD_JSON(m_sName);
+	DESERIALIZE_FIELD_JSON(m_sRenderinName);
+	DESERIALIZE_FIELD_JSON(m_bIsEnabled);
 }
 void Text3dRender::save(nlohmann::json& data)
 {
-	data["enabled"] = m_bIsEnabled;
-	data["texts"] = m_textToSearch;
-	data["name"] = m_sName;
-	data["renderingName"] = m_sRenderinName;
+	SERIALIZE_FIELD_JSON(m_textToSearch);
+	SERIALIZE_FIELD_JSON(m_sName);
+	SERIALIZE_FIELD_JSON(m_sRenderinName);
+	SERIALIZE_FIELD_JSON(m_bIsEnabled);
 }
 void Text3dRender::read(nlohmann::json& data)
 {
-	m_textToSearch = data["texts"].get<std::vector<std::string>>();
-	m_sName = data["name"].get<std::string>();
-	m_sRenderinName = data["renderingName"].get<std::string>();
-	m_bIsEnabled = data["enabled"].get<bool>();
+	DESERIALIZE_FIELD_JSON(m_textToSearch);
+	DESERIALIZE_FIELD_JSON(m_sName);
+	DESERIALIZE_FIELD_JSON(m_sRenderinName);
+	DESERIALIZE_FIELD_JSON(m_bIsEnabled);
 }
 void RenderClass::save(nlohmann::json& data)
 {
-	data["name"] = m_sName;
-	data["enabled"] = m_bIsEnabled;
+	SERIALIZE_FIELD_JSON(m_sName);
+	SERIALIZE_FIELD_JSON(m_bIsEnabled);
 	for (size_t i = 0; i < m_objectsRenders.size(); i++)
 		m_objectsRenders[i].save(data["rendersObj"][std::to_string(i).c_str()]);
 	for (size_t i = 0; i < m_pickupRenders.size(); i++)
@@ -403,8 +404,8 @@ void RenderClass::save(nlohmann::json& data)
 }
 void RenderClass::read(nlohmann::json& data)
 {
-	m_sName = data["name"].get<std::string>();
-	m_bIsEnabled = data["enabled"].get<bool>();
+	DESERIALIZE_FIELD_JSON(m_sName);
+	DESERIALIZE_FIELD_JSON(m_bIsEnabled);
 	size_t i = 0;
 	while (true)
 	{

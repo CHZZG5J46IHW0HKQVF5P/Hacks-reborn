@@ -73,11 +73,11 @@ void AirBrake::onDrawGUI()
 	ImGui::SameLine();
 	Lippets::ImGuiSnippets::KeyButton(activationKey, g::keyButtonSplitter);
 }
-bool AirBrake::onWndProc(WPARAM wParam, UINT msg)
+bool AirBrake::onWndProc()
 {
-	if (msg != WM_KEYDOWN && msg != WM_LBUTTONDOWN && msg != WM_SYSKEYDOWN)
+	if (!g::pKeyEventInfo->bDown)
 		return true;
-	if (activationKey != 0 && wParam == activationKey)
+	if (activationKey != 0 && g::pKeyEventInfo->iKeyID == activationKey)
 	{
 
 		isAirBrakeShouldWork = !isAirBrakeShouldWork;//true;
@@ -85,11 +85,11 @@ bool AirBrake::onWndProc(WPARAM wParam, UINT msg)
 	}
 	if (isAirBrakeShouldWork)
 	{
-		switch (wParam)
+		switch (g::pKeyEventInfo->iKeyID)
 		{
 		case 87: AirBrakeForward(fAirBrakeForce, g::pInfo->isExist, g::pInfo->isDriver); break;
-		case 32: TPupdown(fAirBrakeForce, g::pInfo->isExist, g::pInfo->isDriver,true); break;
-		case 16: TPupdown(fAirBrakeForce, g::pInfo->isExist, g::pInfo->isDriver,false); break;
+		case 32: TPupdown(fAirBrakeForce, g::pInfo->isExist, g::pInfo->isDriver, true); break;
+		case 16: TPupdown(fAirBrakeForce, g::pInfo->isExist, g::pInfo->isDriver, false); break;
 		default:
 			break;
 		}
@@ -100,15 +100,17 @@ bool AirBrake::onWndProc(WPARAM wParam, UINT msg)
 
 void AirBrake::save(nlohmann::json& data)
 {
-	data[m_sHackName] = m_bEnabled;
-	data["activationKey"] = activationKey;
-	data["fAirBrakeForce"] = fAirBrakeForce;
+
+	SERIALIZE_FIELD_JSON(m_bEnabled);
+	SERIALIZE_FIELD_JSON(activationKey);
+	SERIALIZE_FIELD_JSON(fAirBrakeForce);
 }
 void AirBrake::read(nlohmann::json& data)
 {
-	m_bEnabled = data[m_sHackName].get<bool>();
-	activationKey = data["activationKey"].get<int>();
-	fAirBrakeForce = data["fAirBrakeForce"].get<float>();
+
+	DESERIALIZE_FIELD_JSON(m_bEnabled);
+	DESERIALIZE_FIELD_JSON(activationKey);
+	DESERIALIZE_FIELD_JSON(fAirBrakeForce);
 
 	ASSIGN_VAR_VALUE_IF_EQUALS_ZEROF(fAirBrakeForce, 3.f);
 }

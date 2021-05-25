@@ -79,34 +79,42 @@ void PlayersList::onDrawGUI()
 void PlayersList::save(nlohmann::json &data)
 {
 
-	data["noFriendDamage"] = noFriendDamage;
-	data["Connect_logger"] = connectLoger;
+	SERIALIZE_FIELD_JSON(noFriendDamage);
+
+	SERIALIZE_FIELD_JSON(connectLoger);
 
 	SERIALIZE_FIELD_JSON(friendsList);
 
 	SERIALIZE_FIELD_JSON(enemiesList);
 
-	data["FriendsListWindowPos"]["x"] = friendsListWindowPos.x;
-	data["FriendsListWindowPos"]["y"] = friendsListWindowPos.y;
 
-	data["EnemiesListWindowPos"]["x"] = enemiesListWindowPos.x;
-	data["EnemiesListWindowPos"]["y"] = enemiesListWindowPos.y;
+	SERIALIZE_FIELD_JSON_("FriendsListWindowPos_X", friendsListWindowPos.x);
+	SERIALIZE_FIELD_JSON_("FriendsListWindowPos_Y", friendsListWindowPos.y);
+
+	SERIALIZE_FIELD_JSON_("EnemiesListWindowPos_X", enemiesListWindowPos.x);
+
+	SERIALIZE_FIELD_JSON_("EnemiesListWindowPos_Y", enemiesListWindowPos.y);
+
 
 }
 
 void PlayersList::read(nlohmann::json &data)
 {
-	noFriendDamage = data["noFriendDamage"].get<bool>();
-	connectLoger = data["Connect_logger"].get<bool>();
+	DESERIALIZE_FIELD_JSON(noFriendDamage);
+
+	DESERIALIZE_FIELD_JSON(connectLoger);
 
 	DESERIALIZE_FIELD_JSON(friendsList);
+
 	DESERIALIZE_FIELD_JSON(enemiesList);
 
-	friendsListWindowPos.x = data["FriendsListWindowPos"]["x"].get<float>();
-	friendsListWindowPos.y = data["FriendsListWindowPos"]["y"].get<float>();
 
-	enemiesListWindowPos.x = data["EnemiesListWindowPos"]["x"].get<float>();
-	enemiesListWindowPos.y = data["EnemiesListWindowPos"]["y"].get<float>();
+	DESERIALIZE_FIELD_JSON_("FriendsListWindowPos_X", friendsListWindowPos.x);
+	DESERIALIZE_FIELD_JSON_("FriendsListWindowPos_Y", friendsListWindowPos.y);
+
+	DESERIALIZE_FIELD_JSON_("EnemiesListWindowPos_X", enemiesListWindowPos.x);
+
+	DESERIALIZE_FIELD_JSON_("EnemiesListWindowPos_Y", enemiesListWindowPos.y);
 
 }
 
@@ -132,7 +140,7 @@ void PlayersList::onDrawHack()
 				auto szPlayerName = SF->getSAMP()->getPlayers()->GetPlayerName(player.id);
 				if (std::find(friendsList.begin(), friendsList.end(), std::string(szPlayerName)) == friendsList.end())
 					continue;
-				ImGui::TextColored(ImGui::ColorConvertU32ToFloat4(SF->getSAMP()->getPlayers()->GetPlayerColor(player.id)), "%s[%d] %f", szPlayerName, player.id, player.fDistance);
+				ImGui::TextColored(ImGui::ColorConvertU32ToFloat4(SF->getSAMP()->getPlayers()->GetPlayerColor(player.id)), "%s[%d] %.1f", szPlayerName, player.id, player.fDistance);
 			}
 			friendsListWindowPos = ImGui::GetWindowPos();
 		}
@@ -183,7 +191,6 @@ bool PlayersList::onPacketOutcoming(stRakNetHookParams* params)
 bool PlayersList::onRPCIncoming(stRakNetHookParams* params)
 {
 	if (!connectLoger) return true;
-
 	if (params->packetId == ScriptRPCEnumeration::RPC_ScrServerJoin)
 	{
 		UINT8 PlayerNameLength;

@@ -1,13 +1,15 @@
 #include "Hack.h"
 
-HACK_CLASS(Sbiv)
+HACK_CLASS(VehicleGodMode)
 {
 public:
-	Sbiv(const char*);
-	
+	VehicleGodMode(const char*);
+
 	int m_nActivationKey = 0;
 
-	void onDrawGUI() override;
 	OVERRIDE_WNDPROC;
+	
+	void onDrawGUI() override;
+
 	OVERRIDE_SAVE_READ;
 };
