@@ -21,7 +21,7 @@ void TurboControl::onDrawGUI()
 bool TurboControl::onWndProc()
 {
 	if (activationKey != 0 && g::pKeyEventInfo->iKeyID == activationKey)
-		if (g::pInfo->isDriver)
+		if (g::pInfo->isDriver())
 			if (g::pKeyEventInfo->bDown)
 			{
 

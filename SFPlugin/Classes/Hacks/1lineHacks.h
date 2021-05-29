@@ -1,6 +1,8 @@
 #pragma once
 #include "Hack.h"
 
+
+
 enum class RUN_TYPE
 {
 	DEFAULT, //= -1
@@ -52,6 +54,7 @@ private:
 	bool bDontGiveMeBat = false;
 	bool bMegaBMXJump = false;
 	bool bGodMode = false;
+	bool bAutoVehicleOnWheels = false;
 	RUN_TYPE CurrentRunType = RUN_TYPE::DEFAULT;
 	FIGHT_STYLE CurrentFightStyle = FIGHT_STYLE::DEFAULT;
 	OVERRIDE_DRAWGUI;

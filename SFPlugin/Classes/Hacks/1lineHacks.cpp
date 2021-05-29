@@ -217,18 +217,18 @@ void setFightStyle(FIGHT_STYLE fightStyle)
 	}
 }
 
+
 OneLineHacks::OneLineHacks(const char* name)
 {
 	m_sHackName = name;
 	m_bEnabled = true;
 	SF->getSAMP()->registerChatCommand("setskin", [](std::string args)
 	{
-		if (Players::isLocalPlayerExist())
-		{
-			uint32_t iSkinID = atoi(args.c_str());
-			if (iSkinID > 0 && iSkinID < 311)
-				RPC_emulating::setskin(MYID, iSkinID);
-		}
+
+		uint32_t iSkinID = atoi(args.c_str());
+		if (iSkinID > 0 && iSkinID < 311)
+			RPC_emulating::setskin(MYID, iSkinID);
+
 	});
 	SF->getSAMP()->registerChatCommand("die", [](std::string args)
 	{
@@ -335,6 +335,7 @@ void OneLineHacks::onDrawGUI()
 	}
 	if (ImGui::Checkbox("GodMode", &bGodMode))
 		EnableGodMode(bGodMode);
+	ImGui::Checkbox("Auto Set Vehicle Stay On Wheels", &bAutoVehicleOnWheels);
 
 }
 
@@ -367,10 +368,20 @@ void OneLineHacks::switchHack()
 }
 void OneLineHacks::everyTickAction()
 {
+
 	if (bFastHelper)
 		SF->getGame()->emulateGTAKey(4, 255);
-	if (g::pInfo->isDriver)
+	if (g::pInfo->isDriver())
 	{
+		if (bAutoVehicleOnWheels)
+		{
+			if (GTAfunc_IsUpsideDown(g::pInfo->pLocalVeh))
+			{
+				PEDSELF->GetVehicle()->Teleport(g::pInfo->pLocalVeh->base.matrix[4 * 3],
+					g::pInfo->pLocalVeh->base.matrix[4 * 3 + 1],
+					g::pInfo->pLocalVeh->base.matrix[4 * 3 + 2]);
+			}
+		}
 		if (bFastHeli)
 		{
 			if (g::pInfo->vehType == eVehicleType::CHeli)
@@ -380,7 +391,8 @@ void OneLineHacks::everyTickAction()
 		}
 		if (bNoBike)
 		{
-			if (g::pInfo->vehType != Vehicles::eVehicleType::CBike)
+			if (g::pInfo->vehType != Vehicles::eVehicleType::CBike ||
+				g::pInfo->vehType != eVehicleType::CBMX)
 			{
 				if (PEDSELF->GetVehicle()->IsDrowning())
 				{
@@ -432,8 +444,8 @@ void OneLineHacks::everyTickAction()
 }
 bool OneLineHacks::onWndProc()
 {
-	if (bPressNitro && g::pInfo->isDriver)
-		if (g::pKeyEventInfo->iKeyID == 0 || g::pKeyEventInfo->iKeyID == 1)
+	if (g::pKeyEventInfo->iKeyID == 0 || g::pKeyEventInfo->iKeyID == 1)
+		if (bPressNitro && g::pInfo->isDriver())
 			if (g::pKeyEventInfo->bDown)
 			{
 				*reinterpret_cast<byte*>(0x969165) = 1;
@@ -487,8 +499,9 @@ bool OneLineHacks::onPacketOutcoming(stRakNetHookParams *param)
 
 void OneLineHacks::save(nlohmann::json& data)
 {
-	SERIALIZE_FIELD_JSON(CurrentRunType, int);
-	SERIALIZE_FIELD_JSON(CurrentFightStyle, int);
+	SERIALIZE_FIELD_JSON(bAutoVehicleOnWheels);
+	SERIALIZE_FIELD_JSON(CurrentRunType);
+	SERIALIZE_FIELD_JSON(CurrentFightStyle);
 	SERIALIZE_FIELD_JSON(bMegaBMXJump);
 	SERIALIZE_FIELD_JSON(bFastHeli);
 	SERIALIZE_FIELD_JSON(bDontGiveMeBat);
@@ -517,7 +530,7 @@ void OneLineHacks::save(nlohmann::json& data)
 }
 void OneLineHacks::read(nlohmann::json& data)
 {
-
+	DESERIALIZE_FIELD_JSON(bAutoVehicleOnWheels);
 	DESERIALIZE_FIELD_JSON(CurrentFightStyle);// = (FIGHT_STYLE)data["FightStyle"].get<int>();
 	DESERIALIZE_FIELD_JSON(CurrentRunType); //(RUN_TYPE)data["RunType"].get<int>();
 	DESERIALIZE_FIELD_JSON(bMegaBMXJump);

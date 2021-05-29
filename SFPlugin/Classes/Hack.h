@@ -40,9 +40,17 @@ extern SAMPFUNCS *SF;
 
 struct crTickLocalPlayerInfo
 {
-	bool isExist;
-	bool isInCar;
-	bool isDriver;
+	bool isInCar()
+	{
+		return _isInCar && pLocalVeh;
+	}
+	bool isDriver()
+	{
+		return _isDriver && pLocalVeh;
+	}
+	vehicle_info* pLocalVeh;
+	bool _isInCar;
+	bool _isDriver;
 	int iCurrentVehicleID;
 	Vehicles::eVehicleType vehType;
 	std::vector<NearPlayer> nearestPlayers;
@@ -78,6 +86,8 @@ enum HackFunction
 	DRAW_HACK
 };
 
+
+
 class IHack : Lippets::LUtils::NonCopyable
 {
 
@@ -102,6 +112,8 @@ public:
 	virtual void release() {};
 	virtual void init() {};
 };
+
+
 
 #define OVERRIDE_DRAWGUI void onDrawGUI() override;
 

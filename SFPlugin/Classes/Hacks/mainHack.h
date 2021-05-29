@@ -9,4 +9,5 @@ public:
 	bool onRPCIncoming(stRakNetHookParams* params) override;
 	OVERRIDE_WNDPROC;
 	OVERRIDE_EVERY_TICK;
+	OVERRIDE_INIT;
 };

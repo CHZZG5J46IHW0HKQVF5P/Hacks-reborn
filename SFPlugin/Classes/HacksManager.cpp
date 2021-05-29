@@ -81,9 +81,9 @@ void HacksManager::initHacksOnce()
 	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new FastEnterExit("FastEnterExit")));
 	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::VISUAL, new PlayersDescription("PlayersDescription")));
 
-	std::sort(m_hacks.begin(), m_hacks.end(), [](const std::tuple<Priority, HACK_TYPE, IHack*> pair1, const std::tuple<Priority, HACK_TYPE, IHack*>  pair2)
+	std::sort(m_hacks.begin(), m_hacks.end(), [](const Hack& hack, const Hack&  hack2)
 	{
-		return std::get<Priority>(pair1) < std::get<Priority>(pair2);
+		return std::get<Priority>(hack) < std::get<Priority>(hack2);
 	});
 
 	read();
@@ -96,7 +96,7 @@ void HacksManager::initHacksOnce()
 	isInitialized = true;
 }
 
-std::vector<std::tuple<Priority, HACK_TYPE, IHack*>>* HacksManager::getHacks()
+std::vector<Hack>* HacksManager::getHacks()
 {
 	return &m_hacks;
 }

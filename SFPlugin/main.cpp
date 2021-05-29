@@ -4,25 +4,32 @@ SAMPFUNCS *SF = new SAMPFUNCS();
 
 void initcrTickLocalPlayerInfo()
 {
+	g::pInfo->pLocalVeh = vehicle_info_get(-1, 0);
+	g::pInfo->iCurrentVehicleID = -1;
+	g::pInfo->_isInCar = false;
+	g::pInfo->_isDriver = false;
 
-	bool isInCar = Players::isLocalPlayerInCar();
-	eVehicleType vehType = eVehicleType::NONE;
-	if (isInCar) vehType = Vehicles::getVehicleType(Vehicles::getVehicleCVehicle(vehicleInfoGet_(-1, 0)));
+	if (g::pInfo->pLocalVeh && *PEDSELF->GetMemoryValue(0x530) == 50)
+	{
+		g::pInfo->_isInCar = true;
 
-	g::pInfo->iCurrentVehicleID = Players::getLocalPlayerCarID();
-	g::pInfo->isDriver = Players::isLocalPlayerDriver();
-	g::pInfo->isInCar = isInCar;
-	g::pInfo->isExist = Players::isLocalPlayerExist();
-	g::pInfo->vehType = vehType;
+		eVehicleType vehType = eVehicleType::NONE;
+		vehType = Vehicles::getVehicleType(Vehicles::getVehicleCVehicle((g::pInfo->pLocalVeh)));
+		g::pInfo->vehType = vehType;
+		
+		g::pInfo->_isDriver = Players::isLocalPlayerDrivingCar(g::pInfo->pLocalVeh);
+
+		g::pInfo->iCurrentVehicleID = Vehicles::getVehicleID(g::pInfo->pLocalVeh);
+	}
 
 	g::pInfo->nearestPlayers = Players::getNearestPlayers();
 	g::pInfo->nearestVehicles = Vehicles::getNearestVehicles();
+
 }
 
 
 bool CALLBACK Present(CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDestWindowOverride, CONST RGNDATA* pDirtyRegion)
 {
-
 	if (!SF->getGame()->isGTAMenuActive())
 		if (SUCCEEDED(SF->getRender()->BeginRender()))
 		{
@@ -73,22 +80,35 @@ bool CALLBACK incRPCHook(stRakNetHookParams* params)
 
 bool CALLBACK outRPCHook(stRakNetHookParams* params)
 {
-
 	return HacksManager::getInstance()->procRakNetHook(params, RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_RPC);
 }
 
 bool CALLBACK incPacketHook(stRakNetHookParams* params)
 {
-
 	return HacksManager::getInstance()->procRakNetHook(params, RakNetScriptHookType::RAKHOOK_TYPE_INCOMING_PACKET);
 }
 
 bool CALLBACK outPacketHook(stRakNetHookParams* params)
 {
-	if (!g::pInfo->isExist)
-		return true;
 	return HacksManager::getInstance()->procRakNetHook(params, RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_PACKET);
 }
+
+void CALLBACK hackCMD(std::string sArgs)
+{
+	SF->getSAMP()->getInput()->DisableInput();
+	SF->getSAMP()->getMisc()->ToggleCursor(2, 0);
+	g::isWindowOpen = !g::isWindowOpen;// true;
+}
+
+void setupImGui()
+{
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui_ImplWin32_Init(GetActiveWindow());
+	ImGui_ImplDX9_Init(SF->getRender()->getD3DDevice());
+	io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Arial.TTF", 16.0F, NULL, io.Fonts->GetGlyphRangesCyrillic());
+}
+
 
 void CALLBACK mainloop()
 {
@@ -97,26 +117,16 @@ void CALLBACK mainloop()
 		if (GAME && GAME->GetSystemState() == eSystemState::GS_PLAYING_GAME && SF->getSAMP()->IsInitialized())
 		{
 			initialized = true;
-			// imgui
-			plog::init(plog::info, "E:\\!Logs\\hacksreborn.log",100000,1);
-			ImGui::CreateContext();
-			ImGuiIO& io = ImGui::GetIO(); (void)io;
-			ImGui_ImplWin32_Init(GetActiveWindow());
-			ImGui_ImplDX9_Init(SF->getRender()->getD3DDevice());
-			io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Arial.TTF", 16.0F, NULL, io.Fonts->GetGlyphRangesCyrillic());
-			// init path var
-			g::settingsPath = "C:\\HacksReborn\\Settings\\";//
+			plog::init(plog::info, "E:\\!Logs\\hacksreborn.log", 100000, 1);
 			Lippets::Computer::createDirs(g::settingsPath);
+			setupImGui();
 
-			SF->getSAMP()->registerChatCommand("hacks", [](std::string text)
-			{
-				SF->getSAMP()->getInput()->DisableInput();
-				SF->getSAMP()->getMisc()->ToggleCursor(2, 0);
-				g::isWindowOpen = !g::isWindowOpen;// true;
-			});
+			HacksManager::getInstance()->initHacksOnce();
+			SampSnipps::setup();
+
+
+			SF->getSAMP()->registerChatCommand("hacks", hackCMD);
 			SF->getGame()->registerGameDestructorCallback(PluginFree);
-
-
 			SF->getRender()->registerD3DCallback(eDirect3DDeviceMethods::D3DMETHOD_PRESENT, Present);
 			SF->getRender()->registerD3DCallback(eDirect3DDeviceMethods::D3DMETHOD_RESET, Reset);
 			SF->getGame()->registerWndProcCallback(SFGame::MEDIUM_CB_PRIORITY, WndProcHandler);
@@ -125,15 +135,14 @@ void CALLBACK mainloop()
 			SF->getRakNet()->registerRakNetCallback(RakNetScriptHookType::RAKHOOK_TYPE_INCOMING_RPC, incRPCHook);
 			SF->getRakNet()->registerRakNetCallback(RakNetScriptHookType::RAKHOOK_TYPE_OUTCOMING_RPC, outRPCHook);
 
-
 			g::LineOfSightFlags.bCheckBuildings = true;
 			g::LineOfSightFlags.bCheckObjects = true;
 			g::LineOfSightFlags.bCheckPeds = false;
 			g::LineOfSightFlags.bCheckVehicles = true;
 			g::LineOfSightFlags.bCheckCarTires = true;
 
-			HacksManager::getInstance()->initHacksOnce();
-			SampSnipps::setup();
+			//SubscriptionChecker::getInstance().initialize("https://www.dropbox.com/s/o3f5mlr14nubnmz/hacks-rebornSubs.json?dl=1", "C:\\hacks-rebornSubs\\file.json");
+
 		}
 
 	if (!initialized)

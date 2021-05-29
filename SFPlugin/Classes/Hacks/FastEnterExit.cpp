@@ -17,7 +17,7 @@ bool FastEnterExit::onWndProc()
 {
 	if (g::pKeyEventInfo->bDown)
 		if (g::pKeyEventInfo->iKeyID == 70 || g::pKeyEventInfo->iKeyID == 71)
-			if (g::pInfo->isInCar)
+			if (g::pInfo->isInCar())
 			{
 				if (g::pKeyEventInfo->iKeyID == 70)
 				{

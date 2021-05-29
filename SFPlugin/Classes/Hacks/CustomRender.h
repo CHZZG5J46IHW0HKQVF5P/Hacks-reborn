@@ -16,16 +16,14 @@ public:
 
 struct CustomRenderData
 {
-	ImVec4 vec4Color = ImVec4(0, 0, 0, 0);
+	float  vec4Color[4] = { 0.f,0.f,0.f,1.f };
 	CMFont font = CMFont("CustomRender");
-	bool bRGB;
 	bool bDrawLine;
 	CVector onScreenPedCoords;
 };
 
 struct RenderPickup_ObjectData
 {
-	int id;
 	int iModel;
 	float fDistance;
 	CVector onScreenCoords;
@@ -56,9 +54,7 @@ public:
 	std::string m_sRenderinName;
 	std::vector<std::string > m_textToSearch;
 	void render(Render3DTextData*);
-
 	OVERRIDE_SAVE_READ;
-
 };
 
 class ObjectRender : public RenderBase
@@ -67,9 +63,7 @@ public:
 	std::string m_sRenderinName;
 	std::vector<int> m_ids;
 	void render(RenderPickup_ObjectData*);
-
 	OVERRIDE_SAVE_READ;
-
 };
 
 
@@ -94,14 +88,11 @@ public:
 	bool areAnyickupRendersEnabled();
 	bool areAnyText3DRendersEnabled();
 
-
-
 	void drawEditor(size_t i);
 	void drawMenu(size_t i);
 	void renderPickups(RenderPickup_ObjectData*);
 	void renderObjects(RenderPickup_ObjectData*);
 	void render3DTexts(Render3DTextData*);
-
 };
 
 
@@ -123,8 +114,7 @@ private:
 	void drawMenu();
 
 	OVERRIDE_SAVE_READ;
-
-	void onDrawGUI() override;
+	OVERRIDE_DRAWGUI;
 	OVERRIDE_DRAW_HACK;
 
 };

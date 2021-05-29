@@ -178,10 +178,19 @@ void RenderClass::drawMenu(size_t i)
 
 void CustomRender::drawMenu()
 {
+	static bool bDrawSettings = false;
 	if (ImGui::Begin("Custom Render Menu", &m_bIsMenuOpened))
 	{
+		if (ImGui::Button("Settings###customRenderSettingsBTN"))
+			bDrawSettings = !bDrawSettings;
 		for (size_t i = 0; i < m_classes.size(); i++)
 			m_classes[i].drawMenu(i);
+		ImGui::End();
+	}
+	if (ImGui::Begin("Custom Render Settings", &bDrawSettings))
+	{
+		ImGui::Checkbox("Draw Line", &customRenderData.bDrawLine);
+		ImGui::ColorEdit4("Color", (float*)&customRenderData.vec4Color);
 		ImGui::End();
 	}
 }
@@ -248,6 +257,7 @@ bool CustomRender::areAnyClassesEnabled()
 	return false;
 }
 
+
 void CustomRender::onDrawHack()
 {
 	if (!areAnyClassesEnabled())
@@ -261,7 +271,7 @@ void CustomRender::onDrawHack()
 			continue;
 
 		static RenderPickup_ObjectData ObjectData;
-		CVector vecWorld;
+		static CVector vecWorld;
 		vecWorld.fX = object[i]->pGTAEntity->base.matrix[4 * 3];
 		vecWorld.fY = object[i]->pGTAEntity->base.matrix[4 * 3 + 1];
 		vecWorld.fZ = object[i]->pGTAEntity->base.matrix[4 * 3 + 2];
@@ -271,14 +281,12 @@ void CustomRender::onDrawHack()
 		if (ObjectData.onScreenCoords.fZ < 0.01f)
 			continue;
 		ObjectData.fDistance = Stuff::getDistanceBetween(PEDSELF->GetPosition(), vecWorld);
-		ObjectData.id = i;
 		ObjectData.iModel = object[i]->iModel;
 		for (auto&& classR : m_classes)
 			if (classR.m_bIsEnabled)
 				if (classR.areAnyObjectRendersEnabled())
 					classR.renderObjects(&ObjectData);
 	}
-
 
 	for (int i = 0; i < SAMP_MAX_PICKUPS; i++)
 	{
@@ -287,7 +295,7 @@ void CustomRender::onDrawHack()
 			continue;
 
 		static RenderPickup_ObjectData PickupData;
-		CVector vecWorld;
+		static CVector vecWorld;
 		vecWorld.fX = pickup[i].fPosition[0];
 		vecWorld.fY = pickup[i].fPosition[1];
 		vecWorld.fZ = pickup[i].fPosition[2];
@@ -296,7 +304,7 @@ void CustomRender::onDrawHack()
 			continue;
 
 		PickupData.fDistance = Stuff::getDistanceBetween(PEDSELF->GetPosition(), vecWorld);
-		PickupData.id = i;
+
 		PickupData.iModel = pickup[i].iModelID;
 		for (auto&& classR : m_classes)
 			if (classR.m_bIsEnabled)
@@ -304,12 +312,13 @@ void CustomRender::onDrawHack()
 					classR.renderPickups(&PickupData);
 	}
 
+
 	for (int i = 0; i < SAMP_MAX_3DTEXTS; i++)
 	{
 		if (!Pools::is3DTextExist(i))
 			continue;
 		static Render3DTextData Text3DData;
-		CVector vecWorld;
+		static CVector vecWorld;
 		vecWorld.fX = text3d[i].fPosition[0];
 		vecWorld.fY = text3d[i].fPosition[1];
 		vecWorld.fZ = text3d[i].fPosition[2];
@@ -329,7 +338,8 @@ void CustomRender::onDrawHack()
 
 void CustomRender::read(nlohmann::json& data)
 {
-	
+	DESERIALIZE_FIELD_JSON(customRenderData.vec4Color);
+	DESERIALIZE_FIELD_JSON(customRenderData.bDrawLine);
 	DESERIALIZE_FIELD_JSON(m_bEnabled);
 	size_t i = 0;
 	while (true)
@@ -343,6 +353,8 @@ void CustomRender::read(nlohmann::json& data)
 }
 void CustomRender::save(nlohmann::json& data)
 {
+	SERIALIZE_FIELD_JSON(customRenderData.vec4Color);
+	SERIALIZE_FIELD_JSON(customRenderData.bDrawLine);
 	SERIALIZE_FIELD_JSON(m_bEnabled);
 	for (size_t i = 0; i < m_classes.size(); i++)
 		m_classes[i].save(data["class"][std::to_string(i).c_str()]);
@@ -458,8 +470,6 @@ CustomRender::CustomRender(const char* szName)
 {
 	this->m_sHackName = szName;
 	m_bEnabled = false;
-	this->customRenderData.vec4Color.w = 1.f;
-	this->customRenderData.vec4Color.z = 1.f;
 	this->customRenderData.font.Init();
 }
 RenderClass::RenderClass(const char* szName)
@@ -470,14 +480,17 @@ void ObjectRender::render(RenderPickup_ObjectData* pRenderObjectData)
 {
 	if (std::find(m_ids.begin(), m_ids.end(), pRenderObjectData->iModel) != m_ids.end())
 	{
-		UINT32 color = ImGui::ColorConvertFloat4ToU32(CustomRender::customRenderData.vec4Color);
+		UINT32 color = ImGui::ColorConvertFloat4ToU32(ImVec4(CustomRender::customRenderData.vec4Color[2], CustomRender::customRenderData.vec4Color[1], CustomRender::customRenderData.vec4Color[0], CustomRender::customRenderData.vec4Color[3]));
+		if (CustomRender::customRenderData.bDrawLine)
+		{
+			SF->getRender()->DrawLine(pRenderObjectData->onScreenCoords.fX,
+				pRenderObjectData->onScreenCoords.fY, CustomRender::customRenderData.onScreenPedCoords.fX,
+				CustomRender::customRenderData.onScreenPedCoords.fY, 1, color);
 
-		SF->getRender()->DrawLine(pRenderObjectData->onScreenCoords.fX,
-			pRenderObjectData->onScreenCoords.fY, CustomRender::customRenderData.onScreenPedCoords.fX,
-			CustomRender::customRenderData.onScreenPedCoords.fY, 1, color);
+			SF->getRender()->DrawPolygon(pRenderObjectData->onScreenCoords.fX,
+				pRenderObjectData->onScreenCoords.fY, 3, 3, 0.0, 8, color);
+		}
 
-		SF->getRender()->DrawPolygon(pRenderObjectData->onScreenCoords.fX,
-			pRenderObjectData->onScreenCoords.fY, 3, 3, 0.0, 8, color);
 
 		char buf[128];
 		sprintf(buf, "%s {ffffff}[%1.f]", Lippets::Strings::UTF8_to_CP1251(m_sRenderinName).c_str(), pRenderObjectData->fDistance);
@@ -490,15 +503,16 @@ void Text3dRender::render(Render3DTextData* p3DTextData)
 		if (!strstr(p3DTextData->szText, (toSearch).c_str()))
 			return;
 
-	UINT32 color = ImGui::ColorConvertFloat4ToU32(CustomRender::customRenderData.vec4Color);
+	UINT32 color = ImGui::ColorConvertFloat4ToU32(ImVec4(CustomRender::customRenderData.vec4Color[2], CustomRender::customRenderData.vec4Color[1], CustomRender::customRenderData.vec4Color[0], CustomRender::customRenderData.vec4Color[3]));
+	if (CustomRender::customRenderData.bDrawLine)
+	{
+		SF->getRender()->DrawLine(p3DTextData->onScreenCoords.fX,
+			p3DTextData->onScreenCoords.fY, CustomRender::customRenderData.onScreenPedCoords.fX,
+			CustomRender::customRenderData.onScreenPedCoords.fY, 1, color);
 
-	SF->getRender()->DrawLine(p3DTextData->onScreenCoords.fX,
-		p3DTextData->onScreenCoords.fY, CustomRender::customRenderData.onScreenPedCoords.fX,
-		CustomRender::customRenderData.onScreenPedCoords.fY, 1, color);
-
-	SF->getRender()->DrawPolygon(p3DTextData->onScreenCoords.fX,
-		p3DTextData->onScreenCoords.fY, 3, 3, 0.0, 8, color);
-
+		SF->getRender()->DrawPolygon(p3DTextData->onScreenCoords.fX,
+			p3DTextData->onScreenCoords.fY, 3, 3, 0.0, 8, color);
+	}
 	char buf[128];
 	sprintf(buf, "%s {ffffff}[%1.f]", (m_sName).c_str(), p3DTextData->fDistance);
 	CustomRender::customRenderData.font.f->Print(buf, color, p3DTextData->onScreenCoords.fX + 5, p3DTextData->onScreenCoords.fY - 7, false);
@@ -508,15 +522,16 @@ void PickupRender::render(RenderPickup_ObjectData* pRenderPickupData)
 {
 	if (std::find(m_ids.begin(), m_ids.end(), pRenderPickupData->iModel) != m_ids.end())
 	{
-		UINT32 color = ImGui::ColorConvertFloat4ToU32(CustomRender::customRenderData.vec4Color);
+		UINT32 color = ImGui::ColorConvertFloat4ToU32(ImVec4(CustomRender::customRenderData.vec4Color[2], CustomRender::customRenderData.vec4Color[1], CustomRender::customRenderData.vec4Color[0], CustomRender::customRenderData.vec4Color[3]));
+		if (CustomRender::customRenderData.bDrawLine)
+		{
+			SF->getRender()->DrawLine(pRenderPickupData->onScreenCoords.fX,
+				pRenderPickupData->onScreenCoords.fY, CustomRender::customRenderData.onScreenPedCoords.fX,
+				CustomRender::customRenderData.onScreenPedCoords.fY, 1, color);
 
-		SF->getRender()->DrawLine(pRenderPickupData->onScreenCoords.fX,
-			pRenderPickupData->onScreenCoords.fY, CustomRender::customRenderData.onScreenPedCoords.fX,
-			CustomRender::customRenderData.onScreenPedCoords.fY, 1, color);
-
-		SF->getRender()->DrawPolygon(pRenderPickupData->onScreenCoords.fX,
-			pRenderPickupData->onScreenCoords.fY, 3, 3, 0.0, 8, color);
-
+			SF->getRender()->DrawPolygon(pRenderPickupData->onScreenCoords.fX,
+				pRenderPickupData->onScreenCoords.fY, 3, 3, 0.0, 8, color);
+		}
 		char buf[128];
 		sprintf(buf, "%s {ffffff}[%1.f]", (m_sRenderinName).c_str(), pRenderPickupData->fDistance);
 		CustomRender::customRenderData.font.f->Print(buf, color, pRenderPickupData->onScreenCoords.fX + 5, pRenderPickupData->onScreenCoords.fY - 7, false);

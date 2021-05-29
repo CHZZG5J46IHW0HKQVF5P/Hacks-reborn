@@ -12,7 +12,7 @@ void Sbiv::onDrawGUI()
 bool Sbiv:: onWndProc()
 {
 	if (m_nActivationKey != 0 && g::pKeyEventInfo->iKeyID == m_nActivationKey)
-		if (!g::pInfo->isDriver)
+		if (!g::pInfo->isDriver())
 			if (g::pKeyEventInfo->bDown)
 			{
 				PEDSELF->SetMoveSpeed(&CVector());

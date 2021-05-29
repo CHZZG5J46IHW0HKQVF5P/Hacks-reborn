@@ -22,7 +22,7 @@ bool AutoShot::onWndProc()
 }
 void AutoShot::everyTickAction()
 {
-	if (!g::pInfo->isExist || !autoShot || g::pInfo->isInCar)
+	if (!autoShot || g::pInfo->isDriver())
 		return;
 	if (*(DWORD*)PEDSELF->GetMemoryValue(0x79C))
 		SF->getGame()->emulateGTAKey(17, 255);

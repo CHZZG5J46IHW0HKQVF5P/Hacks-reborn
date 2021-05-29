@@ -8,7 +8,7 @@ extern SAMPFUNCS *SF;
 
 namespace g
 {
-	std::string settingsPath;
+	std::string settingsPath = "C:\\HacksReborn\\Settings\\";
 	int keyButtonSplitter;
 	bool isWindowOpen;
 	bool isCtrlPressed, isAltPressed, isShiftPressed;

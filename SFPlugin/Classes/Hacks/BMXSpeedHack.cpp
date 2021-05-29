@@ -30,7 +30,7 @@ bool BMXspeedhack::onWndProc()
 }
 void BMXspeedhack::everyTickAction( )
 {
-	if (!g::pInfo->isDriver || g::pInfo->vehType != Vehicles::eVehicleType::CBMX || !bmxspeedHack)
+	if (!g::pInfo->isDriver() || g::pInfo->vehType != Vehicles::eVehicleType::CBMX || !bmxspeedHack)
 		return;
 	static uint8 BMXState = 1;
 	static CMTimer timer;

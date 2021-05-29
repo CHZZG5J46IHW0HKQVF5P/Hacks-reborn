@@ -60,7 +60,7 @@ bool MainHack::onRPCIncoming(stRakNetHookParams* params)
 	}
 	case ScriptRPCEnumeration::RPC_ScrSetVehicleHealth:
 	{
-		if (!g::pInfo->isDriver)
+		if (!g::pInfo->isDriver())
 			return true;
 		int16 iAutoID;
 		float fHealth;
@@ -113,4 +113,17 @@ void MainHack::everyTickAction()
 			SF->getSAMP()->getInput()->DisableInput();
 		}
 	}
+}
+
+void  MainHack::init()
+{
+	WriteMem<byte>(0x96C009, 1, 1);
+	WriteMem<byte>(0x72C1B7, 1, 235);
+	WriteMem<int>(0x6CC303, 3, 0x621F8A);
+
+	// no car fire when on roof
+	WriteMem<short>(6977387, 2, 55517);
+	WriteMem<int>(6977389, 4, -1869574000);
+	WriteMem<short>(5705343, 2, 55517);
+	WriteMem<int>(5705345, 4, -1869574000);
 }
