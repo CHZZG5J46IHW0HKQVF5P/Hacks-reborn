@@ -5,7 +5,6 @@ DEFAULT_HACK_CONSTRUCTOR(AirBrake)
 
 void AirBrakeForward(float force)
 {
-
 	float angle = *(float*)0xB6F258;
 	PEDSELF->SetTargetRotation(angle + 1.57f);
 	float heading = PEDSELF->GetTargetRotation();
@@ -28,7 +27,6 @@ void AirBrakeForward(float force)
 		PEDSELF->SetMoveSpeed(&CVector(0.f, 0.f, 0.f));
 		PEDSELF->SetPosition(&pos);
 	}
-
 }
 
 void TPupdown(float force, bool bUp)

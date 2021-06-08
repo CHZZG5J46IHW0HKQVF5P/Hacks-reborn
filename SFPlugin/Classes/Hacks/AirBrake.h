@@ -1,7 +1,7 @@
 #pragma once
 #include "Hack.h"
 
-
+void AirBrakeForward(float);
 
 HACK_CLASS(AirBrake)
 {

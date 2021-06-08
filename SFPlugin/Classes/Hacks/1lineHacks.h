@@ -50,11 +50,12 @@ private:
 	bool bNewDl = false;
 	bool bWaterProofEngine = false;
 	bool bBar160hp = false;
-	bool bFastHeli = false;
 	bool bDontGiveMeBat = false;
 	bool bMegaBMXJump = false;
 	bool bGodMode = false;
-	bool bAutoVehicleOnWheels = false;
+	bool bFlipVehicle = false;
+	int nFlipVehicleActivationKey = 0;
+	bool bEternalHorn = false;
 	RUN_TYPE CurrentRunType = RUN_TYPE::DEFAULT;
 	FIGHT_STYLE CurrentFightStyle = FIGHT_STYLE::DEFAULT;
 	OVERRIDE_DRAWGUI;

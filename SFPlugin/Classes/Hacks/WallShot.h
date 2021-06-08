@@ -7,6 +7,6 @@ public:
 	WallShot(const char* name);
 private:
 	OVERRIDE_SAVE_READ;
-	void switchHack() override;
-	void onDrawGUI() override;
+	OVERRIDE_SWITCH_HACK;
+	OVERRIDE_DRAWGUI;
 };

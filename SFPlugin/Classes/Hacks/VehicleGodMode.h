@@ -7,9 +7,11 @@ public:
 
 	int m_nActivationKey = 0;
 
+	static void enableVehGodMode(bool);
+
 	OVERRIDE_WNDPROC;
-	
-	void onDrawGUI() override;
+
+	OVERRIDE_DRAWGUI;
 
 	OVERRIDE_SAVE_READ;
 };

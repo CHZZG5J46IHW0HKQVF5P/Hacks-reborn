@@ -11,12 +11,9 @@ void VehicleGodMode::onDrawGUI()
 	Lippets::ImGuiSnippets::KeyButton(m_nActivationKey, g::keyButtonSplitter);
 }
 
-bool VehicleGodMode::onWndProc()
+void VehicleGodMode::enableVehGodMode(bool bEnable)
 {
-	if (g::pKeyEventInfo->iKeyID != m_nActivationKey)
-		return true;
-
-	if (g::pKeyEventInfo->bDown)
+	if (bEnable)
 	{
 		vehicle_info* pVehicleInfo = vehicle_info_get(-1, 0);
 		if (pVehicleInfo)
@@ -30,6 +27,16 @@ bool VehicleGodMode::onWndProc()
 			pVehicleInfo->flags = (0 | 0 | 0 | 0 | 0);
 
 	}
+
+}
+
+bool VehicleGodMode::onWndProc()
+{
+	if (g::pKeyEventInfo->iKeyID != m_nActivationKey)
+		return true;
+
+	enableVehGodMode(g::pKeyEventInfo->bDown);
+
 }
 
 void VehicleGodMode::save(nlohmann::json &data)

@@ -1,3 +1,4 @@
+#pragma once
 #include "Hack.h"
 
 HACK_CLASS(CollisionHack)
@@ -13,7 +14,7 @@ private:
 
 	OVERRIDE_RELEASE;
 	OVERRIDE_INIT;
-	void onDrawGUI() override;
+	OVERRIDE_DRAWGUI;
 	OVERRIDE_SAVE_READ;
 
 };

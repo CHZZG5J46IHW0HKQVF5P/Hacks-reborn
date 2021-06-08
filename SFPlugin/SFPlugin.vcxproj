@@ -75,8 +75,8 @@
       <FloatingPointModel>Fast</FloatingPointModel>
       <CompileAs>Default</CompileAs>
       <AdditionalIncludeDirectories>SubscriptionChecker;C:\Lippets;C:\Lippets\stuff;C:\Lippets\SobeitApiToSampFuncsWrapper;memsafe;include\plog;Classes\Hacks\Visuals;Classes\CMClasses;ImGui;include;Classes\Hacks;Classes;json;json\json;$(DXSDK_DIR)\Include;SFAPI;game_api;game_api\sdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>/Zc:threadSafeInit-  /std:c++17 %(AdditionalOptions)</AdditionalOptions>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/Zc:threadSafeInit-  /std:c++latest %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
@@ -112,9 +112,11 @@
     <ClCompile Include="Classes\Hacks\AirBrake.cpp" />
     <ClCompile Include="Classes\Hacks\AltClicker.cpp" />
     <ClCompile Include="Classes\Hacks\ArizonaLEmulator.cpp" />
+    <ClCompile Include="Classes\Hacks\AutoCBug.cpp" />
     <ClCompile Include="Classes\Hacks\AutoShot.cpp" />
     <ClCompile Include="Classes\Hacks\Binder.cpp" />
     <ClCompile Include="Classes\Hacks\BMXSpeedHack.cpp" />
+    <ClCompile Include="Classes\Hacks\CarShot.cpp" />
     <ClCompile Include="Classes\Hacks\Collision.cpp" />
     <ClCompile Include="Classes\Hacks\CustomRender.cpp" />
     <ClCompile Include="Classes\Hacks\FastEnterExit.cpp" />
@@ -129,12 +131,14 @@
     <ClCompile Include="Classes\Hacks\VehicleGodMode.cpp" />
     <ClCompile Include="Classes\Hacks\WallHack_NewNameTags.cpp" />
     <ClCompile Include="Classes\Hacks\WallShot.cpp" />
+    <ClCompile Include="Hack.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
     <ClCompile Include="ImGui\imgui_impl_dx9.cpp" />
     <ClCompile Include="ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="ImGui\imgui_stdlib.cpp" />
+    <ClCompile Include="ImGui\imgui_tables.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -147,9 +151,11 @@
     <ClInclude Include="Classes\Hacks\AirBrake.h" />
     <ClInclude Include="Classes\Hacks\AltClicker.h" />
     <ClInclude Include="Classes\Hacks\ArizonaLEmulator.h" />
+    <ClInclude Include="Classes\Hacks\AutoCBug.h" />
     <ClInclude Include="Classes\Hacks\AutoShot.h" />
     <ClInclude Include="Classes\Hacks\Binder.h" />
     <ClInclude Include="Classes\Hacks\BMXSpeedHack.h" />
+    <ClInclude Include="Classes\Hacks\CarShot.h" />
     <ClInclude Include="Classes\Hacks\Collision.h" />
     <ClInclude Include="Classes\Hacks\CustomRender.h" />
     <ClInclude Include="Classes\Hacks\FastEnterExit.h" />

@@ -45,6 +45,10 @@ bool OneBulletKill::onRPCOutcoming(stRakNetHookParams* params)
 		return true;
 
 	params->bitStream->Read(wPlayerID);
+
+	if (!Players::isPlayerExist(wPlayerID))
+		return true;
+
 	params->bitStream->Read(damage_amount);
 	params->bitStream->Read(dWeaponID);
 	params->bitStream->Read(dBodypart);
@@ -61,7 +65,7 @@ bool OneBulletKill::onRPCOutcoming(stRakNetHookParams* params)
 }
 
 
-void OneBulletKill::everyTickAction( )
+void OneBulletKill::everyTickAction()
 {
 	static CMTimer sendDamageTimer;
 	if (sendDamageDeuqeLength > 0)

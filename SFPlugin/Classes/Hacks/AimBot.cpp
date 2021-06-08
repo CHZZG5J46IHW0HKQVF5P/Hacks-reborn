@@ -29,7 +29,7 @@ void Aimbot::read(nlohmann::json& data)
 
 actor_info* Aimbot::getPlayerTarget()
 {
-	auto&& nearestToCrosshairPlayers = Players::getNearestToCrosshairPlayers(!GFuncs::isHackWorking<WallShot>());
+	auto&& nearestToCrosshairPlayers = Players::getNearestToCrosshairPlayers(!GET_HACK_INST(WallShot)->isHackWorking());
 	if (nearestToCrosshairPlayers.empty())
 		return nullptr;
 

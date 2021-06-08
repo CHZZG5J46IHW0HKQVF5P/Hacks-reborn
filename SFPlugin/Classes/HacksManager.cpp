@@ -23,15 +23,12 @@
 #include "Sbiv.h"
 #include "VehicleGodMode.h"
 #include "PlayersDescription.h"
-
+#include "AutoCBug.h"
+#include "CarShot.h"
 
 #include "nameof/nameof.hpp"
 #include <chrono>
-#define HACKS_DBG   1
-using std::chrono::high_resolution_clock;
-using std::chrono::duration_cast;
-using std::chrono::duration;
-using std::chrono::milliseconds;
+//#define HACKS_DBG  1
 
 
 namespace g
@@ -59,6 +56,7 @@ void HacksManager::initHacksOnce()
 
 	m_hacks.clear();
 	m_hacks.emplace_back(std::make_tuple(Priority::HIGH, HACK_TYPE::MISC, new MainHack("MainHack")));
+
 	m_hacks.emplace_back(std::make_tuple(Priority::HIGH, HACK_TYPE::MISC, new PlayersList("Players List")));
 	m_hacks.emplace_back(std::make_tuple(Priority::HIGH, HACK_TYPE::SHOOTING, new OneBulletKill("One Bullet Kill")));
 	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::SHOOTING, new WallShot("Wall Shot")));
@@ -80,6 +78,8 @@ void HacksManager::initHacksOnce()
 	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new VehicleGodMode("VehicleGodMode")));
 	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new FastEnterExit("FastEnterExit")));
 	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::VISUAL, new PlayersDescription("PlayersDescription")));
+	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::SHOOTING, new AutoCBUG("AutoCBUG")));
+	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new CarShot("CarShot")));
 
 	std::sort(m_hacks.begin(), m_hacks.end(), [](const Hack& hack, const Hack&  hack2)
 	{
@@ -96,7 +96,7 @@ void HacksManager::initHacksOnce()
 	isInitialized = true;
 }
 
-std::vector<Hack>* HacksManager::getHacks()
+const std::vector<Hack>* HacksManager::getHacks()
 {
 	return &m_hacks;
 }
@@ -153,7 +153,7 @@ void HacksManager::save()
 			nlohmann::json data;
 			std::get<IHack*>(hack)->save(data);
 			std::ofstream out(g::settingsPath + std::get<IHack*>(hack)->m_sHackName + ".json");
-			PLOGI << std::get<IHack*>(hack)->m_sHackName << "save";
+			PLOGI << std::get<IHack*>(hack)->m_sHackName << " save";
 			out << data.dump();
 			out.close();
 		}
@@ -187,7 +187,6 @@ bool HacksManager::drawHacks()
 		}
 	}
 
-
 	return bImGuiNewFrameWasCalled;
 }
 void HacksManager::drawInterface()
@@ -198,7 +197,6 @@ void HacksManager::drawInterface()
 	{
 		g::keyButtonSplitter = 0;
 		drawMenu();
-
 	}
 	ImGui::End();
 }
@@ -234,8 +232,6 @@ bool HacksManager::procKeys()
 			if (!pHack->onWndProc())
 				return false;
 		}
-
-
 
 	}
 	return true;

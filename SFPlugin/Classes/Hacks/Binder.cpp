@@ -7,7 +7,7 @@ Binder::Binder(const char* name)
 	m_bEnabled = true;
 	m_sHackName = name;
 
-	replacer.addAdditionVarible("iLastTargetPlayerID", new int);
+	replacer.addVariable("iLastTargetPlayerID", new int);
 
 	replacer.addReplacement("myid", [&]()
 	{
@@ -55,14 +55,14 @@ Binder::Binder(const char* name)
 	})
 		->addReplacement("tid", [&]()
 	{
-		int* iLastTargetPlayerID = (int*)replacer.getAdditionVarible("iLastTargetPlayerID");
+		int* iLastTargetPlayerID = (int*)replacer.getVariable("iLastTargetPlayerID");
 		if (*iLastTargetPlayerID == -1)
 			return std::string("");
 		return std::to_string(*iLastTargetPlayerID);
 	})
 		->addReplacement("tname", [&]()
 	{
-		int* iLastTargetPlayerID = (int*)replacer.getAdditionVarible("iLastTargetPlayerID");
+		int* iLastTargetPlayerID = (int*)replacer.getVariable("iLastTargetPlayerID");
 		if (*iLastTargetPlayerID == -1)
 			return std::string("");
 		if (!SF->getSAMP()->getPlayers()->IsPlayerDefined(*iLastTargetPlayerID))
@@ -359,7 +359,7 @@ void Binder::sendMessageToSay(std::string message)
 void Binder::everyTickAction()
 {
 
-	int* iLastTargetPlayerID = (int*)replacer.getAdditionVarible("iLastTargetPlayerID");
+	int* iLastTargetPlayerID = (int*)replacer.getVariable("iLastTargetPlayerID");
 	if (SF->getSAMP()->getPlayers()->pLocalPlayer->sAimingAtPid < 1000)
 		*iLastTargetPlayerID = SF->getSAMP()->getPlayers()->pLocalPlayer->sAimingAtPid;
 	if (isBinderEnabled)
@@ -375,7 +375,6 @@ void Binder::everyTickAction()
 				bindID = 0;
 			if (binds[bindID].checkKeys())
 			{
-
 				choosenBindID = bindID;
 				choosenTextID = 0;
 				sendMessageToSay(binds[choosenBindID].bindTexts[choosenTextID]);

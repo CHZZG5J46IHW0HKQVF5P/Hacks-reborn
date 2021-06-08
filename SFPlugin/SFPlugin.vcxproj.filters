@@ -577,6 +577,12 @@
     <ClInclude Include="Classes\Hacks\PlayersDescription.h">
       <Filter>Classes\Hacks\Visuals</Filter>
     </ClInclude>
+    <ClInclude Include="Classes\Hacks\AutoCBug.h">
+      <Filter>Classes\Hacks\Shooting</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Hacks\CarShot.h">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -624,27 +630,6 @@
     </ClCompile>
     <ClCompile Include="Classes\Hacks\CustomRender.cpp">
       <Filter>Classes\Hacks\Visuals</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_demo.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_draw.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_impl_dx9.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_impl_win32.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_stdlib.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_widgets.cpp">
-      <Filter>ImGui</Filter>
     </ClCompile>
     <ClCompile Include="Classes\Hacks\Collision.cpp">
       <Filter>Classes\Hacks\Misc</Filter>
@@ -710,5 +695,36 @@
     <ClCompile Include="Classes\Hacks\PlayersDescription.cpp">
       <Filter>Classes\Hacks\Visuals</Filter>
     </ClCompile>
+    <ClCompile Include="ImGui\imgui.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_demo.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_dx9.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_win32.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_stdlib.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_tables.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_widgets.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_draw.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\AutoCBug.cpp">
+      <Filter>Classes\Hacks\Shooting</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Hacks\CarShot.cpp">
+      <Filter>Classes\Hacks\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Hack.cpp" />
   </ItemGroup>
 </Project>

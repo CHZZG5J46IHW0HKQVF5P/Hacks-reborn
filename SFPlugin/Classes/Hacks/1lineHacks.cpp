@@ -284,7 +284,7 @@ void OneLineHacks::onDrawGUI()
 		EnableNoAnims(bNoAnims);
 	if (ImGui::Checkbox("No Cam Restore", &bNoCamrestore))
 		EnableNoCamRestore(bNoCamrestore);
-	ImGui::Checkbox("No Fall", &bNoFall);
+	ImGui::Checkbox("No Fall & No Drop", &bNoFall);
 	ImGui::Checkbox("Surf On Vehicles", &bSurfOnVehicles);
 
 	ImGui::Checkbox("Press Nitro", &bPressNitro);
@@ -302,7 +302,6 @@ void OneLineHacks::onDrawGUI()
 	ImGui::Checkbox("No Reload", &bNoReload);
 	ImGui::Checkbox("Auto Bike", &bAutoBike);
 	ImGui::Checkbox("Dont Give Me Bat", &bDontGiveMeBat);
-	ImGui::Checkbox("Fast Heli", &bFastHeli);
 	ImGui::Checkbox("Mega BMX Jump", &bMegaBMXJump);
 
 	ImGui::Text("Custom Run Anim");
@@ -335,8 +334,9 @@ void OneLineHacks::onDrawGUI()
 	}
 	if (ImGui::Checkbox("GodMode", &bGodMode))
 		EnableGodMode(bGodMode);
-	ImGui::Checkbox("Auto Set Vehicle Stay On Wheels", &bAutoVehicleOnWheels);
-
+	ImGui::Checkbox("Flip Vehicle", &bFlipVehicle);
+	ImGui::SameLine();
+	Lippets::ImGuiSnippets::KeyButton(nFlipVehicleActivationKey, g::keyButtonSplitter);
 }
 
 void OneLineHacks::onDrawHack()
@@ -368,27 +368,10 @@ void OneLineHacks::switchHack()
 }
 void OneLineHacks::everyTickAction()
 {
-
 	if (bFastHelper)
 		SF->getGame()->emulateGTAKey(4, 255);
 	if (g::pInfo->isDriver())
 	{
-		if (bAutoVehicleOnWheels)
-		{
-			if (GTAfunc_IsUpsideDown(g::pInfo->pLocalVeh))
-			{
-				PEDSELF->GetVehicle()->Teleport(g::pInfo->pLocalVeh->base.matrix[4 * 3],
-					g::pInfo->pLocalVeh->base.matrix[4 * 3 + 1],
-					g::pInfo->pLocalVeh->base.matrix[4 * 3 + 2]);
-			}
-		}
-		if (bFastHeli)
-		{
-			if (g::pInfo->vehType == eVehicleType::CHeli)
-			{
-				PEDSELF->GetVehicle()->SetHeliRotorSpeed(0.25f);
-			}
-		}
 		if (bNoBike)
 		{
 			if (g::pInfo->vehType != Vehicles::eVehicleType::CBike ||
@@ -442,19 +425,37 @@ void OneLineHacks::everyTickAction()
 
 
 }
+
+
+
 bool OneLineHacks::onWndProc()
 {
-	if (g::pKeyEventInfo->iKeyID == 0 || g::pKeyEventInfo->iKeyID == 1)
-		if (bPressNitro && g::pInfo->isDriver())
-			if (g::pKeyEventInfo->bDown)
-			{
-				*reinterpret_cast<byte*>(0x969165) = 1;
-			}
-			else
-			{
-				*reinterpret_cast<byte*>(0x969165) = 0;
-				PEDSELF->GetVehicle()->RemoveVehicleUpgrade(1010);
-			}
+
+	if (g::pInfo->isDriver())
+	{
+		if (g::pKeyEventInfo->iKeyID == 0 || g::pKeyEventInfo->iKeyID == 1)
+			if (bPressNitro)
+				if (g::pKeyEventInfo->bDown)
+				{
+					*reinterpret_cast<byte*>(0x969165) = 1;
+				}
+				else
+				{
+					*reinterpret_cast<byte*>(0x969165) = 0;
+					PEDSELF->GetVehicle()->RemoveVehicleUpgrade(1010);
+
+				}
+		if (g::pKeyEventInfo->iKeyID == nFlipVehicleActivationKey)
+		{
+
+			float fRotation = PEDSELF->GetTargetRotation();
+			PEDSELF->GetVehicle()->Teleport(g::pInfo->pLocalVeh->base.matrix[4 * 3],
+				g::pInfo->pLocalVeh->base.matrix[4 * 3 + 1],
+				g::pInfo->pLocalVeh->base.matrix[4 * 3 + 2]);
+			RPC_emulating::setVehicleZAngle(SF->getSAMP()->getPlayers()->pLocalPlayer->sCurrentVehicleID, fRotation * (180.0 / M_PI));
+		}
+	}
+
 	return true;
 }
 
@@ -471,39 +472,61 @@ bool OneLineHacks::onRPCIncoming(stRakNetHookParams *params)
 }
 bool OneLineHacks::onPacketOutcoming(stRakNetHookParams *param)
 {
-
-	if ((bNoFall || bSurfOnVehicles || bFakeAfk) && (param->packetId == ID_PLAYER_SYNC))
+	switch (param->packetId)
 	{
-		if (bFakeAfk)
-			return false;
-		stOnFootData data;
-		memset(&data, 0, sizeof(stOnFootData));
-		byte packet;
-		param->bitStream->ResetReadPointer();
-		param->bitStream->Read(packet);
-		param->bitStream->Read((PCHAR)&data, sizeof(stOnFootData));
-		param->bitStream->ResetReadPointer();
-		if (bNoFall)
-			data.stSampKeys.keys_decel__jump = 0;
-		if (bSurfOnVehicles)
-			data.sSurfingVehicleID = 0;
-		param->bitStream->ResetWritePointer();
-		param->bitStream->Write(packet);
-		param->bitStream->Write((PCHAR)&data, sizeof(stOnFootData));
-		return true;
+	case ID_VEHICLE_SYNC:
+		if (bEternalHorn)
+		{
+			stInCarData data;
+			memset(&data, 0, sizeof(stInCarData));
+			byte packet;
+			param->bitStream->ResetReadPointer();
+			param->bitStream->Read(packet);
+			param->bitStream->Read((PCHAR)&data, sizeof(stInCarData));
+			param->bitStream->ResetReadPointer();
+			data.byteSiren = 1;
+			data.stSampKeys.keys_horn__crouch = 1;
+			param->bitStream->ResetWritePointer();
+			param->bitStream->Write(packet);
+			param->bitStream->Write((PCHAR)&data, sizeof(stInCarData));
+			return true;
+		}
+	case ID_PLAYER_SYNC:
+		if (bNoFall || bSurfOnVehicles || bFakeAfk)
+		{
+			if (bFakeAfk)
+				return false;
+			stOnFootData data;
+			memset(&data, 0, sizeof(stOnFootData));
+			byte packet;
+			param->bitStream->ResetReadPointer();
+			param->bitStream->Read(packet);
+			param->bitStream->Read((PCHAR)&data, sizeof(stOnFootData));
+			param->bitStream->ResetReadPointer();
+			if (bNoFall)
+				data.stSampKeys.keys_decel__jump = 0;
+			if (bSurfOnVehicles)
+				data.sSurfingVehicleID = 0;
+			param->bitStream->ResetWritePointer();
+			param->bitStream->Write(packet);
+			param->bitStream->Write((PCHAR)&data, sizeof(stOnFootData));
+			return true;
+		}
+	case ID_BULLET_SYNC:
+		if (bNoReload)
+			PEDSELF->GetWeapon(PEDSELF->GetCurrentWeaponSlot())->SetAmmoInClip(2);
 	}
-	if (bNoReload && param->packetId == ID_BULLET_SYNC)
-		PEDSELF->GetWeapon(PEDSELF->GetCurrentWeaponSlot())->SetAmmoInClip(2);
+
 	return true;
 }
 
 void OneLineHacks::save(nlohmann::json& data)
 {
-	SERIALIZE_FIELD_JSON(bAutoVehicleOnWheels);
+	SERIALIZE_FIELD_JSON(bFlipVehicle);
+	SERIALIZE_FIELD_JSON(nFlipVehicleActivationKey);
 	SERIALIZE_FIELD_JSON(CurrentRunType);
 	SERIALIZE_FIELD_JSON(CurrentFightStyle);
 	SERIALIZE_FIELD_JSON(bMegaBMXJump);
-	SERIALIZE_FIELD_JSON(bFastHeli);
 	SERIALIZE_FIELD_JSON(bDontGiveMeBat);
 	SERIALIZE_FIELD_JSON(bAntiStun);
 	SERIALIZE_FIELD_JSON(bDriveWalkUnderWater);
@@ -530,11 +553,11 @@ void OneLineHacks::save(nlohmann::json& data)
 }
 void OneLineHacks::read(nlohmann::json& data)
 {
-	DESERIALIZE_FIELD_JSON(bAutoVehicleOnWheels);
+	DESERIALIZE_FIELD_JSON(bFlipVehicle);
+	DESERIALIZE_FIELD_JSON(nFlipVehicleActivationKey);
 	DESERIALIZE_FIELD_JSON(CurrentFightStyle);// = (FIGHT_STYLE)data["FightStyle"].get<int>();
 	DESERIALIZE_FIELD_JSON(CurrentRunType); //(RUN_TYPE)data["RunType"].get<int>();
 	DESERIALIZE_FIELD_JSON(bMegaBMXJump);
-	DESERIALIZE_FIELD_JSON(bFastHeli);
 	DESERIALIZE_FIELD_JSON(bDontGiveMeBat);
 	DESERIALIZE_FIELD_JSON(bAntiStun);
 	DESERIALIZE_FIELD_JSON(bDriveWalkUnderWater);

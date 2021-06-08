@@ -18,6 +18,8 @@ extern SAMPFUNCS *SF;
 #include "C:\Lippets\SampSnipps\GTAfuncs.h"
 #include <bitset>
 
+class IHack;
+#include "GlobalFuncs.h"
 #define SERIALIZE_FIELD_JSON_(name,value) data[name] = value
 #define SERIALIZE_FIELD_JSON(x) data[#x] = x
 
@@ -40,14 +42,8 @@ extern SAMPFUNCS *SF;
 
 struct crTickLocalPlayerInfo
 {
-	bool isInCar()
-	{
-		return _isInCar && pLocalVeh;
-	}
-	bool isDriver()
-	{
-		return _isDriver && pLocalVeh;
-	}
+	bool isInCar();
+	bool isDriver();
 	vehicle_info* pLocalVeh;
 	bool _isInCar;
 	bool _isDriver;
@@ -87,7 +83,6 @@ enum HackFunction
 };
 
 
-
 class IHack : Lippets::LUtils::NonCopyable
 {
 
@@ -96,11 +91,17 @@ public:
 	std::string m_sHackName;
 	bool m_bDrawHackNeedImGui = false;
 	bool m_bEnabled = false;
-	virtual bool isHackWorking() { return m_bEnabled; };
+	inline virtual bool isHackWorking() { return m_bEnabled; };
 	virtual void save(nlohmann::json&) {};
 	virtual void read(nlohmann::json&) {};
 	virtual ~IHack() = default;
 	virtual void switchHack() {};
+	template<class T>
+	inline static T* getInstance()
+	{
+		static T* pInst = GFuncs::getHackPtr<T>();
+		return pInst;
+	}
 	virtual bool onRPCIncoming(stRakNetHookParams*) { m_bitsDontCall__.set(RPC_INC); return true; };
 	virtual bool onRPCOutcoming(stRakNetHookParams*) { m_bitsDontCall__.set(RPC_OUT); return true; };
 	virtual bool onPacketIncoming(stRakNetHookParams*) { m_bitsDontCall__.set(PACKET_INC);  return true; };
@@ -114,28 +115,20 @@ public:
 };
 
 
-
+#define GET_HACK_INST(className) className::getInstance<className>()
 #define OVERRIDE_DRAWGUI void onDrawGUI() override;
-
 #define OVERRIDE_SAVE_READ void save(nlohmann::json&) override; \
-							void read(nlohmann::json&) override;
-
+					void read(nlohmann::json&) override;
 #define OVERRIDE_SWITCH_HACK void switchHack() override;
-
 #define OVERRIDE_RPC_INC  bool onRPCIncoming(stRakNetHookParams*) override;
 #define OVERRIDE_RPC_OUT  bool onRPCOutcoming(stRakNetHookParams*) override;
 #define OVERRIDE_PACKET_INC  bool onPacketIncoming(stRakNetHookParams*) override;
 #define OVERRIDE_PACKET_OUT  bool onPacketOutcoming(stRakNetHookParams*) override;
-
 #define OVERRIDE_WNDPROC bool onWndProc() override; 
-
 #define OVERRIDE_EVERY_TICK void everyTickAction() override;
-
 #define OVERRIDE_DRAW_HACK void onDrawHack() override;
-
 #define OVERRIDE_RELEASE void release() override;
 #define OVERRIDE_INIT void init() override;
-
 #define OVERRIDE_IS_HACK_WORKING bool isHackWorking() override;
 
 

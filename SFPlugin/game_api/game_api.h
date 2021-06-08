@@ -3,6 +3,7 @@
 
 #include "sdk/SharedUtil.h"
 #include "game/CGame.h"
+#include "CQuat.h"
 
 extern CGame SAMPFUNCS_API *GAME;
 extern CPed SAMPFUNCS_API *PEDSELF;

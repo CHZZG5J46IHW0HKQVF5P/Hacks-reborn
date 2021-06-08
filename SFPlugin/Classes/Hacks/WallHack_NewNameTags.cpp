@@ -1,5 +1,6 @@
 #include "WallHack_NewNameTags.h"
 #include "GlobalFuncs.h"
+
 FORCEINLINE void DrawLine(D3DCOLOR playerColor, CVector2D* start, CVector2D* end)
 {
 	SF->getRender()->DrawPolygon(start->fX, start->fY, 3, 3, 0.f, 10, playerColor);
@@ -180,9 +181,7 @@ void WallHack::onDrawHack()
 {
 	if (!bNoNameTags || drawWallHack)
 	{
-
-
-
+											  
 		GFuncs::resortPlayersByDistance(&g::pInfo->nearestPlayers, true);
 		for (auto&& player : g::pInfo->nearestPlayers)//(int i = 0; i < 1000; i++)
 		{

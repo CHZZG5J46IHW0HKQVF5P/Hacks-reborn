@@ -105,7 +105,6 @@ void MainHack::everyTickAction()
 {
 	if (g::isWindowOpen)
 	{
-
 		SF->getSAMP()->getMisc()->ToggleCursor(2, 0);
 
 		if (SF->getSAMP()->getInput()->iInputEnabled)

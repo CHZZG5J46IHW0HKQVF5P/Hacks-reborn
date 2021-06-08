@@ -4,7 +4,7 @@ DEFAULT_HACK_CONSTRUCTOR(Sbiv)
 
 void Sbiv::onDrawGUI()
 {
-	ImGui::Checkbox(u8"—бив", &m_bEnabled);
+	ImGui::Checkbox("Sbiv", &m_bEnabled);
 	ImGui::SameLine();
 	Lippets::ImGuiSnippets::KeyButton(m_nActivationKey, g::keyButtonSplitter);
 }
@@ -15,8 +15,8 @@ bool Sbiv:: onWndProc()
 		if (!g::pInfo->isDriver())
 			if (g::pKeyEventInfo->bDown)
 			{
-				PEDSELF->SetMoveSpeed(&CVector());
-				GTAfunc_PerformAnimation("PED", "HANDSUP", 200, 0, 0, 1, 0, 0, 0, 0);
+				PEDSELF->SetMoveSpeed((CVector*)&CVector());
+				GTAfunc_PerformAnimation("PED", "HANDSUP", 200, 0, 0,1, 0, 0, 0, 0);
 			}
 	return true;
 }

@@ -14,12 +14,13 @@ class CQuat;
 #ifndef __CQUAT_H
 #define __CQUAT_H
 
-#include "CMatrix4.h"
+#include "CMatrix.h"
 
 #include <math.h>
 #include <float.h>
 
 #define EPSILON         0.001
+
 
 class CQuat
 {
@@ -115,7 +116,7 @@ public:
         qm.y = (qa.y * ratioA + qb.y * ratioB);
         qm.z = (qa.z * ratioA + qb.z * ratioB);
     };
-private:
+public:
     float x, y, z, w;
 };
 

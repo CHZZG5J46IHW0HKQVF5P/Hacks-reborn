@@ -35,7 +35,7 @@ public:
 	HacksManager(HacksManager &other) = delete;
 	void operator=(const HacksManager &) = delete;
 	static HacksManager *getInstance();
-	std::vector<Hack>* getHacks();
+	const std::vector<Hack>* getHacks();
 	void destroy();
 	bool drawHacks();
 	void drawInterface();

@@ -4,16 +4,14 @@
 
 #define HOOKPOS_PlayerCollision 0x0054BCEE
 
-CollisionHack* pCollisionHack;
-
 DEFAULT_HACK_CONSTRUCTOR(CollisionHack)
 
 bool CollisionCheck(object_base *obj1, object_base *obj2)
 {
 	return (obj2->nType == 3 || obj2->nType == 2) &&
-		((obj1->nType == 2 && pCollisionHack->m_bIsVehicleCollisionEnabled) ||
-		(obj1->nType == 3 && pCollisionHack->m_bIsPedsCollisionEnabled) ||
-			(obj1->nType == 4 && pCollisionHack->m_bIsObjectsCollisionEnabled));
+		((obj1->nType == 2 && GET_HACK_INST(CollisionHack)->m_bIsVehicleCollisionEnabled) ||
+		(obj1->nType == 3 && GET_HACK_INST(CollisionHack)->m_bIsPedsCollisionEnabled) ||
+			(obj1->nType == 4 && GET_HACK_INST(CollisionHack)->m_bIsObjectsCollisionEnabled));
 }
 
 
@@ -398,6 +396,7 @@ bool ignoreColWithObjectID(int iModelID)
 	return false;
 }
 
+
 void __declspec (naked) HOOK_PlayerCollision(void)
 {
 
@@ -417,8 +416,11 @@ hk_PlCol_process:
 		mov _obj1, edi // with *_info (edi)
 	}
 
+	static const auto hackWorking = [&]() {
+		return GET_HACK_INST(CollisionHack)->isHackWorking();
+	};
 
-	if (!pCollisionHack->isHackWorking())
+	if (!hackWorking())
 		goto hk_PlCol_processCol;
 
 	// process collision if cheat not enabled
@@ -437,7 +439,7 @@ hk_PlCol_process:
 		goto hk_PlCol_noCol;
 
 
-	if (pCollisionHack->m_bIsBuildingsCollisionEnabled)
+	if (GET_HACK_INST(CollisionHack)->m_bIsBuildingsCollisionEnabled)
 	{
 		__asm popad;
 		__asm jmp RETURN_ovrwr
@@ -478,7 +480,6 @@ void CollisionHack::onDrawGUI()
 
 void CollisionHack::init()
 {
-	pCollisionHack = GFuncs::getHackPtr<CollisionHack>();
 
 	memcpy_safe(patch, (void *)HOOKPOS_PlayerCollision, 6);
 	SF->getGame()->createHook((void *)HOOKPOS_PlayerCollision, HOOK_PlayerCollision, DETOUR_TYPE_JMP, 6);
