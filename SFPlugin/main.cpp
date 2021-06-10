@@ -140,9 +140,6 @@ void CALLBACK mainloop()
 			g::LineOfSightFlags.bCheckPeds = false;
 			g::LineOfSightFlags.bCheckVehicles = true;
 			g::LineOfSightFlags.bCheckCarTires = true;
-
-			//SubscriptionChecker::getInstance().initialize("https://www.dropbox.com/s/o3f5mlr14nubnmz/hacks-rebornSubs.json?dl=1", "C:\\hacks-rebornSubs\\file.json");
-
 		}
 
 	if (!initialized)
@@ -150,6 +147,8 @@ void CALLBACK mainloop()
 
 	initcrTickLocalPlayerInfo();
 	HacksManager::getInstance()->procEveryTickAction();
+
+
 }
 
 

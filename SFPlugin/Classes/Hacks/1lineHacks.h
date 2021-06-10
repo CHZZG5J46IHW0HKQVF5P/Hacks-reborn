@@ -55,7 +55,8 @@ private:
 	bool bGodMode = false;
 	bool bFlipVehicle = false;
 	int nFlipVehicleActivationKey = 0;
-	bool bEternalHorn = false;
+	bool bEternalHorn = false;		  
+	bool bMapTeleport = false;
 	RUN_TYPE CurrentRunType = RUN_TYPE::DEFAULT;
 	FIGHT_STYLE CurrentFightStyle = FIGHT_STYLE::DEFAULT;
 	OVERRIDE_DRAWGUI;
@@ -64,6 +65,7 @@ private:
 	OVERRIDE_EVERY_TICK;
 	OVERRIDE_WNDPROC;
 	OVERRIDE_RPC_INC;
+	OVERRIDE_RPC_OUT;
 	OVERRIDE_PACKET_OUT;
 	OVERRIDE_SAVE_READ;
 };

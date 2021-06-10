@@ -223,42 +223,42 @@ OneLineHacks::OneLineHacks(const char* name)
 	m_sHackName = name;
 	m_bEnabled = true;
 	SF->getSAMP()->registerChatCommand("setskin", [](std::string args)
-	{
-
-		uint32_t iSkinID = atoi(args.c_str());
-		if (iSkinID > 0 && iSkinID < 311)
-			RPC_emulating::setskin(MYID, iSkinID);
-
-	});
-	SF->getSAMP()->registerChatCommand("die", [](std::string args)
-	{
-		if (Players::isLocalPlayerExist())
-			PEDSELF->SetHealth(0.0f);
-	});
-	SF->getSAMP()->registerChatCommand("delgun", [](std::string args)
-	{
-		if (Players::isLocalPlayerExist())
 		{
-			eWeaponSlot eWSlot = PEDSELF->GetCurrentWeaponSlot();
-			if (eWSlot != 0)
-				PEDSELF->GetWeapon(eWSlot)->Remove();
-		}
-	});
+
+			uint32_t iSkinID = atoi(args.c_str());
+			if (iSkinID > 0 && iSkinID < 311)
+				RPC_emulating::setskin(MYID, iSkinID);
+
+		});
+	SF->getSAMP()->registerChatCommand("die", [](std::string args)
+		{
+			if (Players::isLocalPlayerExist())
+				PEDSELF->SetHealth(0.0f);
+		});
+	SF->getSAMP()->registerChatCommand("delgun", [](std::string args)
+		{
+			if (Players::isLocalPlayerExist())
+			{
+				eWeaponSlot eWSlot = PEDSELF->GetCurrentWeaponSlot();
+				if (eWSlot != 0)
+					PEDSELF->GetWeapon(eWSlot)->Remove();
+			}
+		});
 	SF->getSAMP()->registerChatCommand("parashut", [](std::string args)
-	{
-		GiveWeapon(eWeaponType::WEAPONTYPE_PARACHUTE, 1);
-		PEDSELF->SetCurrentWeaponSlot(eWeaponSlot::WEAPONSLOT_TYPE_PARACHUTE);
-	});
+		{
+			GiveWeapon(eWeaponType::WEAPONTYPE_PARACHUTE, 1);
+			PEDSELF->SetCurrentWeaponSlot(eWeaponSlot::WEAPONSLOT_TYPE_PARACHUTE);
+		});
 	SF->getSAMP()->registerChatCommand("fafk", [](std::string args)
-	{
-		bFakeAfk = !bFakeAfk;// true;
-		notify("Fake AFK", bFakeAfk);
-	});
+		{
+			bFakeAfk = !bFakeAfk;// true;
+			notify("Fake AFK", bFakeAfk);
+		});
 	SF->getSAMP()->registerChatCommand("fasth", [](std::string args)
-	{
-		bFastHelper = !bFastHelper;// true;
-		notify("Fast Helper", bFastHelper);
-	});
+		{
+			bFastHelper = !bFastHelper;// true;
+			notify("Fast Helper", bFastHelper);
+		});
 }
 
 
@@ -337,6 +337,7 @@ void OneLineHacks::onDrawGUI()
 	ImGui::Checkbox("Flip Vehicle", &bFlipVehicle);
 	ImGui::SameLine();
 	Lippets::ImGuiSnippets::KeyButton(nFlipVehicleActivationKey, g::keyButtonSplitter);
+	ImGui::Checkbox("Map Teleport", &bMapTeleport);
 }
 
 void OneLineHacks::onDrawHack()
@@ -459,6 +460,23 @@ bool OneLineHacks::onWndProc()
 	return true;
 }
 
+bool OneLineHacks::onRPCOutcoming(stRakNetHookParams* params)
+{
+	switch (params->packetId)
+	{
+	case RPCEnumeration::RPC_MapMarker:
+	{
+		float fCoords[3];
+		params->bitStream->ResetReadPointer();
+		params->bitStream->Read((char*)fCoords, 12);
+		PEDSELF->Teleport(fCoords[0], fCoords[1], fCoords[2]);
+		return true;
+	}
+	default:
+		break;
+	}
+	return true;
+}
 bool OneLineHacks::onRPCIncoming(stRakNetHookParams *params)
 {
 	if (!bDontGiveMeBat || params->packetId != ScriptRPCEnumeration::RPC_ScrGivePlayerWeapon)
@@ -522,6 +540,7 @@ bool OneLineHacks::onPacketOutcoming(stRakNetHookParams *param)
 
 void OneLineHacks::save(nlohmann::json& data)
 {
+	SERIALIZE_FIELD_JSON(bMapTeleport);
 	SERIALIZE_FIELD_JSON(bFlipVehicle);
 	SERIALIZE_FIELD_JSON(nFlipVehicleActivationKey);
 	SERIALIZE_FIELD_JSON(CurrentRunType);
@@ -553,6 +572,7 @@ void OneLineHacks::save(nlohmann::json& data)
 }
 void OneLineHacks::read(nlohmann::json& data)
 {
+	DESERIALIZE_FIELD_JSON(bMapTeleport);
 	DESERIALIZE_FIELD_JSON(bFlipVehicle);
 	DESERIALIZE_FIELD_JSON(nFlipVehicleActivationKey);
 	DESERIALIZE_FIELD_JSON(CurrentFightStyle);// = (FIGHT_STYLE)data["FightStyle"].get<int>();
