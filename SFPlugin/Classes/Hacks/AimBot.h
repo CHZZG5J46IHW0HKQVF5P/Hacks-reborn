@@ -7,10 +7,10 @@ public:
 	Aimbot(const char*);
 private:
 	bool bCanAimToSameColored;
-	actor_info* getPlayerTarget( );
+	actor_info* getPlayerTarget();
 	void aim(actor_info*);
-	void everyTickAction( ) override;
-	void onDrawGUI() override;
-	
+
+	OVERRIDE_EVERY_TICK;
+	OVERRIDE_DRAWGUI;
 	OVERRIDE_SAVE_READ;
 };

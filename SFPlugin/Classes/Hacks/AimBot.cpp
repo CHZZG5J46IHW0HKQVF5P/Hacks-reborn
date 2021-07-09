@@ -33,8 +33,6 @@ actor_info* Aimbot::getPlayerTarget()
 	if (nearestToCrosshairPlayers.empty())
 		return nullptr;
 
-	GFuncs::resortPlayersByDistance(&g::pInfo->nearestPlayers, false);
-
 
 	for (auto&& playerId_Dist : nearestToCrosshairPlayers)
 		if (std::find_if(g::pInfo->nearestPlayers.begin(), g::pInfo->nearestPlayers.end(), [&](const NearPlayer& pair)

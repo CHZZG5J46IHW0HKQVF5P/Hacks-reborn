@@ -1,6 +1,6 @@
 #pragma once
 #include "Hack.h"
-#include "C:\Lippets\CMClasses\CMReplacer.h"
+#include "CMClasses\CMReplacer.h"
 #include <utility>
 
 
@@ -44,11 +44,13 @@ private:
 	std::string sLastCmdArgs;
 
 
-	OVERRIDE_RELEASE;
 	void sendMessageToSay(std::string);
+
+	OVERRIDE_RELEASE;
+	
 	OVERRIDE_EVERY_TICK;
-	bool onRPCOutcoming(stRakNetHookParams* ) override;
+	OVERRIDE_RPC_OUT;
 	OVERRIDE_SAVE_READ;
-	void onDrawGUI() override;
+	OVERRIDE_DRAWGUI;
 
 };

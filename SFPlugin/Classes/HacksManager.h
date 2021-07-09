@@ -25,16 +25,14 @@ enum class HACK_TYPE
 
 typedef std::tuple<Priority, HACK_TYPE, IHack*> Hack;
 
-class HacksManager
+class HacksManager : public Lippets::LUtils::Classes::NonCopyable
 {
 private:
 	HacksManager();
 	std::vector<Hack> m_hacks;
 public:
 
-	HacksManager(HacksManager &other) = delete;
-	void operator=(const HacksManager &) = delete;
-	static HacksManager *getInstance();
+	static HacksManager* getInstance();
 	const std::vector<Hack>* getHacks();
 	void destroy();
 	bool drawHacks();

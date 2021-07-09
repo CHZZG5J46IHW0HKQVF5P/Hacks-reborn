@@ -7,7 +7,7 @@ public:
 	
 	int m_nActivationKey = 0;
 
-	void onDrawGUI() override;
+	OVERRIDE_DRAWGUI;
 	OVERRIDE_WNDPROC;
 	OVERRIDE_SAVE_READ;
 };

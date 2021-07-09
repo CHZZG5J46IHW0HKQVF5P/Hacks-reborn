@@ -1,10 +1,13 @@
-#include "SAMPFUNCS_API.h"
-#include "game_api.h"
+
 
 #ifndef M_PI
 #define M_PI	3.14159265358979323844f
 #endif
 #define DEGTORAD( Deg ) ( (Deg * M_PI) / 180.0f )
+
+#include <cmath>
+#include "stdint.h"
+#include "cstring"
 
 int		near_zero ( float v );
 void	vect2_normalize ( const float in[2], float out[2] );

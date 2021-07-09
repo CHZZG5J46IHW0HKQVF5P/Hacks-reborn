@@ -20,9 +20,10 @@ private:
 	DamageInfo dInfo;
 	int iDelay = 0;
 	int sendDamageDeuqeLength = 0;
+
 	OVERRIDE_EVERY_TICK;
 	OVERRIDE_RPC_OUT;
-	void onDrawGUI() override;
+	OVERRIDE_DRAWGUI;
 	
 	OVERRIDE_SAVE_READ;
 };

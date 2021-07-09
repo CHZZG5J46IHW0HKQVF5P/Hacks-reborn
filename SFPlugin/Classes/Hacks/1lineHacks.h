@@ -8,7 +8,7 @@ enum class RUN_TYPE
 	DEFAULT, //= -1
 	CJ,//= 54
 	ROLLER,//= 138
-	SWAT //= 128
+	SWAT //= 128										
 };
 
 enum class FIGHT_STYLE
@@ -21,6 +21,7 @@ enum class FIGHT_STYLE
 	ELBOWS//= 16
 };
 
+// Записываем в адрес 0x53C159 5 байт 0x90, готово! Вы взломали самп и отключили траву
 
 HACK_CLASS(OneLineHacks)
 {
@@ -55,7 +56,7 @@ private:
 	bool bGodMode = false;
 	bool bFlipVehicle = false;
 	int nFlipVehicleActivationKey = 0;
-	bool bEternalHorn = false;		  
+	bool bEternalHorn = false;
 	bool bMapTeleport = false;
 	RUN_TYPE CurrentRunType = RUN_TYPE::DEFAULT;
 	FIGHT_STYLE CurrentFightStyle = FIGHT_STYLE::DEFAULT;

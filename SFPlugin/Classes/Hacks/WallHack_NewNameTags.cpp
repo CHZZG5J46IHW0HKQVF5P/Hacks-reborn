@@ -1,10 +1,10 @@
 #include "WallHack_NewNameTags.h"
 #include "GlobalFuncs.h"
 
-FORCEINLINE void DrawLine(D3DCOLOR playerColor, CVector2D* start, CVector2D* end)
+FORCEINLINE void DrawLine(D3DCOLOR playerColor, const CVector2D& start, const CVector2D& end)
 {
-	SF->getRender()->DrawPolygon(start->fX, start->fY, 3, 3, 0.f, 10, playerColor);
-	SF->getRender()->DrawLine(start->fX, start->fY, end->fX, end->fY, 1, playerColor);
+	SF->getRender()->DrawPolygon(start.fX, start.fY, 3, 3, 0.f, 10, playerColor);
+	SF->getRender()->DrawLine(start.fX, start.fY, end.fX, end.fY, 1, playerColor);
 }
 
 FORCEINLINE void DrawCIRCLEatGameCoords(D3DCOLOR color, const CVector& coords)
@@ -43,7 +43,7 @@ void WallHack::init()
 {
 	font.Init();
 }
-void WallHack::save(nlohmann::json &data)
+void WallHack::save(nlohmann::json& data)
 {
 	SERIALIZE_FIELD_JSON(wallHack);
 	SERIALIZE_FIELD_JSON(activationKey);
@@ -57,7 +57,7 @@ void WallHack::save(nlohmann::json &data)
 	SERIALIZE_FIELD_JSON(fNameTagYOffset);
 	font.save(data);
 }
-void WallHack::read(nlohmann::json &data)
+void WallHack::read(nlohmann::json& data)
 {
 
 	DESERIALIZE_FIELD_JSON(wallHack);
@@ -158,7 +158,7 @@ bool WallHack::onRPCIncoming(stRakNetHookParams* params)
 {
 	if (params->packetId != ScriptRPCEnumeration::RPC_ScrChatBubble)
 		return true;
-	UINT16 playerid; UINT32 color; float drawDistance; UINT32 expiretime; UINT8 textLength; char *text;
+	UINT16 playerid; UINT32 color; float drawDistance; UINT32 expiretime; UINT8 textLength; char* text;
 	params->bitStream->ResetReadPointer();
 	params->bitStream->Read(playerid);
 	params->bitStream->Read(color);
@@ -181,13 +181,12 @@ void WallHack::onDrawHack()
 {
 	if (!bNoNameTags || drawWallHack)
 	{
-											  
-		GFuncs::resortPlayersByDistance(&g::pInfo->nearestPlayers, true);
-		for (auto&& player : g::pInfo->nearestPlayers)//(int i = 0; i < 1000; i++)
+
+		for (auto&& player : g::pInfo->nearestPlayers | std::ranges::views::reverse)//(int i = 0; i < 1000; i++)
 		{
 			const int i = player.id;
 			CVector PedPos;
-			GAME->GetPools()->GetPed((DWORD*)SF->getSAMP()->getPlayers()->pRemotePlayer[i]->pPlayerData->pSAMP_Actor->pGTA_Ped)->GetTransformedBonePosition(eBone::BONE_HEAD, &PedPos);
+			GAME->GetPools()->GetPed((DWORD*)player.pActorInfo)->GetTransformedBonePosition(eBone::BONE_HEAD, &PedPos);
 
 			CMatrix matrix;
 			GAME->GetCamera()->GetMatrix(&matrix);
@@ -222,16 +221,16 @@ void WallHack::onDrawHack()
 			font.f->Print(szBuffer, playerColor, (onScreenPos.fX - font.f->DrawLength(szBuffer) / 2.0f), onScreenPos.fY);
 			uint16 iYO = 0;
 
-			if (SF->getSAMP()->getPlayers()->pRemotePlayer[i]->pPlayerData->fActorArmor > 0.f)
+			if (player.pActorInfo->armor > 0.f)
 			{
 				iYO += iYBoxOffset;
 				SF->getRender()->DrawBorderedBox(onScreenPos.fX - 25, onScreenPos.fY + fFontHeight + iYO, 50, iBoxHight, 0xD8000000, 1, 0xFF000000);
-				SF->getRender()->DrawBorderedBox(onScreenPos.fX - 25, onScreenPos.fY + fFontHeight + iYO, SF->getSAMP()->getPlayers()->pRemotePlayer[i]->pPlayerData->fActorArmor * 0.5f, iBoxHight, 0xFFFFFFFF, 1, 0xFF000000);
+				SF->getRender()->DrawBorderedBox(onScreenPos.fX - 25, onScreenPos.fY + fFontHeight + iYO, player.pActorInfo->armor * 0.5f, iBoxHight, 0xFFFFFFFF, 1, 0xFF000000);
 				iYO += iBoxHight;
 			}
 			iYO += iYBoxOffset;
 			SF->getRender()->DrawBorderedBox(onScreenPos.fX - 25, onScreenPos.fY + fFontHeight + iYO, 50, iBoxHight, 0xD8000000, 1, 0xFF000000);
-			float health = SF->getSAMP()->getPlayers()->pRemotePlayer[i]->pPlayerData->fActorHealth;
+			float health = player.pActorInfo->hitpoints;
 			if (health > 100.f)
 				health = 100.f;
 			SF->getRender()->DrawBorderedBox(onScreenPos.fX - 25, onScreenPos.fY + fFontHeight + iYO, health * 0.5f, iBoxHight, 0xFFFF0000, 1, 0xFF000000);
@@ -257,8 +256,9 @@ void WallHack::onDrawHack()
 				}
 				if (bShowVeh)
 				{
+
 					if (Players::isPlayerInCar(player.pActorInfo))
-						strcat_s(whbuffer, Stuff::VehiclesNames[SF->getSAMP()->getPlayers()->pRemotePlayer[i]->pPlayerData->pSAMP_Vehicle->pGTA_Vehicle->base.model_alt_id - 400]);
+						strcat_s(whbuffer, Stuff::VehiclesNames[player.pActorInfo->vehicle->base.model_alt_id - 400]);
 					else
 						strcat_s(whbuffer, "Onfoot");
 					strcat_s(whbuffer, " \n");
@@ -277,65 +277,65 @@ void WallHack::onDrawHack()
 					CVector2D UPPERTORSO = Players::getBonePosOnScreen(ped, BONE_UPPERTORSO);
 					CVector2D PELVIS = Players::getBonePosOnScreen(ped, BONE_PELVIS); // Œœ“»Ã»«≈…ÿŒÕ!
 
-					DrawLine(playerColor, &Players::getBonePosOnScreen(ped, BONE_HEAD),
-						&Players::getBonePosOnScreen(ped, BONE_NECK));
+					DrawLine(playerColor, Players::getBonePosOnScreen(ped, BONE_HEAD),
+						Players::getBonePosOnScreen(ped, BONE_NECK));
 
-					DrawLine(playerColor, &UPPERTORSO,
-						&Players::getBonePosOnScreen(ped, BONE_RIGHTSHOULDER));
+					DrawLine(playerColor, UPPERTORSO,
+						Players::getBonePosOnScreen(ped, BONE_RIGHTSHOULDER));
 
-					DrawLine(playerColor, &UPPERTORSO,
-						&Players::getBonePosOnScreen(ped, BONE_LEFTSHOULDER));
+					DrawLine(playerColor, UPPERTORSO,
+						Players::getBonePosOnScreen(ped, BONE_LEFTSHOULDER));
 
-					DrawLine(playerColor, &Players::getBonePosOnScreen(ped, BONE_RIGHTSHOULDER),
-						&Players::getBonePosOnScreen(ped, BONE_RIGHTELBOW));
+					DrawLine(playerColor, Players::getBonePosOnScreen(ped, BONE_RIGHTSHOULDER),
+						Players::getBonePosOnScreen(ped, BONE_RIGHTELBOW));
 
-					DrawLine(playerColor, &Players::getBonePosOnScreen(ped, BONE_LEFTSHOULDER),
-						&Players::getBonePosOnScreen(ped, BONE_LEFTELBOW));
+					DrawLine(playerColor, Players::getBonePosOnScreen(ped, BONE_LEFTSHOULDER),
+						Players::getBonePosOnScreen(ped, BONE_LEFTELBOW));
 
-					DrawLine(playerColor, &Players::getBonePosOnScreen(ped, BONE_RIGHTELBOW),
-						&Players::getBonePosOnScreen(ped, BONE_RIGHTWRIST));
+					DrawLine(playerColor, Players::getBonePosOnScreen(ped, BONE_RIGHTELBOW),
+						Players::getBonePosOnScreen(ped, BONE_RIGHTWRIST));
 
-					DrawLine(playerColor, &Players::getBonePosOnScreen(ped, BONE_LEFTELBOW),
-						&Players::getBonePosOnScreen(ped, BONE_LEFTWRIST));
+					DrawLine(playerColor, Players::getBonePosOnScreen(ped, BONE_LEFTELBOW),
+						Players::getBonePosOnScreen(ped, BONE_LEFTWRIST));
 
-					DrawLine(playerColor, &Players::getBonePosOnScreen(ped, BONE_RIGHTWRIST),
-						&Players::getBonePosOnScreen(ped, BONE_RIGHTHAND));
+					DrawLine(playerColor, Players::getBonePosOnScreen(ped, BONE_RIGHTWRIST),
+						Players::getBonePosOnScreen(ped, BONE_RIGHTHAND));
 
-					DrawLine(playerColor, &Players::getBonePosOnScreen(ped, BONE_LEFTWRIST),
-						&Players::getBonePosOnScreen(ped, BONE_LEFTHAND));
+					DrawLine(playerColor, Players::getBonePosOnScreen(ped, BONE_LEFTWRIST),
+						Players::getBonePosOnScreen(ped, BONE_LEFTHAND));
 
-					DrawLine(playerColor, &Players::getBonePosOnScreen(ped, BONE_NECK),
-						&UPPERTORSO);
+					DrawLine(playerColor, Players::getBonePosOnScreen(ped, BONE_NECK),
+						UPPERTORSO);
 
-					DrawLine(playerColor, &UPPERTORSO,
-						&Players::getBonePosOnScreen(ped, BONE_SPINE1));
+					DrawLine(playerColor, UPPERTORSO,
+						Players::getBonePosOnScreen(ped, BONE_SPINE1));
 
-					DrawLine(playerColor, &Players::getBonePosOnScreen(ped, BONE_SPINE1),
-						&PELVIS);
+					DrawLine(playerColor, Players::getBonePosOnScreen(ped, BONE_SPINE1),
+						PELVIS);
 
-					DrawLine(playerColor, &PELVIS,
-						&Players::getBonePosOnScreen(ped, eBone::BONE_LEFTHIP));
+					DrawLine(playerColor, PELVIS,
+						Players::getBonePosOnScreen(ped, eBone::BONE_LEFTHIP));
 
-					DrawLine(playerColor, &PELVIS,
-						&Players::getBonePosOnScreen(ped, eBone::BONE_RIGHTHIP));
+					DrawLine(playerColor, PELVIS,
+						Players::getBonePosOnScreen(ped, eBone::BONE_RIGHTHIP));
 
-					DrawLine(playerColor, &Players::getBonePosOnScreen(ped, BONE_LEFTHIP),
-						&Players::getBonePosOnScreen(ped, eBone::BONE_LEFTKNEE));
+					DrawLine(playerColor, Players::getBonePosOnScreen(ped, BONE_LEFTHIP),
+						Players::getBonePosOnScreen(ped, eBone::BONE_LEFTKNEE));
 
-					DrawLine(playerColor, &Players::getBonePosOnScreen(ped, BONE_RIGHTHIP),
-						&Players::getBonePosOnScreen(ped, eBone::BONE_RIGHTKNEE));
+					DrawLine(playerColor, Players::getBonePosOnScreen(ped, BONE_RIGHTHIP),
+						Players::getBonePosOnScreen(ped, eBone::BONE_RIGHTKNEE));
 
-					DrawLine(playerColor, &Players::getBonePosOnScreen(ped, BONE_LEFTKNEE),
-						&Players::getBonePosOnScreen(ped, eBone::BONE_LEFTANKLE));
+					DrawLine(playerColor, Players::getBonePosOnScreen(ped, BONE_LEFTKNEE),
+						Players::getBonePosOnScreen(ped, eBone::BONE_LEFTANKLE));
 
-					DrawLine(playerColor, &Players::getBonePosOnScreen(ped, BONE_RIGHTKNEE),
-						&Players::getBonePosOnScreen(ped, eBone::BONE_RIGHTANKLE));
+					DrawLine(playerColor, Players::getBonePosOnScreen(ped, BONE_RIGHTKNEE),
+						Players::getBonePosOnScreen(ped, eBone::BONE_RIGHTANKLE));
 
-					DrawLine(playerColor, &Players::getBonePosOnScreen(ped, BONE_LEFTANKLE),
-						&Players::getBonePosOnScreen(ped, eBone::BONE_LEFTFOOT));
+					DrawLine(playerColor, Players::getBonePosOnScreen(ped, BONE_LEFTANKLE),
+						Players::getBonePosOnScreen(ped, eBone::BONE_LEFTFOOT));
 
-					DrawLine(playerColor, &Players::getBonePosOnScreen(ped, BONE_RIGHTANKLE),
-						&Players::getBonePosOnScreen(ped, eBone::BONE_RIGHTFOOT));
+					DrawLine(playerColor, Players::getBonePosOnScreen(ped, BONE_RIGHTANKLE),
+						Players::getBonePosOnScreen(ped, eBone::BONE_RIGHTFOOT));
 				}
 			}
 

@@ -19,12 +19,12 @@ void AirBrakeForward(float force)
 	pos += slappos;
 	if (g::pInfo->isDriver())
 	{
-		PEDSELF->GetVehicle()->SetMoveSpeed(&CVector(0.f, 0.f, 0.f));
+		PEDSELF->GetVehicle()->SetMoveSpeed(&CVectorConstants::zerVec);
 		PEDSELF->GetVehicle()->SetPosition(&pos);
 	}
 	else
 	{
-		PEDSELF->SetMoveSpeed(&CVector(0.f, 0.f, 0.f));
+		PEDSELF->SetMoveSpeed(&CVectorConstants::zerVec);
 		PEDSELF->SetPosition(&pos);
 	}
 }
@@ -40,7 +40,7 @@ void TPupdown(float force, bool bUp)
 			pos.fZ += force;
 		else
 			pos.fZ -= force;
-		PEDSELF->GetVehicle()->SetMoveSpeed(&CVector(0.f, 0.f, 0.f));
+		PEDSELF->GetVehicle()->SetMoveSpeed(&CVectorConstants::zerVec);
 		PEDSELF->GetVehicle()->SetPosition(&pos);
 	}
 	else
@@ -50,7 +50,7 @@ void TPupdown(float force, bool bUp)
 			pos.fZ += force;
 		else
 			pos.fZ -= force;
-		PEDSELF->SetMoveSpeed(&CVector(0.f, 0.f, 0.f));
+		PEDSELF->SetMoveSpeed(&CVectorConstants::zerVec);
 		PEDSELF->SetPosition(&pos);
 
 	}

@@ -1,5 +1,5 @@
 #pragma once
-#include "C:\Lippets\FIles\Strings.h"
+#include "Files\Strings.h"
 #include "d3d9.h"
 #include "SAMPFUNCS_API.h"
 #include "game_api.h"
@@ -350,7 +350,7 @@ namespace Vehicles
 	bool isVehicleHavePassengers(vehicle_info *vehInfo);
 	std::string getVehicleNameByModel(int model_alt_id);
 	std::vector<NearVehicle> getNearestVehicles(bool bInvert = false);
-
+	sampid getVehicleID(vehicle_info* pVehInfo);
 	eVehicleType getVehicleType(CVehicle *cveh);
 
 }
@@ -372,7 +372,7 @@ namespace Players
 	bool isPlayerDriver(actor_info* pActorInfo);
 	bool isLocalPlayerDriver();
 	int getLocalPlayerCarID();
-
+	bool isLocalPlayerDrivingCar(vehicle_info*);
 	actor_info* getPlayerInfo(sampid id, bool checkExist = true);
 	std::vector<NearPlayer> getNearestToCrosshairPlayers(bool bCheckLineOfSight = true);
 	std::vector<NearPlayer> getNearestPlayers(bool bInvert = false);
@@ -390,6 +390,7 @@ namespace Pools // refactor this ->
 }
 namespace RPC_emulating
 {
+	void setVehicleZAngle(UINT16 wVehicleID, float Angle);
 	void setskin(uint32_t player_id, uint32_t skin_id);
 	void giveweapon(uint32_t weapon_id, uint32_t ammo);
 	void setPlayerFightStyle(UINT16 wPlayerID, UINT8 fightstyle);

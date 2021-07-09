@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{AC0C243A-FAEA-4062-9682-3FC9E0B4D835}</ProjectGuid>
     <RootNamespace>SFPlugin</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -25,7 +25,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -43,7 +43,7 @@
     <TargetExt>.sf</TargetExt>
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
-    <OutDir>..\..\..\..\..\gtasamps\GTA 140K BY DAPO SHOW\SAMPFUNCS</OutDir>
+    <OutDir>..\..\..\..\..\gtasamps\ARIZONA GAMES\bin\Arizona\SAMPFUNCS</OutDir>
     <TargetName>HacksReborn</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -74,11 +74,13 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FloatingPointModel>Fast</FloatingPointModel>
       <CompileAs>Default</CompileAs>
-      <AdditionalIncludeDirectories>SubscriptionChecker;C:\Lippets;C:\Lippets\stuff;C:\Lippets\SobeitApiToSampFuncsWrapper;memsafe;include\plog;Classes\Hacks\Visuals;Classes\CMClasses;ImGui;include;Classes\Hacks;Classes;json;json\json;$(DXSDK_DIR)\Include;SFAPI;game_api;game_api\sdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>memsafe;include\plog;Classes\Hacks\Visuals;Classes\CMClasses;ImGui;include;Classes\Hacks;Classes;json;json\json;$(DXSDK_DIR)\Include;SFAPI;game_api;game_api\sdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zc:threadSafeInit-  /std:c++latest %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ConformanceMode>true</ConformanceMode>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
@@ -92,27 +94,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="C:\Lippets\CMClasses\CMFont.cpp" />
-    <ClCompile Include="C:\Lippets\CMClasses\CMReplacer.cpp" />
-    <ClCompile Include="C:\Lippets\CMClasses\CMTimer.cpp" />
-    <ClCompile Include="C:\Lippets\FIles\Computer.cpp" />
-    <ClCompile Include="C:\Lippets\FIles\Conditions.cpp" />
-    <ClCompile Include="C:\Lippets\FIles\KeyboardMouse.cpp" />
-    <ClCompile Include="C:\Lippets\FIles\Numbers.cpp" />
-    <ClCompile Include="C:\Lippets\FIles\Strings.cpp" />
-    <ClCompile Include="C:\Lippets\SampSnipps\cheat_funcs.cpp" />
-    <ClCompile Include="C:\Lippets\SampSnipps\GTAfuncs.cpp" />
-    <ClCompile Include="C:\Lippets\SampSnipps\math_stuff.cpp" />
-    <ClCompile Include="C:\Lippets\SampSnipps\samp.cpp" />
-    <ClCompile Include="C:\Lippets\SampSnipps\SampSnipps.cpp" />
-    <ClCompile Include="Classes\GlobalFuncs.cpp" />
     <ClCompile Include="Classes\HacksManager.cpp" />
     <ClCompile Include="Classes\Hacks\1lineHacks.cpp" />
     <ClCompile Include="Classes\Hacks\AimBot.cpp" />
     <ClCompile Include="Classes\Hacks\AirBrake.cpp" />
     <ClCompile Include="Classes\Hacks\AltClicker.cpp" />
     <ClCompile Include="Classes\Hacks\ArizonaLEmulator.cpp" />
-    <ClCompile Include="Classes\Hacks\AutoCBug.cpp" />
     <ClCompile Include="Classes\Hacks\AutoShot.cpp" />
     <ClCompile Include="Classes\Hacks\Binder.cpp" />
     <ClCompile Include="Classes\Hacks\BMXSpeedHack.cpp" />
@@ -131,7 +118,6 @@
     <ClCompile Include="Classes\Hacks\VehicleGodMode.cpp" />
     <ClCompile Include="Classes\Hacks\WallHack_NewNameTags.cpp" />
     <ClCompile Include="Classes\Hacks\WallShot.cpp" />
-    <ClCompile Include="Hack.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
@@ -140,6 +126,13 @@
     <ClCompile Include="ImGui\imgui_stdlib.cpp" />
     <ClCompile Include="ImGui\imgui_tables.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="include\CMClasses\CMFont.cpp" />
+    <ClCompile Include="include\CMClasses\CMReplacer.cpp" />
+    <ClCompile Include="include\SampSnipps\cheat_funcs.cpp" />
+    <ClCompile Include="include\SampSnipps\GTAfuncs.cpp" />
+    <ClCompile Include="include\SampSnipps\math_stuff.cpp" />
+    <ClCompile Include="include\SampSnipps\samp.cpp" />
+    <ClCompile Include="include\SampSnipps\SampSnipps.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -151,7 +144,6 @@
     <ClInclude Include="Classes\Hacks\AirBrake.h" />
     <ClInclude Include="Classes\Hacks\AltClicker.h" />
     <ClInclude Include="Classes\Hacks\ArizonaLEmulator.h" />
-    <ClInclude Include="Classes\Hacks\AutoCBug.h" />
     <ClInclude Include="Classes\Hacks\AutoShot.h" />
     <ClInclude Include="Classes\Hacks\Binder.h" />
     <ClInclude Include="Classes\Hacks\BMXSpeedHack.h" />

@@ -23,7 +23,6 @@
 #include "Sbiv.h"
 #include "VehicleGodMode.h"
 #include "PlayersDescription.h"
-#include "AutoCBug.h"
 #include "CarShot.h"
 
 #include "nameof/nameof.hpp"
@@ -78,7 +77,6 @@ void HacksManager::initHacksOnce()
 	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new VehicleGodMode("VehicleGodMode")));
 	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new FastEnterExit("FastEnterExit")));
 	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::VISUAL, new PlayersDescription("PlayersDescription")));
-	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::SHOOTING, new AutoCBUG("AutoCBUG")));
 	m_hacks.emplace_back(std::make_tuple(Priority::DEFAULT, HACK_TYPE::MISC, new CarShot("CarShot")));
 
 	std::sort(m_hacks.begin(), m_hacks.end(), [](const Hack& hack, const Hack&  hack2)

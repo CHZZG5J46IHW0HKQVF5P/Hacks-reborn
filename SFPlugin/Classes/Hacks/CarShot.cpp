@@ -35,7 +35,7 @@ bool CarShot::onPacketOutcoming(stRakNetHookParams* param)
 	if (param->packetId == ID_VEHICLE_SYNC)
 	{
 
-		auto&& pTargetEntitiy = GAME->GetCamera()->GetCam(GAME->GetCamera()->GetActiveCam())->GetTargetEntity();
+		auto pTargetEntitiy = GAME->GetCamera()->GetCam(GAME->GetCamera()->GetActiveCam())->GetTargetEntity();
 
 		if (!pTargetEntitiy)
 			return true;

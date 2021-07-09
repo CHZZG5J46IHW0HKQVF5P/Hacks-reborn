@@ -1,6 +1,6 @@
 #pragma once
 #include "Hack.h"
-#include "C:\Lippets\FIles\Numbers.h"
+#include "FIles\Numbers.h"
 
 class ChatBubble
 {
@@ -47,10 +47,11 @@ private:
 	OVERRIDE_INIT;
 	OVERRIDE_SAVE_READ;
 	OVERRIDE_EVERY_TICK;
-	void onDrawGUI() override;
-	void switchHack() override;
-	bool  onWndProc() override;
-	bool onRPCIncoming(stRakNetHookParams* params) override;
+	OVERRIDE_DRAWGUI;
+
+	OVERRIDE_SWITCH_HACK;
+	OVERRIDE_WNDPROC;
+	OVERRIDE_RPC_INC;
 	OVERRIDE_DRAW_HACK;
 
 };

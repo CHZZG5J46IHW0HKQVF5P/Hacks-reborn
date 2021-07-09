@@ -13,9 +13,9 @@ private:
 	bool connectLoger;
 	bool noFriendDamage;
 	OVERRIDE_DRAW_HACK;
-	void onDrawGUI() override;
+	OVERRIDE_DRAWGUI;
 	
-	bool onPacketOutcoming(stRakNetHookParams* params) override;
-	bool onRPCIncoming(stRakNetHookParams* params) override;
+	OVERRIDE_PACKET_OUT;
+	OVERRIDE_RPC_INC;
 	OVERRIDE_SAVE_READ;
 };

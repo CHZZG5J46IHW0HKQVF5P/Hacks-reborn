@@ -124,7 +124,7 @@ void PlayersList::onDrawHack()
 	if (g::pInfo->nearestPlayers.empty())
 		return;
 
-	GFuncs::resortPlayersByDistance(&g::pInfo->nearestPlayers, false);
+
 	if (std::find_if(g::pInfo->nearestPlayers.begin(), g::pInfo->nearestPlayers.end(), [&](const NearPlayer& id_dist)
 	{
 		return std::find(friendsList.begin(), friendsList.end(), SF->getSAMP()->getPlayers()->GetPlayerName(id_dist.id)) != friendsList.end();

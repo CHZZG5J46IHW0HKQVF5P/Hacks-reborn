@@ -11,7 +11,7 @@ private:
 	int iDelay;
 	bool bmxspeedHack = false;
 
-	void onDrawGUI() override;
+	OVERRIDE_DRAWGUI;
 	OVERRIDE_WNDPROC;
 	OVERRIDE_EVERY_TICK;
 	OVERRIDE_SAVE_READ;

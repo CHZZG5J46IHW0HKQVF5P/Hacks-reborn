@@ -384,6 +384,7 @@ VOID GTAfunc_SetMoveSpeed(object_base *entity, CVector vecMoveSpeed)
 
 bool GTAfunc_IsUpsideDown(vehicle_info *vinfo)
 {
+	if (!vinfo) return false;
 	DWORD	dwThis = (DWORD)vinfo;
 	DWORD	dwFunc = FUNC_CVehicle_IsUpsideDown;
 	bool	bReturn = false;
@@ -668,7 +669,7 @@ void GTAfunc_PerformAnimation(const char *szBlockName, const char *szAnimName, i
 
 			// create a new task
 			CTask *pTask = GAME->GetTasks()->CreateTaskSimpleRunNamedAnim(
-				szAnimName, pBlock->GetName(), flags, 4.0f, iTime, !bInterruptable, bRunInSequence, bOffsetPed, bHoldLastFrame);
+				szAnimName, pBlock->GetName(), flags, 4.0f, iTime, bInterruptable, bRunInSequence, bOffsetPed, bHoldLastFrame);
 
 			if (pTask)
 			{

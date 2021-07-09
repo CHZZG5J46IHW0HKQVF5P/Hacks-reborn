@@ -338,6 +338,7 @@ void OneLineHacks::onDrawGUI()
 	ImGui::SameLine();
 	Lippets::ImGuiSnippets::KeyButton(nFlipVehicleActivationKey, g::keyButtonSplitter);
 	ImGui::Checkbox("Map Teleport", &bMapTeleport);
+	ImGui::Checkbox("Always Horn", &bEternalHorn);
 }
 
 void OneLineHacks::onDrawHack()
@@ -393,24 +394,24 @@ void OneLineHacks::everyTickAction()
 		{
 			static uint8 eBikeState = 1;
 			static CMTimer timer;
-			if (PEDSELF->GetVehicle()->GetGasPedal() == 1.f && !SF->getSAMP()->getInput()->iInputEnabled && !Vehicles::isVehicleInAir(2.5f, vehicleInfoGet_(-1, 0))) //GetAsyncKeyState(87)
+			if (PEDSELF->GetVehicle()->GetGasPedal() == 1.f && !SF->getSAMP()->getInput()->iInputEnabled)
 			{
 				if (timer.isEnded())
 				{
 					if (eBikeState == 1)
 					{
-						timer.setTimer(30);
+						timer.setTimer(50);
 						eBikeState = 2;
 					}
 					else if (eBikeState == 2)
 					{
-						keybd_event(VK_BACK, 0, 0, 0);
+						Lippets::KeyBoard::SendKeyPress(VK_UP, 0); //keybd_event(VK_BACK, 0, 0, 0);
 						timer.setTimer(5);
 						eBikeState = 3;
 					}
 					else if (eBikeState == 3)
 					{
-						keybd_event(VK_BACK, 0, KEYEVENTF_KEYUP, 0);
+						Lippets::KeyBoard::SendKeyRelease(VK_UP, 0); //keybd_event(VK_BACK, 0, KEYEVENTF_KEYUP, 0);
 						eBikeState = 1;
 					}
 				}
@@ -418,7 +419,7 @@ void OneLineHacks::everyTickAction()
 			else
 				if (eBikeState == 3)
 				{
-					keybd_event(VK_BACK, 0, KEYEVENTF_KEYUP, 0);
+					Lippets::KeyBoard::SendKeyRelease(VK_UP, 0); //keybd_event(VK_BACK, 0, KEYEVENTF_KEYUP, 0);
 					eBikeState = 1;
 				}
 		}
@@ -462,14 +463,18 @@ bool OneLineHacks::onWndProc()
 
 bool OneLineHacks::onRPCOutcoming(stRakNetHookParams* params)
 {
+
 	switch (params->packetId)
 	{
 	case RPCEnumeration::RPC_MapMarker:
 	{
-		float fCoords[3];
-		params->bitStream->ResetReadPointer();
-		params->bitStream->Read((char*)fCoords, 12);
-		PEDSELF->Teleport(fCoords[0], fCoords[1], fCoords[2]);
+		if (bMapTeleport)
+		{
+			float fCoords[3];
+			params->bitStream->ResetReadPointer();
+			params->bitStream->Read((char*)fCoords, 12);
+			PEDSELF->Teleport(fCoords[0], fCoords[1], fCoords[2]);
+		}
 		return true;
 	}
 	default:
@@ -477,7 +482,7 @@ bool OneLineHacks::onRPCOutcoming(stRakNetHookParams* params)
 	}
 	return true;
 }
-bool OneLineHacks::onRPCIncoming(stRakNetHookParams *params)
+bool OneLineHacks::onRPCIncoming(stRakNetHookParams* params)
 {
 	if (!bDontGiveMeBat || params->packetId != ScriptRPCEnumeration::RPC_ScrGivePlayerWeapon)
 		return true;
@@ -488,7 +493,7 @@ bool OneLineHacks::onRPCIncoming(stRakNetHookParams *params)
 		return false;
 	return true;
 }
-bool OneLineHacks::onPacketOutcoming(stRakNetHookParams *param)
+bool OneLineHacks::onPacketOutcoming(stRakNetHookParams* param)
 {
 	switch (param->packetId)
 	{
@@ -602,3 +607,5 @@ void OneLineHacks::read(nlohmann::json& data)
 	DESERIALIZE_FIELD_JSON(bBar160hp);
 	DESERIALIZE_FIELD_JSON(bGodMode);
 }
+
+

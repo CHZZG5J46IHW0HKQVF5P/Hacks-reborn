@@ -2,16 +2,13 @@
 
 #include "HacksManager.h"
 
-
+class HacksManager;
 namespace GFuncs
 {
-	void resortPlayersByDistance(std::vector < NearPlayer > * arrPtr, bool bInvert);
-	void resortVehiclesByDistance(std::vector<NearVehicle>* arrPtr, bool bInvert);
-
-	template<class T>
-	T* getHackPtr()
+	template<typename T>
+	inline T* getHackPtr()
 	{
-		auto&& hacks = HacksManager::getInstance()->getHacks();
+		static const auto&& hacks = HacksManager::getInstance()->getHacks();
 		for (auto&& hack : *hacks)
 		{
 			auto var = dynamic_cast<T*>(std::get<IHack*>(hack));

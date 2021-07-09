@@ -54,10 +54,10 @@
 #define CLASS_CMenuManager	0xBA6748
 
 ////////////////////////
-#include "SAMPFUNCS_API.h"
-#include "game_api.h"
 #include "SampSnipps/cheat_funcs.h"
 #include "SampSnipps\math_stuff.h"
+#include "SAMPFUNCS_API.h"
+#include "game_api.h"
 // structures & enums //
 ////////////////////////
 struct RsInputDevice
@@ -129,7 +129,6 @@ bool		GTAfunc_IsOnItsSide ( vehicle_info *vinfo );
 
 // game core funcs
 int			GTAfunc_getNumVideoModes ( void );
-VideoMode	*GTAfunc_getVideoModeInfo ( VideoMode *modeInfo, int modeIndex );
 int			GTAfunc_getCurrentVideoMode ( void );
 void		GTAfunc_setCurrentVideoMode ( int modeIndex );
 int			GTAfunc_RwD3D9ChangeVideoMode ( int modeIndex );

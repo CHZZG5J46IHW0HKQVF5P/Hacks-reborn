@@ -1,14 +1,15 @@
 #include "SampSnipps\SampSnipps.h"
 #include "SampSnipps/samp.h"
+#include "Files/LUtils.h"
 #include <chrono>
 
-extern SAMPFUNCS *SF;
-void D3D::CalcScreenCoords(const CVector *vecWorld, CVector *vecScreen)
+extern SAMPFUNCS* SF;
+void D3D::CalcScreenCoords(const CVector* vecWorld, CVector* vecScreen)
 {
 
-	D3DXMATRIX m((float *)(0xB6FA2C));
-	DWORD *dwLenX = (DWORD *)(0xC17044);
-	DWORD *dwLenY = (DWORD *)(0xC17048);
+	D3DXMATRIX m((float*)(0xB6FA2C));
+	DWORD* dwLenX = (DWORD*)(0xC17044);
+	DWORD* dwLenY = (DWORD*)(0xC17048);
 
 	vecScreen->fX = (vecWorld->fZ * m._31) + (vecWorld->fY * m._21) + (vecWorld->fX * m._11) + m._41;
 	vecScreen->fY = (vecWorld->fZ * m._32) + (vecWorld->fY * m._22) + (vecWorld->fX * m._12) + m._42;
@@ -18,11 +19,11 @@ void D3D::CalcScreenCoords(const CVector *vecWorld, CVector *vecScreen)
 	vecScreen->fX *= (float)(fRecip * (*dwLenX));
 	vecScreen->fY *= (float)(fRecip * (*dwLenY));
 }
-void D3D::CalcScreenCoords(D3DXVECTOR3 *vecWorld, D3DXVECTOR3 *vecScreen)
+void D3D::CalcScreenCoords(D3DXVECTOR3* vecWorld, D3DXVECTOR3* vecScreen)
 {
-	D3DXMATRIX m((float *)(0xB6FA2C));
-	DWORD *dwLenX = (DWORD *)(0xC17044);
-	DWORD *dwLenY = (DWORD *)(0xC17048);
+	D3DXMATRIX m((float*)(0xB6FA2C));
+	DWORD* dwLenX = (DWORD*)(0xC17044);
+	DWORD* dwLenY = (DWORD*)(0xC17048);
 
 	vecScreen->x = (vecWorld->z * m._31) + (vecWorld->y * m._21) + (vecWorld->x * m._11) + m._41;
 	vecScreen->y = (vecWorld->z * m._32) + (vecWorld->y * m._22) + (vecWorld->x * m._12) + m._42;
@@ -32,17 +33,17 @@ void D3D::CalcScreenCoords(D3DXVECTOR3 *vecWorld, D3DXVECTOR3 *vecScreen)
 	vecScreen->x *= (float)(fRecip * (*dwLenX));
 	vecScreen->y *= (float)(fRecip * (*dwLenY));
 }
-bool D3D::isCoordsOnScreen(const CVector &vecWorld)
+bool D3D::isCoordsOnScreen(const CVector& vecWorld)
 {
 	CVector posOnScreen;
 	CalcScreenCoords(&vecWorld, &posOnScreen);
 	return posOnScreen.fZ > 0.01f;
 }
-float Stuff::getDistanceBetween(const CVector *pos1, const CVector &pos2)
+float Stuff::getDistanceBetween(const CVector* pos1, const CVector& pos2)
 {
 	return sqrt((pos1->fX - pos2.fX) * (pos1->fX - pos2.fX) + (pos1->fY - pos2.fY) * (pos1->fY - pos2.fY) + (pos1->fZ - pos2.fZ) * (pos1->fZ - pos2.fZ));
 }
-float Stuff::getDistanceBetween2d(const CVector2D &vec1, const CVector2D &vec2)
+float Stuff::getDistanceBetween2d(const CVector2D& vec1, const CVector2D& vec2)
 {
 	return sqrt(pow(vec1.fX - vec2.fX, 2) + pow(vec1.fY - vec2.fY, 2));
 }
@@ -56,30 +57,30 @@ void Stuff::AddMessageJumpQ(const std::string& text, unsigned int time, unsigned
 	}
 	szText = new char[text.length()];
 	strcpy(szText, text.c_str());
-	((void(__cdecl *)(char *, unsigned int, unsigned short, bool))0x69F1E0)(szText, time, flag, bPreviousBrief);
+	((void(__cdecl*)(char*, unsigned int, unsigned short, bool))0x69F1E0)(szText, time, flag, bPreviousBrief);
 }
 
 int Stuff::isModelLoaded(int iModelID)
 {
-	int *ModelsLoadStateArray = (int *)0x8E4CD0;
+	int* ModelsLoadStateArray = (int*)0x8E4CD0;
 	return ModelsLoadStateArray[5 * iModelID];
 }
-bool Stuff::TestCheat(const char *cheat)
+bool Stuff::TestCheat(const char* cheat)
 {
-	char *c = reinterpret_cast<char *>(0x00969110);
+	char* c = reinterpret_cast<char*>(0x00969110);
 	char buf[30];
 	strcpy(buf, cheat);
-	char *s = _strrev(buf);
+	char* s = _strrev(buf);
 	if (_strnicmp(s, c, strlen(s)))
 		return false;
-	*reinterpret_cast<char *>(0x00969110) = 0;
+	*reinterpret_cast<char*>(0x00969110) = 0;
 	return true;
 }
-bool Vehicles::isInValid(int id)
+bool Vehicles::isInValid(sampid id)
 {
 	return !(id >= 0 && id < 2000);
 }
-bool Vehicles::isVehicleExist(int id)
+bool Vehicles::isVehicleExist(sampid id)
 {
 	if (isInValid(id))
 		return false;
@@ -90,25 +91,25 @@ bool Vehicles::isVehicleExist(int id)
 	return true;
 }
 
-CVehicle *Vehicles::getVehicleCVehicle(vehicle_info *vehInfo)
+CVehicle* Vehicles::getVehicleCVehicle(vehicle_info* vehInfo)
 {
 	CHECK_VALID(vehInfo, nullptr);
-	return GAME->GetPools()->GetVehicle((DWORD *)vehInfo);
+	return GAME->GetPools()->GetVehicle((DWORD*)vehInfo);
 }
 
-eVehicleType Vehicles::getVehicleType(CVehicle *cveh)
+eVehicleType Vehicles::getVehicleType(CVehicle* cveh)
 {
 	CHECK_VALID(cveh, eVehicleType::NONE);
-	return (eVehicleType) * (DWORD *)cveh->GetMemoryValue(0x594);
+	return (eVehicleType) * (DWORD*)cveh->GetMemoryValue(0x594);
 }
 bool Vehicles::isVehicleInAir(float lim, vehicle_info* pVehInfo)
 {
 	CHECK_VALID(pVehInfo, false);
-	CVehicle *cveh = getVehicleCVehicle(pVehInfo);
+	CVehicle* cveh = getVehicleCVehicle(pVehInfo);
 	eVehicleType vehType = Vehicles::getVehicleType(cveh);
 	if (vehType == eVehicleType::CAutomobile)
 	{
-		return !(*(byte *)cveh->GetMemoryValue(0x0961));
+		return !(*(byte*)cveh->GetMemoryValue(0x0961));
 	}
 	else
 	{
@@ -116,7 +117,7 @@ bool Vehicles::isVehicleInAir(float lim, vehicle_info* pVehInfo)
 		return zCoord > lim;
 	}
 }
-bool Vehicles::isVehicleHavePassengers(vehicle_info *vehInfo)
+bool Vehicles::isVehicleHavePassengers(vehicle_info* vehInfo)
 {
 	for (int i = 0; i < vehInfo->m_nMaxPassengers; i++)
 		if (vehInfo->passengers[i] != nullptr)
@@ -182,26 +183,30 @@ std::vector<NearVehicle> Vehicles::getNearestVehicles(bool bInvert)
 	}
 
 	if (bInvert)
-		std::sort(vehicles.begin(), vehicles.end(), [](const NearVehicle &a, const NearVehicle &b) {
+		std::sort(vehicles.begin(), vehicles.end(), [](const NearVehicle& a, const NearVehicle& b) {
 		return (a.fDistance > b.fDistance);
-	});
+			});
 	else
-		std::sort(vehicles.begin(), vehicles.end(), [](const NearVehicle &a, const NearVehicle &b) {
+		std::sort(vehicles.begin(), vehicles.end(), [](const NearVehicle& a, const NearVehicle& b) {
 		return (a.fDistance < b.fDistance);
-	});
+			});
 	return vehicles;
 
 }
-
-bool Players::isInValid(int sampID)
+sampid Vehicles::getVehicleID(vehicle_info* pVehInfo)
+{
+	CHECK_VALID(pVehInfo, -1);
+	return SF->getSAMP()->getVehicles()->GetSAMPVehicleIDFromGTAHandle(GAME->GetPools()->GetVehicleRef(GAME->GetPools()->GetVehicle((DWORD*)pVehInfo)));
+}
+bool Players::isInValid(sampid sampID)
 {
 	return (sampID < 0 || sampID > 1000);
 }
-bool Players::isLocal(int sampID)
+bool Players::isLocal(sampid sampID)
 {
 	return (sampID == ACTOR_SELF || sampID == SF->getSAMP()->getPlayers()->sLocalPlayerID);
 }
-bool Players::isPlayerExist(int sampID)
+bool Players::isPlayerExist(sampid sampID)
 {
 	if (isInValid(sampID))
 		return false;
@@ -232,12 +237,20 @@ bool Players::isPlayerDriver(actor_info* pActorInfo)
 		return false;
 	return pActorInfo->vehicle->passengers[0] == pActorInfo;
 }
+
+bool Players::isLocalPlayerDrivingCar(vehicle_info* veh)
+{
+	CHECK_VALID(veh, false);
+	return veh->passengers[0] == SF->getSAMP()->getPlayers()->pLocalPlayer->pSAMP_Actor->pGTA_Ped;
+}
+
 bool Players::isLocalPlayerDriver()
 {
 	auto pVehicleInfo = vehicleInfoGet_(VEHICLE_SELF, 0);
 	CHECK_VALID(pVehicleInfo, false);
 	return pVehicleInfo->passengers[0] == SF->getSAMP()->getPlayers()->pLocalPlayer->pSAMP_Actor->pGTA_Ped;
 }
+
 int Players::getLocalPlayerCarID()
 {
 	auto pVehInfo = vehicleInfoGet_(VEHICLE_SELF, 0);
@@ -288,7 +301,7 @@ std::vector<NearPlayer> Players::getNearestToCrosshairPlayers(bool bCheckLineOfS
 		CMatrix matrix;
 		GAME->GetCamera()->GetMatrix(&matrix);
 		if (bCheckLineOfSight)
-			if (!GAME->GetWorld()->IsLineOfSightClear(&matrix.vPos, &CVector(vecPos.x, vecPos.y, vecPos.z), lineOfSightFlags))
+			if (!GAME->GetWorld()->IsLineOfSightClear(&matrix.vPos, Lippets::LUtils::getRValueObjectPtr(CVector(vecPos.x, vecPos.y, vecPos.z)), lineOfSightFlags))
 				continue;
 		float fRadius = Stuff::getDistanceBetween2d(CVector2D(screenPos.x, screenPos.y), CVector2D(cshX, cshY));
 		sampid id = SAMPSobeit::getSAMPPlayerIDFromGTAPed(pActorInfo);
@@ -296,9 +309,9 @@ std::vector<NearPlayer> Players::getNearestToCrosshairPlayers(bool bCheckLineOfS
 			continue;
 		players.push_back({ id,pActorInfo,fRadius });
 	}
-	std::sort(players.begin(), players.end(), [](const NearPlayer &a, const NearPlayer& b) {
+	std::sort(players.begin(), players.end(), [](const NearPlayer& a, const NearPlayer& b) {
 		return (a.fDistance < b.fDistance);
-	});
+		});
 	return players;
 }
 
@@ -348,18 +361,18 @@ std::vector<NearPlayer> Players::getNearestPlayers(bool bInvert)
 	}
 
 	if (bInvert)
-		std::sort(players.begin(), players.end(), [](const NearPlayer& a, const NearPlayer&b) {
+		std::sort(players.begin(), players.end(), [](const NearPlayer& a, const NearPlayer& b) {
 		return (a.fDistance > b.fDistance);
-	});
+			});
 	else
 		std::sort(players.begin(), players.end(), [](const NearPlayer& a, const NearPlayer& b) {
 		return (a.fDistance < b.fDistance);
-	});
+			});
 
 	return players;
 
 }
-CVector2D Players::getBonePosOnScreen(CPed *ped, eBone bone)
+CVector2D Players::getBonePosOnScreen(CPed* ped, eBone bone)
 {
 	CVector returnValue;
 	CVector bonePosition;
@@ -433,6 +446,14 @@ bool Pools::Is3dTOnScreen(int p)
 		return false;
 	return true;
 }
+void RPC_emulating::setVehicleZAngle(UINT16 wVehicleID, float Angle)
+{
+	BitStream bs;
+	bs.Write(wVehicleID);
+	bs.Write(Angle);
+	SF->getRakNet()->emulateRecvRPC(160, &bs);
+}
+
 void RPC_emulating::setskin(uint32_t player_id, uint32_t skin_id)
 {
 	BitStream bsClass;
@@ -479,12 +500,12 @@ void SampSnipps::setup()
 	if (bWasInitialized)
 		return;
 	/* setup & refresh actor pool */
-	Stuff::getActorsPool() = *(Stuff::pool **)ACTOR_POOL_POINTER;
+	Stuff::getActorsPool() = *(Stuff::pool**)ACTOR_POOL_POINTER;
 	if (Stuff::getActorsPool() == nullptr || Stuff::getActorsPool()->start == nullptr || Stuff::getActorsPool()->size <= 0)
 		return;
 
 	/* setup & refresh vehicle pool */
-	Stuff::getVehiclesPool() = *(Stuff::pool **)VEHICLE_POOL_POINTER;
+	Stuff::getVehiclesPool() = *(Stuff::pool**)VEHICLE_POOL_POINTER;
 	if (Stuff::getVehiclesPool == nullptr || Stuff::getVehiclesPool()->start == nullptr || Stuff::getVehiclesPool()->size <= 0)
 		return;
 	bWasInitialized = true;

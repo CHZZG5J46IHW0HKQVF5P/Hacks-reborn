@@ -577,9 +577,6 @@
     <ClInclude Include="Classes\Hacks\PlayersDescription.h">
       <Filter>Classes\Hacks\Visuals</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\Hacks\AutoCBug.h">
-      <Filter>Classes\Hacks\Shooting</Filter>
-    </ClInclude>
     <ClInclude Include="Classes\Hacks\CarShot.h">
       <Filter>Classes\Hacks\Misc</Filter>
     </ClInclude>
@@ -634,50 +631,8 @@
     <ClCompile Include="Classes\Hacks\Collision.cpp">
       <Filter>Classes\Hacks\Misc</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Lippets\SampSnipps\GTAfuncs.cpp">
-      <Filter>Cpps</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\GlobalFuncs.cpp">
-      <Filter>Cpps</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Lippets\CMClasses\CMFont.cpp">
-      <Filter>Cpps</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Lippets\FIles\Strings.cpp">
-      <Filter>Cpps</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Lippets\SampSnipps\SampSnipps.cpp">
-      <Filter>Cpps</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Lippets\FIles\KeyboardMouse.cpp">
-      <Filter>Cpps</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Lippets\FIles\Numbers.cpp">
-      <Filter>Cpps</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Lippets\CMClasses\CMReplacer.cpp">
-      <Filter>Cpps</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Lippets\CMClasses\CMTimer.cpp">
-      <Filter>Cpps</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Lippets\FIles\Computer.cpp">
-      <Filter>Cpps</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Lippets\FIles\Conditions.cpp">
-      <Filter>Cpps</Filter>
-    </ClCompile>
     <ClCompile Include="Classes\Hacks\FPSController.cpp">
       <Filter>Classes\Hacks\Misc</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Lippets\SampSnipps\math_stuff.cpp">
-      <Filter>Cpps</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Lippets\SampSnipps\cheat_funcs.cpp">
-      <Filter>Cpps</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Lippets\SampSnipps\samp.cpp">
-      <Filter>Cpps</Filter>
     </ClCompile>
     <ClCompile Include="Classes\Hacks\FastEnterExit.cpp">
       <Filter>Classes\Hacks\Misc</Filter>
@@ -719,12 +674,29 @@
     <ClCompile Include="ImGui\imgui_draw.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\Hacks\AutoCBug.cpp">
-      <Filter>Classes\Hacks\Shooting</Filter>
-    </ClCompile>
     <ClCompile Include="Classes\Hacks\CarShot.cpp">
       <Filter>Classes\Hacks\Misc</Filter>
     </ClCompile>
-    <ClCompile Include="Hack.cpp" />
+    <ClCompile Include="include\CMClasses\CMFont.cpp">
+      <Filter>Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="include\CMClasses\CMReplacer.cpp">
+      <Filter>Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="include\SampSnipps\cheat_funcs.cpp">
+      <Filter>Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="include\SampSnipps\GTAfuncs.cpp">
+      <Filter>Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="include\SampSnipps\math_stuff.cpp">
+      <Filter>Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="include\SampSnipps\samp.cpp">
+      <Filter>Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="include\SampSnipps\SampSnipps.cpp">
+      <Filter>Cpps</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

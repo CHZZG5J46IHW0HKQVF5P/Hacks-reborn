@@ -6,11 +6,6 @@ DEFAULT_HACK_CONSTRUCTOR(BMXspeedhack)
 void BMXspeedhack::onDrawGUI()
 {
 	ImGui::Checkbox(m_sHackName.c_str(), &m_bEnabled);
-	if (ImGui::BeginPopupContextItem())
-	{
-		ImGui::SliderInt("Delay", &iDelay, 1, 300);
-		ImGui::EndPopup();
-	}
 	ImGui::SameLine();
 	Lippets::ImGuiSnippets::KeyButton(activationKey, g::keyButtonSplitter);
 }
@@ -38,15 +33,15 @@ void BMXspeedhack::everyTickAction( )
 	{
 		if (BMXState == 1)
 		{
-			timer.setTimer(iDelay);
+			timer.setTimer(25);
 			BMXState = 2;
-			SF->getGame()->emulateGTAKey(16, 128);
+			Lippets::KeyBoard::SendKeyPress('W', 0); //SF->getGame()->emulateGTAKey(16, 128);
 		}
 		else if (BMXState == 2)
 		{
-			timer.setTimer(iDelay);
+			timer.setTimer(25);
 			BMXState = 1;
-			SF->getGame()->emulateGTAKey(16, 255);
+			Lippets::KeyBoard::SendKeyRelease('W', 0); //SF->getGame()->emulateGTAKey(16, 255);
 		}
 	}
 

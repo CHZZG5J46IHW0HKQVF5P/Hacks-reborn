@@ -2,22 +2,24 @@
 #define _MATH_DEFINES_DEFINED
 #include "SAMPFUNCS_API.h"
 #include "game_api.h"
-extern SAMPFUNCS *SF;
+extern SAMPFUNCS* SF;
 
 #include "nlohmanSingle/json.hpp"
-#include "C:\Lippets\SampSnipps\SampSnipps.h"
+#include "SampSnipps\SampSnipps.h"
 #include "imgui_single.h"
-#include "C:\Lippets\FIles\Computer.h"
-#include "C:\Lippets\FIles\Conditions.h"
-#include "C:\Lippets\FIles\ImGuiSnippets.h"
-#include "C:\Lippets\FIles\Strings.h"
-#include "C:\Lippets\FIles\Numbers.h"
-#include "C:\Lippets\CMClasses\CMFont.h"
-#include "C:\Lippets\CMClasses\CMTimer.h"
-#include "C:\Lippets\FIles\LUtils.h"
-#include "C:\Lippets\SampSnipps\GTAfuncs.h"
+#include "Files\KeyboardMouse.h"
+#include "Files\Computer.h"
+#include "Files\Conditions.h"
+#include "Files\ImGuiSnippets.h"
+#include "Files\Strings.h"
+#include "Files\Numbers.h"
+#include "CMClasses\CMFont.h"
+#include "CMClasses\CMTimer.h"
+#include "Files\LUtils.h"
+#include "SampSnipps\GTAfuncs.h"
 #include <bitset>
-
+#include <ranges>
+#include <algorithm>
 class IHack;
 #include "GlobalFuncs.h"
 #define SERIALIZE_FIELD_JSON_(name,value) data[name] = value
@@ -31,8 +33,8 @@ class IHack;
 #define ASSIGN_VAR_VALUE_IF_EQUALS_ZEROF(var,newVal) if (var == 0.f) var = newVal;
 
 #define HACK_CLASS(name) class name : public IHack
-#define DEFAULT_HACK_CONSTRUCTOR(name) name::name(const char* szHackName) { m_sHackName = szHackName;}
-#define DEFAULT_HACK_CONSTRUCTOR_WITH_IMGUI(name) name::name(const char* szHackName) { m_sHackName = szHackName; m_bDrawHackNeedImGui = true;}
+#define DEFAULT_HACK_CONSTRUCTOR(name) name::name(const char* szHackName) { m_sHackName = #name;}
+#define DEFAULT_HACK_CONSTRUCTOR_WITH_IMGUI(name) name::name(const char* szHackName) { m_sHackName = #name; m_bDrawHackNeedImGui = true;}
 #define cm(x) SF->getSAMP()->getChat()->AddChatMessage(-1,(x));
 #define cm_ SF->getSAMP()->getChat()->AddChatMessage
 #define MYID SF->getSAMP()->getPlayers()->sLocalPlayerID
@@ -42,8 +44,14 @@ class IHack;
 
 struct crTickLocalPlayerInfo
 {
-	bool isInCar();
-	bool isDriver();
+	inline bool isInCar()
+	{
+		return _isInCar && pLocalVeh;
+	}
+	inline bool isDriver()
+	{
+		return _isDriver && pLocalVeh;
+	}
 	vehicle_info* pLocalVeh;
 	bool _isInCar;
 	bool _isDriver;
@@ -62,7 +70,7 @@ namespace g
 	extern bool isShiftPressed;
 	extern int keyButtonSplitter;
 	extern crTickLocalPlayerInfo* const pInfo;
-	extern Lippets::KeyEvenByWndProc * const pKeyEventInfo;
+	extern Lippets::KeyEvenByWndProc* const pKeyEventInfo;
 	extern SLineOfSightFlags LineOfSightFlags;
 };
 
@@ -83,7 +91,7 @@ enum HackFunction
 };
 
 
-class IHack : Lippets::LUtils::NonCopyable
+class IHack : Lippets::LUtils::Classes::NonCopyable
 {
 
 public:
@@ -96,10 +104,10 @@ public:
 	virtual void read(nlohmann::json&) {};
 	virtual ~IHack() = default;
 	virtual void switchHack() {};
-	template<class T>
+	template<typename T>
 	inline static T* getInstance()
 	{
-		static T* pInst = GFuncs::getHackPtr<T>();
+		static T* pInst = GFuncs::template getHackPtr<T>();
 		return pInst;
 	}
 	virtual bool onRPCIncoming(stRakNetHookParams*) { m_bitsDontCall__.set(RPC_INC); return true; };

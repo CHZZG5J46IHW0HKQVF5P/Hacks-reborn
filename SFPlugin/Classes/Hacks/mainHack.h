@@ -5,8 +5,8 @@ HACK_CLASS(MainHack)
 {
 public:
 	MainHack(const char*);
-	bool onRPCOutcoming(stRakNetHookParams* params) override;
-	bool onRPCIncoming(stRakNetHookParams* params) override;
+	OVERRIDE_RPC_INC;
+	OVERRIDE_RPC_OUT;
 	OVERRIDE_WNDPROC;
 	OVERRIDE_EVERY_TICK;
 	OVERRIDE_INIT;

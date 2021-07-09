@@ -11,8 +11,8 @@ private:
 	int offsetY = 0;
 	int offsetX = 0;
 	OVERRIDE_INIT;
-	void onDrawGUI() override;
-	void onDrawHack( ) override;
+	OVERRIDE_DRAWGUI;
+	OVERRIDE_DRAW_HACK;
 	
 	OVERRIDE_SAVE_READ;
 

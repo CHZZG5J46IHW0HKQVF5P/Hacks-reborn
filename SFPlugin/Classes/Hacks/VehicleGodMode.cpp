@@ -36,16 +36,16 @@ bool VehicleGodMode::onWndProc()
 		return true;
 
 	enableVehGodMode(g::pKeyEventInfo->bDown);
-
+	return true;
 }
 
-void VehicleGodMode::save(nlohmann::json &data)
+void VehicleGodMode::save(nlohmann::json& data)
 {
 	SERIALIZE_FIELD_JSON(m_bEnabled);
 	SERIALIZE_FIELD_JSON(m_nActivationKey);
 }
 
-void VehicleGodMode::read(nlohmann::json &data)
+void VehicleGodMode::read(nlohmann::json& data)
 {
 	DESERIALIZE_FIELD_JSON(m_bEnabled);
 	DESERIALIZE_FIELD_JSON(m_nActivationKey);

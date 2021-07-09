@@ -15,7 +15,7 @@ bool Sbiv:: onWndProc()
 		if (!g::pInfo->isDriver())
 			if (g::pKeyEventInfo->bDown)
 			{
-				PEDSELF->SetMoveSpeed((CVector*)&CVector());
+				PEDSELF->SetMoveSpeed(&CVectorConstants::zerVec);
 				GTAfunc_PerformAnimation("PED", "HANDSUP", 200, 0, 0,1, 0, 0, 0, 0);
 			}
 	return true;
